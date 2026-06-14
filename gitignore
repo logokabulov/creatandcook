@@ -1,0 +1,14 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+
+# Env / secrets (kelajakda Supabase kalitlari uchun)
+.env
+.env.local
+
+# Dependencies (kelajakda kerak bo'lsa)
+node_modules/
