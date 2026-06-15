@@ -367,6 +367,11 @@
   .hm-news .it-t{font-weight:600;font-size:14px}
   .hm-news .it-m{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:3px}
   .hm-news .arr{margin-left:auto;color:var(--muted);flex-shrink:0;font-size:18px}
+  .gbtn{width:100%;margin-top:12px;display:flex;align-items:center;justify-content:center;gap:10px;font-family:var(--font);font-weight:600;font-size:15px;color:var(--text);background:var(--field);border:1px solid var(--line);border-radius:12px;padding:13px;cursor:pointer;transition:.15s}
+  .gbtn:hover{border-color:var(--line2);background:var(--hover)}
+  .gbtn svg{width:18px;height:18px}
+  .or-div{display:flex;align-items:center;gap:12px;margin:18px 0 2px;color:var(--faint);font-size:12px;font-family:'JetBrains Mono',monospace}
+  .or-div::before,.or-div::after{content:"";flex:1;height:1px;background:var(--line)}
 </style>
 </head>
 <body data-theme="dark">
@@ -527,8 +532,8 @@
         <div class="step-meta">A / HISOBGA KIRISH</div>
         <h2>Xush kelibsiz</h2>
         <div class="field">
-          <label>Username, Gmail yoki Telefon</label>
-          <input type="text" id="l-id" placeholder="username / email / +998...">
+          <label>Gmail</label>
+          <input type="text" id="l-id" placeholder="ism@gmail.com">
           <div class="err-msg" id="l-id-e">Login kiriting</div>
         </div>
         <div class="field">
@@ -537,6 +542,8 @@
           <div class="err-msg" id="l-pw-e">Parol kiriting</div>
         </div>
         <button class="submit" onclick="doLogin()">Kirish <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <div class="or-div">YOKI</div>
+        <button class="gbtn" onclick="signInGoogle()"><svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.2-8l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C39.9 35.5 44 30.3 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg> Google bilan davom etish</button>
         <div class="below">
           <button class="link" onclick="showView('forgot')">Parolni unutdingizmi?</button>
           <span class="note">Hisob yo'qmi? <button class="link" onclick="showView('register')" style="border:none">RO'YXAT</button></span>
@@ -547,19 +554,10 @@
       <div class="pane" id="pane-register">
         <div class="step-meta">B / YANGI HISOB</div>
         <h2>Ro'yxatdan o'tish</h2>
-        <div class="seg">
-          <button class="on" id="reg-seg-email" onclick="setRegMode('email')">Gmail</button>
-          <button id="reg-seg-phone" onclick="setRegMode('phone')">Telefon</button>
-        </div>
         <div class="field" id="reg-email-field">
           <label>Gmail</label>
           <input type="email" id="r-email" placeholder="ism@gmail.com">
           <div class="err-msg" id="r-email-e">To'g'ri gmail manzilini kiriting</div>
-        </div>
-        <div class="field" id="reg-phone-field" style="display:none">
-          <label>Telefon raqam</label>
-          <input type="tel" id="r-phone" placeholder="+998 90 123 45 67">
-          <div class="err-msg" id="r-phone-e">To'g'ri telefon raqamini kiriting</div>
         </div>
         <div class="field">
           <label>Username</label>
@@ -578,6 +576,8 @@
           <div class="err-msg" id="r-pw2-e">Parollar mos kelmadi</div>
         </div>
         <button class="submit" onclick="doRegister()">Hisob yaratish <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+        <div class="or-div">YOKI</div>
+        <button class="gbtn" onclick="signInGoogle()"><svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.2-8l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C39.9 35.5 44 30.3 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg> Google bilan davom etish</button>
         <div class="below"><span class="note">Hisobingiz bormi? <button class="link" onclick="showView('login')" style="border:none">KIRISH</button></span></div>
       </div>
 
@@ -586,22 +586,13 @@
         <div id="fs-1">
           <div class="step-meta">C·1 / TIKLASH</div>
           <h2>Parolni unutdingiz</h2>
-          <p class="hint" style="margin-bottom:16px">Tasdiqlash kodini qayerga yuboraylik?</p>
-          <div class="seg">
-            <button class="on" id="f-seg-email" onclick="setForgotMode('email')">Gmail</button>
-            <button id="f-seg-phone" onclick="setForgotMode('phone')">Telefon</button>
-          </div>
+          <p class="hint" style="margin-bottom:16px">Parolni tiklash havolasini Gmailingizga yuboramiz.</p>
           <div class="field" id="f-email-field">
             <label>Gmail</label>
             <input type="email" id="f-email" placeholder="ism@gmail.com">
             <div class="err-msg" id="f-email-e">To'g'ri gmail manzilini kiriting</div>
           </div>
-          <div class="field" id="f-phone-field" style="display:none">
-            <label>Telefon raqam</label>
-            <input type="tel" id="f-phone" placeholder="+998 90 123 45 67">
-            <div class="err-msg" id="f-phone-e">To'g'ri telefon raqamini kiriting</div>
-          </div>
-          <button class="submit" onclick="forgotSendCode()">Kod yuborish <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
+          <button class="submit" onclick="forgotSendCode()">Havola yuborish <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
           <div class="below"><button class="link" onclick="showView('login')">← Kirishga qaytish</button></div>
         </div>
         <div id="fs-2" style="display:none">
@@ -635,8 +626,8 @@
         </div>
         <div id="fs-4" style="display:none">
           <div class="step-meta">C·4 / TAYYOR</div>
-          <h2>Parol yangilandi</h2>
-          <div class="ok-box"><div class="t">✓ Muvaffaqiyatli</div><div class="d">Endi login va yangi parolingiz bilan kira olasiz.</div></div>
+          <h2>Havolani tekshiring</h2>
+          <div class="ok-box"><div class="t">✓ Yuborildi</div><div class="d">Parolni tiklash havolasi emailingizga yuborildi. Havola orqali yangi parol o'rnatasiz.</div></div>
           <button class="submit" onclick="showView('login')">Kirishga o'tish <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         </div>
       </div>
@@ -723,7 +714,7 @@
           </div>
           <div class="hm-streak">
             <svg viewBox="0 0 24 24" stroke="none"><defs><linearGradient id="fg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9b8bff"/><stop offset="1" stop-color="#ff4d8d"/></linearGradient></defs><path fill="url(#fg)" d="M12 22a6 6 0 006-6c0-3-2-5-3-6 0 1.5-1 2.5-2 2.5 1-2.5-1-5.5-4-6.5.5 2.5-.5 4-2 5.5-1 1-2 2.5-2 4.5a6 6 0 006 6z"/></svg>
-            <span class="n">7</span><span class="u" data-i18n="home.day">KUN</span>
+            <span class="n" id="hm-streak">7</span><span class="u" data-i18n="home.day">KUN</span>
           </div>
         </div>
 
@@ -742,8 +733,8 @@
         <div class="hm-stats">
           <div class="hm-stat"><div class="lbl" data-i18n="home.s_progress">Umumiy progress</div><div class="val">42<small>%</small></div></div>
           <div class="hm-stat"><div class="lbl" data-i18n="home.s_lessons">Darslar</div><div class="val">18<small> / 60</small></div></div>
-          <div class="hm-stat"><div class="lbl" data-i18n="home.s_points">Ballar</div><div class="val">530</div></div>
-          <div class="hm-stat"><div class="lbl" data-i18n="home.s_streak">Streak</div><div class="val">7<small> <span data-i18n="home.day2">kun</span></small></div></div>
+          <div class="hm-stat"><div class="lbl" data-i18n="home.s_points">Ballar</div><div class="val" id="hm-points">530</div></div>
+          <div class="hm-stat"><div class="lbl" data-i18n="home.s_streak">Streak</div><div class="val"><span id="hm-streak2">7</span><small> <span data-i18n="home.day2">kun</span></small></div></div>
         </div>
 
         <div class="hm-daily">
@@ -836,7 +827,16 @@
   </main>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
+/* ---------------- SUPABASE ---------------- */
+const SUPABASE_URL='https://sxiwzaxojwunuededqys.supabase.co';
+const SUPABASE_KEY='sb_publishable_HtvA218bd7ev1_6YZ4MgdQ_S_gzeTNh';
+const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+function _val(id){const e=document.getElementById(id);return e?e.value.trim():'';}
+function _setVal(id,v){const e=document.getElementById(id);if(e&&v!=null)e.value=v;}
+function _setText(id,v){const e=document.getElementById(id);if(e&&v!=null)e.textContent=v;}
+
 /* ---------------- THEME ---------------- */
 function toggleTheme(){const b=document.body;b.setAttribute('data-theme',b.getAttribute('data-theme')==='dark'?'light':'dark');}
 
@@ -856,42 +856,42 @@ const isEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 const isPhone=v=>{const d=v.replace(/\D/g,'');return /^[+]?[\d\s()-]{7,}$/.test(v.trim())&&d.length>=7;};
 
 let regMode='email';
-function setRegMode(m){regMode=m;
-  document.getElementById('reg-seg-email').classList.toggle('on',m==='email');
-  document.getElementById('reg-seg-phone').classList.toggle('on',m==='phone');
-  document.getElementById('reg-email-field').style.display=m==='email'?'block':'none';
-  document.getElementById('reg-phone-field').style.display=m==='phone'?'block':'none';
-}
 let forgotMode='email';
-function setForgotMode(m){forgotMode=m;
-  document.getElementById('f-seg-email').classList.toggle('on',m==='email');
-  document.getElementById('f-seg-phone').classList.toggle('on',m==='phone');
-  document.getElementById('f-email-field').style.display=m==='email'?'block':'none';
-  document.getElementById('f-phone-field').style.display=m==='phone'?'block':'none';
-}
 
 let currentUsername='username';
-function doLogin(){
-  let ok=true;const id=document.getElementById('l-id').value,pw=document.getElementById('l-pw').value;
-  setErr('l-id',!id.trim());if(!id.trim())ok=false;
-  setErr('l-pw',!pw);if(!pw)ok=false;
-  if(ok){ currentUsername = id.includes('@')||id.match(/^\+?\d/)? 'foydalanuvchi' : id.trim(); enterApp(); }
-}
-function doRegister(){
+async function doLogin(){
+  clearErrors();
+  const id=_val('l-id'), pw=document.getElementById('l-pw').value;
   let ok=true;
-  if(regMode==='email'){const e=document.getElementById('r-email').value;const eo=isEmail(e);setErr('r-email',!eo);if(!eo)ok=false;}
-  else{const p=document.getElementById('r-phone').value;const po=isPhone(p);setErr('r-phone',!po);if(!po)ok=false;}
-  const u=document.getElementById('r-user').value.trim();const uo=/^[a-zA-Z0-9_]{3,}$/.test(u);setErr('r-user',!uo);if(!uo)ok=false;
-  const pw=document.getElementById('r-pw').value;const pwo=pw.length>=6;setErr('r-pw',!pwo);if(!pwo)ok=false;
-  const pw2=document.getElementById('r-pw2').value;const mo=pw&&pw===pw2;setErr('r-pw2',!mo);if(!mo)ok=false;
-  if(ok){ currentUsername=u; alert('✓ Hisob yaratildi (demo). Endi kirishingiz mumkin.'); document.getElementById('l-id').value = regMode==='email'?document.getElementById('r-email').value:u; showView('login'); }
+  if(!id){setErr('l-id',true);ok=false;}
+  if(!pw){setErr('l-pw',true);ok=false;}
+  if(!ok)return;
+  if(!isEmail(id)){setErr('l-id',true);const m=document.getElementById('l-id-e');m.textContent='Iltimos, Gmail manzilingiz bilan kiring';m.classList.add('show');return;}
+  const {error}=await sb.auth.signInWithPassword({email:id,password:pw});
+  if(error){setErr('l-pw',true);const m=document.getElementById('l-pw-e');m.textContent='Email yoki parol xato';m.classList.add('show');return;}
+  await loadProfileAndEnter();
+}
+async function doRegister(){
+  clearErrors();
+  let ok=true;
+  const email=_val('r-email'); if(!isEmail(email)){setErr('r-email',true);ok=false;}
+  const u=_val('r-user'); if(!/^[a-zA-Z0-9_]{3,}$/.test(u)){setErr('r-user',true);ok=false;}
+  const pw=document.getElementById('r-pw').value; if(pw.length<6){setErr('r-pw',true);ok=false;}
+  const pw2=document.getElementById('r-pw2').value; if(!pw||pw!==pw2){setErr('r-pw2',true);ok=false;}
+  if(!ok)return;
+  const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{username:u}}});
+  if(error){ alert('Xatolik: '+error.message); return; }
+  currentUsername=u;
+  if(data.session){ await loadProfileAndEnter(); }
+  else { alert('\u2713 Hisob yaratildi. Endi kiring.'); document.getElementById('l-id').value=email; showView('login'); }
 }
 function forgotStep(n){[1,2,3,4].forEach(i=>document.getElementById('fs-'+i).style.display=(i===n)?'block':'none');clearErrors();}
-function forgotSendCode(){
-  let ok=true,dest='';
-  if(forgotMode==='email'){const e=document.getElementById('f-email').value;ok=isEmail(e);setErr('f-email',!ok);dest=e.trim();}
-  else{const p=document.getElementById('f-phone').value;ok=isPhone(p);setErr('f-phone',!ok);dest=p.trim();}
-  if(ok){document.getElementById('f-dest').textContent=dest;forgotStep(2);setTimeout(()=>{const c=document.querySelector('.cd');if(c)c.focus();},50);}
+async function forgotSendCode(){
+  clearErrors();
+  const e=_val('f-email'); if(!isEmail(e)){setErr('f-email',true);return;}
+  const {error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:window.location.origin});
+  if(error){alert('Xatolik: '+error.message);return;}
+  forgotStep(4);
 }
 function forgotVerify(){const code=Array.from(document.querySelectorAll('.cd')).map(i=>i.value).join('');const ok=/^\d{6}$/.test(code);setErr('f-code',!ok);if(ok)forgotStep(3);}
 function forgotReset(){let ok=true;const pw=document.getElementById('f-pw').value;const pwo=pw.length>=6;setErr('f-pw',!pwo);if(!pwo)ok=false;const pw2=document.getElementById('f-pw2').value;const mo=pw&&pw===pw2;setErr('f-pw2',!mo);if(!mo)ok=false;if(ok)forgotStep(4);}
@@ -901,23 +901,43 @@ document.querySelectorAll('.cd').forEach((box,i,arr)=>{
 });
 
 /* ENTER / EXIT */
+async function loadProfileAndEnter(){
+  const {data:{user}}=await sb.auth.getUser();
+  if(!user) return;
+  let {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(!profile) profile={username:(user.email||'user').split('@')[0],email:user.email,points:0,streak:0};
+  currentUsername=profile.username||(user.email||'user').split('@')[0];
+  _setVal('s-first',profile.first_name); _setVal('s-last',profile.last_name); _setVal('s-user',profile.username);
+  _setVal('s-phone',profile.phone); _setVal('s-email',profile.email||user.email);
+  if(profile.gender){const g=document.getElementById('s-gender'); if(g)g.value=profile.gender;}
+  if(profile.birthday){const b=document.getElementById('s-bday'); if(b)b.value=profile.birthday;}
+  _setText('hm-points',profile.points||0); _setText('hm-streak',profile.streak||0); _setText('hm-streak2',profile.streak||0);
+  if(profile.avatar_url){
+    document.getElementById('side-avatar').innerHTML='<img src="'+profile.avatar_url+'">';
+    document.getElementById('photo-prev').innerHTML='<img src="'+profile.avatar_url+'">';
+  }
+  enterApp();
+}
 function enterApp(){
+  document.getElementById('landing').classList.remove('on');
   document.getElementById('auth').classList.remove('on');
   document.getElementById('app').classList.add('on');
   const letter=(currentUsername[0]||'U').toUpperCase();
-  document.getElementById('side-avatar').textContent=letter;
-  document.getElementById('photo-prev').textContent=letter;
+  if(!document.querySelector('#side-avatar img')) document.getElementById('side-avatar').textContent=letter;
+  if(!document.querySelector('#photo-prev img')) document.getElementById('photo-prev').textContent=letter;
   document.getElementById('side-username').textContent=currentUsername;
-  document.getElementById('s-user').value=currentUsername;
+  if(!_val('s-user')) document.getElementById('s-user').value=currentUsername;
   const hn=document.getElementById('home-name'); if(hn) hn.textContent=currentUsername;
   go('asosiy');
 }
-function logout(){
+async function logout(){
   closeProfile();closeNav();
+  await sb.auth.signOut();
   document.getElementById('app').classList.remove('on');
-  document.getElementById('auth').classList.add('on');
-  showView('login');
+  document.getElementById('auth').classList.remove('on');
+  document.getElementById('landing').classList.add('on');
   document.getElementById('l-pw').value='';
+  window.scrollTo(0,0);
 }
 
 /* SIDEBAR NAV */
@@ -944,11 +964,30 @@ function closeProfile(){document.getElementById('profile').classList.remove('ope
 document.addEventListener('click',e=>{const p=document.getElementById('profile');if(p&&!p.contains(e.target))closeProfile();});
 
 /* PHOTO */
-function loadPhoto(e){const f=e.target.files[0];if(!f)return;const r=new FileReader();r.onload=ev=>{
-  document.getElementById('photo-prev').innerHTML='<img src="'+ev.target.result+'">';
-  document.getElementById('side-avatar').innerHTML='<img src="'+ev.target.result+'">';
-};r.readAsDataURL(f);}
-function saveSettings(){const u=document.getElementById('s-user').value.trim();if(u){currentUsername=u;document.getElementById('side-username').textContent=u;const hn=document.getElementById('home-name');if(hn)hn.textContent=u;}alert('✓ Sozlamalar saqlandi (demo).');}
+async function loadPhoto(e){const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();r.onload=ev=>{document.getElementById('photo-prev').innerHTML='<img src="'+ev.target.result+'">';document.getElementById('side-avatar').innerHTML='<img src="'+ev.target.result+'">';};r.readAsDataURL(f);
+  const {data:{user}}=await sb.auth.getUser(); if(!user){alert('Avval tizimga kiring.');return;}
+  const ext=(f.name.split('.').pop()||'jpg').toLowerCase(); const path=user.id+'/avatar.'+ext;
+  const {error:upErr}=await sb.storage.from('avatars').upload(path,f,{upsert:true,contentType:f.type});
+  if(upErr){alert('Rasm yuklashda xato: '+upErr.message);return;}
+  const {data:pub}=sb.storage.from('avatars').getPublicUrl(path); const url=pub.publicUrl+'?t='+Date.now();
+  await sb.from('profiles').update({avatar_url:url}).eq('id',user.id);
+  document.getElementById('photo-prev').innerHTML='<img src="'+url+'">';
+  document.getElementById('side-avatar').innerHTML='<img src="'+url+'">';
+}
+async function signInGoogle(){
+  const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});
+  if(error) alert('Google xato: '+error.message);
+}
+async function saveSettings(){
+  const {data:{user}}=await sb.auth.getUser();
+  if(!user){alert('Avval tizimga kiring.');return;}
+  const payload={first_name:_val('s-first'),last_name:_val('s-last'),username:_val('s-user'),gender:_val('s-gender'),birthday:_val('s-bday')||null,phone:_val('s-phone'),email:_val('s-email')};
+  const {error}=await sb.from('profiles').update(payload).eq('id',user.id);
+  if(error){alert('Xatolik: '+error.message);return;}
+  const u=payload.username; if(u){currentUsername=u;document.getElementById('side-username').textContent=u;const hn=document.getElementById('home-name');if(hn)hn.textContent=u;if(!document.querySelector('#side-avatar img'))document.getElementById('side-avatar').textContent=(u[0]||'U').toUpperCase();}
+  alert('\u2713 Sozlamalar saqlandi.');
+}
 
 /* LANGUAGE */
 const I18N={
@@ -1044,6 +1083,14 @@ function showLanding(){document.getElementById('app').classList.remove('on');doc
   size();
   if(reduce){ for(let i=0;i<70;i++) step(); }
   else draw();
+})();
+
+/* ---------------- SESSION RESTORE (avto-kirish) ---------------- */
+(async function(){
+  try{
+    const {data:{session}}=await sb.auth.getSession();
+    if(session){ document.getElementById('landing').classList.remove('on'); await loadProfileAndEnter(); }
+  }catch(e){}
 })();
 </script>
 </body>
