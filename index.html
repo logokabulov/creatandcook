@@ -32,17 +32,17 @@
   .mono{font-family:'JetBrains Mono',monospace}
   @keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
   @keyframes drift{0%,100%{transform:translate(0,0) scale(1)}33%{transform:translate(6%,-5%) scale(1.12)}66%{transform:translate(-5%,5%) scale(.95)}}
- 
+
   .theme-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line);background:var(--surface);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text);transition:.18s}
   .theme-btn:hover{border-color:var(--line2);background:var(--hover)}
   .theme-btn svg{width:18px;height:18px;stroke:currentColor;stroke-width:1.8;fill:none}
   .theme-btn .moon{display:block}.theme-btn .sun{display:none}
   [data-theme="dark"] .theme-btn .moon{display:none}[data-theme="dark"] .theme-btn .sun{display:block}
- 
+
   .screen{display:none}
   #auth.on{display:flex}
   #app.on{display:grid}
- 
+
   /* ===================== AUTH ===================== */
   #auth{position:relative;min-height:100vh;min-height:100dvh;padding:clamp(14px,3vw,40px);overflow:hidden;align-items:center;justify-content:center}
   #auth .a-orbs{position:absolute;inset:-10%;z-index:0;will-change:transform}
@@ -53,7 +53,7 @@
   #auth-grid{position:absolute;inset:0;z-index:1;display:block}
   #auth .vig{position:absolute;inset:0;z-index:2;pointer-events:none;background:radial-gradient(ellipse at center,transparent 48%,var(--vigcol) 100%)}
   #auth .theme-btn{position:absolute;top:clamp(14px,3vw,32px);right:clamp(14px,3vw,32px);z-index:6}
- 
+
   .frame{position:relative;z-index:4;width:100%;max-width:940px;display:grid;grid-template-columns:.86fr 1fr;border:1px solid var(--line);border-radius:22px;background:var(--glass);backdrop-filter:blur(20px);box-shadow:0 40px 120px -40px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);overflow:hidden}
   .left{position:relative;display:flex;flex-direction:column;border-right:1px solid var(--line)}
   .brand-top{display:flex;justify-content:space-between;align-items:center;padding:22px 26px}
@@ -67,7 +67,7 @@
   .verb.on{opacity:1;transform:none;filter:none}
   .lede-sub{margin-top:20px;color:var(--muted);font-size:15px;line-height:1.5;max-width:320px}
   .left-foot{padding:16px 26px;font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.06em;color:var(--faint);display:flex;justify-content:space-between;border-top:1px solid var(--line)}
- 
+
   .right{display:flex;flex-direction:column;min-width:0}
   .tabs{display:flex;border-bottom:1px solid var(--line)}
   .tab{flex:1;appearance:none;background:none;border:none;cursor:pointer;font-family:var(--font);font-weight:700;font-size:13px;color:var(--muted);padding:18px 10px;position:relative;transition:color .15s}
@@ -77,11 +77,11 @@
   .pane.active{display:block;animation:rise .4s ease}
   .step-meta{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--accent);font-weight:700}
   .pane h2{font-family:var(--display);font-size:28px;font-weight:800;letter-spacing:-.02em;line-height:1.05;margin:8px 0 22px}
- 
+
   .seg{display:flex;gap:6px;padding:5px;border-radius:12px;background:var(--field);border:1px solid var(--line);margin-bottom:18px}
   .seg button{flex:1;appearance:none;background:none;border:none;cursor:pointer;font-family:var(--font);font-weight:600;font-size:13px;padding:9px;color:var(--muted);border-radius:8px;transition:.15s}
   .seg button.on{background:var(--grad);color:#0b0b11;font-weight:700}
- 
+
   .field{margin-bottom:15px}
   .field label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px}
   .field .row{display:flex;align-items:stretch;gap:8px}
@@ -108,7 +108,7 @@
   .ok-box .t{font-weight:700;font-size:15px}
   .ok-box .d{font-size:13px;color:var(--muted);margin-top:6px;line-height:1.5}
   .ok-box b{color:var(--text)}
- 
+
   /* ===================== APP ===================== */
   #app{min-height:100vh;min-height:100dvh;grid-template-columns:264px 1fr}
   .scrim{display:none}
@@ -132,7 +132,7 @@
   .sub-item.active{color:var(--text)}
   .sub-item.active .prog-tile{background:var(--grad);color:#0b0b11;border-color:transparent}
   .prog-tile{width:26px;height:26px;border-radius:8px;border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:11px;flex-shrink:0}
- 
+
   .profile{position:relative;padding:12px;border-top:1px solid var(--line)}
   .profile-btn{width:100%;appearance:none;cursor:pointer;display:flex;align-items:center;gap:11px;padding:9px 11px;border-radius:14px;border:1px solid var(--line);background:var(--field);color:var(--text);transition:.15s}
   .profile-btn:hover{background:var(--hover);border-color:var(--line2)}
@@ -152,7 +152,7 @@
   .pm-item.logout{color:var(--danger)}
   .pm-item .flag{width:22px;height:15px;border-radius:3px;overflow:hidden;flex-shrink:0;display:flex}
   .pm-item .meta{margin-left:auto;font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted)}
- 
+
   .main{min-width:0;display:flex;flex-direction:column}
   .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 26px;height:74px;border-bottom:1px solid var(--line);position:sticky;top:0;z-index:20;background:var(--glass);backdrop-filter:blur(14px)}
   .topbar h2{font-family:var(--display);font-weight:800;font-size:22px;letter-spacing:-.02em}
@@ -162,7 +162,7 @@
   .hamb svg{width:20px;height:20px;stroke:currentColor;stroke-width:1.8;fill:none}
   .content{padding:30px 26px 60px;max-width:1040px}
   .view{display:none}.view.on{display:block;animation:rise .35s ease}
- 
+
   .panel-card{border:1px solid var(--line);border-radius:18px;background:var(--surface);margin-bottom:18px;overflow:hidden}
   .pc-head{padding:18px 20px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px}
   .pc-tile{width:40px;height:40px;border-radius:12px;border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:700;font-size:14px;flex-shrink:0}
@@ -176,7 +176,7 @@
   .cell .n{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .cell .t{font-weight:700;font-size:15px;margin-top:10px}
   .cell .m{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:6px}
- 
+
   .lb-row{display:grid;grid-template-columns:44px 1fr auto;align-items:center;gap:10px;border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:13px 18px;margin-bottom:10px;transition:.15s}
   .lb-row:hover{border-color:var(--line2)}
   .lb-row .rk{font-family:var(--display);font-weight:800;font-size:18px;color:var(--muted)}
@@ -184,7 +184,7 @@
   .lb-row .who{display:flex;align-items:center;gap:12px;font-weight:600}
   .lb-row .who .avatar{width:34px;height:34px;font-size:14px}
   .lb-row .pts{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:14px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
- 
+
   .set-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
   .set-grid .full{grid-column:1/-1}
   .photo-row{display:flex;align-items:center;gap:18px;border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:20px;background:var(--surface)}
@@ -192,7 +192,7 @@
   .photo-prev img{width:100%;height:100%;object-fit:cover}
   .upl-btn{font-family:var(--font);font-weight:600;font-size:13px;color:#0b0b11;background:var(--grad);border:none;border-radius:10px;padding:11px 18px;cursor:pointer}
   .ph-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:8px}
- 
+
   @media(max-width:860px){
     .frame{grid-template-columns:1fr;max-width:460px}
     .left{border-right:none;border-bottom:1px solid var(--line)}
@@ -234,7 +234,7 @@
   .ld-cta{font-family:var(--font);font-weight:700;font-size:14px;color:#0b0b11;background:var(--grad);border:none;border-radius:100px;padding:11px 20px;cursor:pointer;box-shadow:0 14px 36px -14px var(--accent);transition:transform .12s}
   .ld-cta:hover{transform:translateY(-1px)}
   @media(max-width:820px){.ld-nav-links{display:none}}
- 
+
   .ld-bgwrap{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none}
   #ld-bg{position:absolute;inset:0;width:100%;height:100%;display:block}
   .ld-orbs{position:absolute;inset:-10%;will-change:transform;mix-blend-mode:screen}
@@ -258,7 +258,7 @@
   .ld-stats div{display:flex;flex-direction:column;gap:5px}
   .ld-stats .num{font-family:var(--display);font-weight:800;font-size:30px;background:var(--grad);-webkit-background-clip:text;background-clip:text;color:transparent}
   .ld-stats .lbl{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.12em;color:var(--muted)}
- 
+
   .ld-sec{position:relative;padding:clamp(70px,11vw,130px) clamp(18px,5vw,56px);max-width:1180px;margin:0 auto}
   .ld-eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.2em;color:var(--accent);font-weight:700;text-align:center}
   .ld-h2{font-family:var(--display);font-weight:800;font-size:clamp(30px,4.6vw,54px);line-height:1.05;letter-spacing:-.02em;text-align:center;margin-top:12px}
@@ -267,7 +267,7 @@
   .cols-3{grid-template-columns:repeat(3,1fr)}
   .cols-4{grid-template-columns:repeat(4,1fr)}
   @media(max-width:900px){.cols-3,.cols-4{grid-template-columns:1fr}}
- 
+
   .ld-card{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:26px;transition:.2s}
   .ld-card:hover{border-color:var(--line2);transform:translateY(-4px)}
   .ld-card .tile{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-family:var(--display);font-weight:800;font-size:17px;background:var(--grad);color:#0b0b11;margin-bottom:18px}
@@ -278,7 +278,7 @@
   .ld-card ul{margin-top:14px;list-style:none;display:flex;flex-direction:column;gap:8px}
   .ld-card li{font-size:13.5px;color:var(--text);display:flex;gap:9px;align-items:flex-start}
   .ld-card li::before{content:"";width:15px;height:15px;flex-shrink:0;margin-top:2px;border-radius:5px;background:var(--grad)}
- 
+
   .ld-price{border:1px solid var(--line);border-radius:20px;background:var(--surface);padding:30px;position:relative;display:flex;flex-direction:column}
   .ld-price.feat{border:1.5px solid transparent;background:linear-gradient(var(--surface),var(--surface)) padding-box,var(--grad) border-box;box-shadow:0 30px 80px -40px var(--accent)}
   .ld-price .badge2{position:absolute;top:-12px;left:50%;transform:translateX(-50%);font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11px;letter-spacing:.08em;color:#0b0b11;background:var(--grad);border-radius:100px;padding:5px 14px}
@@ -291,21 +291,21 @@
   .ld-price button{width:100%;font-family:var(--font);font-weight:700;font-size:15px;border-radius:12px;padding:14px;cursor:pointer;border:1px solid var(--line2);background:var(--field);color:var(--text);transition:.15s}
   .ld-price.feat button{background:var(--grad);color:#0b0b11;border:none;box-shadow:0 16px 40px -16px var(--accent)}
   .ld-price button:hover{transform:translateY(-1px)}
- 
+
   .ld-quote{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:24px}
   .ld-quote p{font-size:15px;line-height:1.6}
   .ld-quote .who{display:flex;align-items:center;gap:11px;margin-top:18px}
   .ld-quote .av{width:38px;height:38px;border-radius:50%;background:var(--grad);color:#0b0b11;font-weight:800;display:flex;align-items:center;justify-content:center}
   .ld-quote .nm{font-weight:700;font-size:14px}
   .ld-quote .rl{font-size:12px;color:var(--muted)}
- 
+
   .ld-final{position:relative;overflow:hidden;border-radius:28px;margin:0 clamp(18px,5vw,56px) 40px;padding:clamp(50px,8vw,90px) 30px;text-align:center;background:radial-gradient(120% 140% at 50% 0%,#241a3f,#12101c);border:1px solid var(--line)}
   .ld-final h2{font-family:var(--display);font-weight:800;font-size:clamp(30px,5vw,56px);letter-spacing:-.02em;color:#fff}
   .ld-final p{color:#c7c4dd;margin-top:16px;font-size:17px}
- 
+
   .ld-foot{max-width:1180px;margin:0 auto;padding:30px clamp(18px,5vw,56px) 50px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:16px;border-top:1px solid var(--line);color:var(--muted);font-size:13px}
   .ld-foot .ld-logo{font-size:18px}
- 
+
   .ld-reveal{opacity:0;transform:translateY(28px);transition:opacity .8s cubic-bezier(.16,1,.3,1),transform .8s cubic-bezier(.16,1,.3,1)}
   .ld-reveal.in{opacity:1;transform:none}
   .ld-reveal.d1{transition-delay:.08s}.ld-reveal.d2{transition-delay:.16s}.ld-reveal.d3{transition-delay:.24s}
@@ -319,7 +319,7 @@
   .hm-streak svg{width:20px;height:20px}
   .hm-streak .n{font-family:var(--display);font-weight:800;font-size:18px}
   .hm-streak .u{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);letter-spacing:.08em}
- 
+
   .hm-cont{display:grid;grid-template-columns:1fr 300px;border:1px solid var(--line);border-radius:20px;overflow:hidden;background:var(--surface);margin-bottom:20px;cursor:pointer;transition:.18s}
   .hm-cont:hover{border-color:var(--line2)}
   .hm-cont .info{padding:26px}
@@ -335,14 +335,14 @@
   .hm-cont .thumb .play{width:58px;height:58px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;box-shadow:0 14px 40px -10px var(--accent)}
   .hm-cont .thumb .play svg{width:20px;height:20px;fill:#0b0b11;margin-left:3px}
   @media(max-width:680px){.hm-cont{grid-template-columns:1fr}.hm-cont .thumb{height:150px;border-left:none;border-top:1px solid var(--line)}}
- 
+
   .hm-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:24px}
   @media(max-width:760px){.hm-stats{grid-template-columns:repeat(2,1fr)}}
   .hm-stat{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:18px}
   .hm-stat .lbl{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);text-transform:uppercase}
   .hm-stat .val{font-family:var(--display);font-weight:800;font-size:30px;margin-top:8px}
   .hm-stat .val small{font-size:15px;color:var(--muted);font-weight:600}
- 
+
   .hm-sec-h{font-family:var(--display);font-weight:800;font-size:18px;letter-spacing:-.01em;margin:6px 0 14px}
   .hm-daily{display:flex;align-items:center;gap:20px;border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:20px;margin-bottom:26px}
   .hm-ring{width:74px;height:74px;flex-shrink:0;position:relative}
@@ -350,7 +350,7 @@
   .hm-daily .dt{font-family:var(--display);font-weight:800;font-size:17px}
   .hm-daily .dd{color:var(--muted);font-size:14px;margin-top:6px}
   .hm-daily .dd b{color:var(--text)}
- 
+
   .hm-courses{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:26px}
   @media(max-width:760px){.hm-courses{grid-template-columns:1fr}}
   .hm-course{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:18px;cursor:pointer;transition:.18s}
@@ -358,7 +358,7 @@
   .hm-course .tile{width:38px;height:38px;border-radius:11px;background:var(--grad);color:#0b0b11;font-family:var(--display);font-weight:800;display:flex;align-items:center;justify-content:center;font-size:14px}
   .hm-course h4{font-weight:700;font-size:15px;margin-top:14px}
   .hm-course .pr{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:4px}
- 
+
   .hm-news{border:1px solid var(--line);border-radius:18px;background:var(--surface);overflow:hidden}
   .hm-news .item{display:flex;align-items:center;gap:14px;padding:15px 18px;cursor:pointer;transition:background .12s}
   .hm-news .item+.item{border-top:1px solid var(--line)}
@@ -408,10 +408,48 @@
   .ad-vtag.has{color:#0b0b11;background:var(--grad)}
   .ad-vtag.no{color:var(--muted);border:1px solid var(--line2)}
   @media(max-width:680px){.ad-form{grid-template-columns:1fr}}
+  .ad-form textarea{width:100%;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--text);outline:none;resize:vertical;min-height:70px}
+  .ad-form textarea:focus{border-color:var(--accent)}
+  .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+  .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
+  .ad-modacts button:hover{background:var(--hover)}
+  .ad-modacts button.del{color:var(--danger);border-color:var(--line2)}
+  .ad-modacts button.del:hover{border-color:var(--danger)}
+  /* ===== STUDENT: PROGRAM MODULES + LESSON PAGE ===== */
+  .pm-mod{border:1px solid var(--line);border-radius:16px;background:var(--surface);margin-bottom:14px;overflow:hidden}
+  .pm-mod-h{display:flex;align-items:center;justify-content:space-between;padding:15px 18px;font-family:var(--display);font-weight:800;font-size:16px;border-bottom:1px solid var(--line)}
+  .pm-mod-h span{font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--muted)}
+  .pm-empty{padding:14px 18px;color:var(--muted);font-size:13px}
+  .pm-lesson{width:100%;display:flex;align-items:center;gap:13px;padding:13px 18px;background:none;border:none;border-top:1px solid var(--line);cursor:pointer;font-family:var(--font);color:var(--text);text-align:left;transition:background .12s}
+  .pm-lesson:first-of-type{border-top:none}
+  .pm-lesson:hover{background:var(--hover)}
+  .pm-ord{width:26px;height:26px;flex-shrink:0;border-radius:8px;background:var(--field);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent)}
+  .pm-t{flex:1;min-width:0;font-weight:600;font-size:14px}
+  .pm-check{width:24px;height:24px;flex-shrink:0;border-radius:50%;border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent}
+  .pm-check.done{background:var(--grad);border-color:transparent;color:#0b0b11;font-weight:800}
+
+  .lsn-back{display:inline-flex;align-items:center;gap:7px;background:var(--field);border:1px solid var(--line);border-radius:100px;padding:9px 16px;cursor:pointer;font-family:var(--font);font-weight:600;font-size:13px;color:var(--text);margin-bottom:16px}
+  .lsn-back:hover{border-color:var(--line2)}
+  .lsn-back svg{width:15px;height:15px}
+  .lsn-player{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--line)}
+  .lsn-player video{width:100%;height:100%;display:block;background:#000}
+  .lsn-novideo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:13px;background:linear-gradient(135deg,rgba(155,139,255,.12),rgba(255,77,141,.08))}
+  .lsn-title{font-family:var(--display);font-weight:800;font-size:clamp(20px,3vw,28px);letter-spacing:-.02em;margin-top:20px}
+  .lsn-desc{color:var(--muted);font-size:15px;line-height:1.65;margin-top:12px;white-space:pre-wrap}
+  .lsn-mats{margin-top:20px}
+  .lsn-mh{font-family:'JetBrains Mono',monospace;font-size:11px;letter-spacing:.1em;color:var(--accent);font-weight:700;margin-bottom:10px}
+  .lsn-mat{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface);padding:13px 16px;margin-bottom:8px;text-decoration:none;color:var(--text);transition:.15s}
+  .lsn-mat:hover{border-color:var(--line2);background:var(--hover)}
+  .lsn-mat .mi{width:34px;height:34px;flex-shrink:0;border-radius:9px;background:var(--field);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--accent)}
+  .lsn-mat span:nth-child(2){flex:1;min-width:0;font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lsn-mat .dl{flex-shrink:0;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .lsn-complete{margin-top:24px;width:100%;max-width:320px;font-family:var(--font);font-weight:700;font-size:15px;color:#0b0b11;background:var(--grad);border:none;border-radius:12px;padding:15px;cursor:pointer;box-shadow:0 16px 40px -16px var(--accent);transition:transform .12s}
+  .lsn-complete:hover{transform:translateY(-1px)}
+  .lsn-complete.done{background:var(--field);color:var(--accent);border:1px solid var(--line2);box-shadow:none;cursor:default}
 </style>
 </head>
 <body data-theme="dark">
- 
+
 <!-- ============================== LANDING ============================== -->
 <div id="landing" class="screen on">
   <div class="ld-bgwrap"><canvas id="ld-bg"></canvas><div class="ld-orbs" id="ld-orbs"><b class="ld-o1"></b><b class="ld-o2"></b></div><div class="ld-veil"></div></div>
@@ -427,7 +465,7 @@
       <button class="ld-cta" onclick="showAuth('register')">Bepul boshlash</button>
     </div>
   </nav>
- 
+
   <header class="ld-hero">
     <div class="ld-hero-in">
       <div class="ld-kick ld-reveal">CREATANDCOOK · MOTION MAKTABI</div>
@@ -444,7 +482,7 @@
       </div>
     </div>
   </header>
- 
+
   <!-- 2 · PROGRAMS -->
   <section class="ld-sec" id="ld-programs">
     <div class="ld-eyebrow ld-reveal">DASTURLAR</div>
@@ -468,7 +506,7 @@
       </div>
     </div>
   </section>
- 
+
   <!-- 3 · FEATURES + TESTIMONIALS -->
   <section class="ld-sec" id="ld-features">
     <div class="ld-eyebrow ld-reveal">NEGA CREATANDCOOK</div>
@@ -484,7 +522,7 @@
       <div class="ld-quote ld-reveal d2"><p>"DaVinci'ni ochishga ham hadiksirardim — node tizimi murakkab tuyulardi. Color bo'limi buni bosqichma-bosqich, tushunarli qilib berdi. Hozir color grading'ni freelance loyihalarda alohida xizmat sifatida taklif qilyapman."</p><div class="who"><div class="av">S</div><div><div class="nm">Sardor</div><div class="rl">Colorist</div></div></div></div>
     </div>
   </section>
- 
+
   <!-- 4 · PRICING -->
   <section class="ld-sec" id="ld-pricing">
     <div class="ld-eyebrow ld-reveal">TARIFLAR</div>
@@ -512,7 +550,7 @@
       </div>
     </div>
   </section>
- 
+
   <!-- 5 · FINAL CTA + FOOTER -->
   <section class="ld-final ld-reveal">
     <h2>Bugun bepul boshlang</h2>
@@ -527,7 +565,7 @@
     <div>© 2026 · Video montaj &amp; motion maktabi</div>
   </footer>
 </div>
- 
+
 <!-- ============================== AUTH ============================== -->
 <div id="auth" class="screen">
   <div class="a-orbs" id="auth-orbs"><b class="ao1"></b><b class="ao2"></b></div>
@@ -537,7 +575,7 @@
     <svg class="moon" viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg>
     <svg class="sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
   </button>
- 
+
   <div class="frame">
     <div class="left">
       <div class="brand-top">
@@ -556,13 +594,13 @@
       </div>
       <div class="left-foot"><span>Ae · RESOLVE · Pr</span><span>EST. 2026</span></div>
     </div>
- 
+
     <div class="right">
       <div class="tabs">
         <button class="tab active" id="tab-login" onclick="showView('login')">Kirish</button>
         <button class="tab" id="tab-register" onclick="showView('register')">Ro'yxatdan o'tish</button>
       </div>
- 
+
       <!-- LOGIN -->
       <div class="pane active" id="pane-login">
         <div class="step-meta">A / HISOBGA KIRISH</div>
@@ -585,7 +623,7 @@
           <span class="note">Hisob yo'qmi? <button class="link" onclick="showView('register')" style="border:none">RO'YXAT</button></span>
         </div>
       </div>
- 
+
       <!-- REGISTER -->
       <div class="pane" id="pane-register">
         <div class="step-meta">B / YANGI HISOB</div>
@@ -616,7 +654,7 @@
         <button class="gbtn" onclick="signInGoogle()"><svg viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3c-1.6 4.7-6.1 8-11.3 8-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.3-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 16 19 13 24 13c3.1 0 5.9 1.2 8 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.2-8l-6.5 5C9.6 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C39.9 35.5 44 30.3 44 24c0-1.3-.1-2.3-.4-3.5z"/></svg> Google bilan davom etish</button>
         <div class="below"><span class="note">Hisobingiz bormi? <button class="link" onclick="showView('login')" style="border:none">KIRISH</button></span></div>
       </div>
- 
+
       <!-- REGISTER DONE (email tasdiqlash) -->
       <div class="pane" id="pane-regdone">
         <div class="step-meta">B / TASDIQLASH</div>
@@ -628,7 +666,7 @@
         <button class="submit" onclick="showView('login')">Kirishga o'tish <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
         <div class="below"><span class="note">Xat kelmadimi? Spam papkasini tekshiring yoki <button class="link" onclick="resendConfirm()" style="border:none">QAYTA YUBORISH</button></span></div>
       </div>
- 
+
       <!-- FORGOT -->
       <div class="pane" id="pane-forgot">
         <div id="fs-1">
@@ -682,7 +720,7 @@
     </div>
   </div>
 </div>
- 
+
 <!-- ============================== APP ============================== -->
 <div id="app" class="screen">
   <div class="scrim" onclick="closeNav()"></div>
@@ -700,7 +738,7 @@
       </button>
       <div class="subnav" id="subnav">
         <button class="sub-item" data-view="ae" onclick="go('ae')"><span class="prog-tile">Ae</span>After Effects</button>
-        <button class="sub-item" data-view="pr" onclick="go('pr')"><span class="prog-tile">Pr</span>Premier Pro</button>
+        <button class="sub-item" data-view="pr" onclick="go('pr')"><span class="prog-tile">Pr</span>Premiere Pro</button>
         <button class="sub-item" data-view="dv" onclick="go('dv')"><span class="prog-tile">Dv</span>DaVinci Resolve</button>
       </div>
       <button class="nav-item" data-view="reyting" onclick="go('reyting')">
@@ -713,7 +751,7 @@
         <span>Admin panel</span>
       </button>
     </nav>
- 
+
     <div class="profile" id="profile">
       <button class="profile-btn" onclick="toggleProfile(event)">
         <span class="av-wrap"><span class="avatar" id="side-avatar">U</span><span class="dot"></span></span>
@@ -739,7 +777,7 @@
       </div>
     </div>
   </aside>
- 
+
   <main class="main">
     <div class="topbar">
       <div style="display:flex;align-items:center;gap:14px">
@@ -756,7 +794,7 @@
         </button>
       </div>
     </div>
- 
+
     <div class="content">
       <section class="view on" id="view-asosiy">
         <div class="hm-top">
@@ -769,7 +807,7 @@
             <span class="n" id="hm-streak">7</span><span class="u" data-i18n="home.day">KUN</span>
           </div>
         </div>
- 
+
         <div class="hm-cont" onclick="go('ae')">
           <div class="info">
             <div class="k" data-i18n="home.cont_k">DAVOM ETTIRISH</div>
@@ -781,14 +819,14 @@
           </div>
           <div class="thumb"><div class="play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></div></div>
         </div>
- 
+
         <div class="hm-stats">
           <div class="hm-stat"><div class="lbl" data-i18n="home.s_progress">Umumiy progress</div><div class="val">42<small>%</small></div></div>
           <div class="hm-stat"><div class="lbl" data-i18n="home.s_lessons">Darslar</div><div class="val">18<small> / 60</small></div></div>
           <div class="hm-stat"><div class="lbl" data-i18n="home.s_points">Ballar</div><div class="val" id="hm-points">530</div></div>
           <div class="hm-stat"><div class="lbl" data-i18n="home.s_streak">Streak</div><div class="val"><span id="hm-streak2">7</span><small> <span data-i18n="home.day2">kun</span></small></div></div>
         </div>
- 
+
         <div class="hm-daily">
           <div class="hm-ring">
             <svg width="74" height="74" viewBox="0 0 74 74"><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#9b8bff"/><stop offset="1" stop-color="#ff4d8d"/></linearGradient></defs><circle cx="37" cy="37" r="31" fill="none" stroke="var(--field)" stroke-width="7"/><circle cx="37" cy="37" r="31" fill="none" stroke="url(#rg)" stroke-width="7" stroke-linecap="round" stroke-dasharray="195" stroke-dashoffset="97" transform="rotate(-90 37 37)"/></svg>
@@ -799,14 +837,14 @@
             <div class="dd"><span data-i18n="home.daily_note">Bugun bajarildi</span>: <b>1 / 2 <span data-i18n="home.lessons2">dars</span></b></div>
           </div>
         </div>
- 
+
         <div class="hm-sec-h" data-i18n="home.courses">Kurslarim</div>
         <div class="hm-courses">
           <div class="hm-course" onclick="go('ae')"><div class="tile">Ae</div><h4>After Effects</h4><div class="pr">14 / 24 <span data-i18n="home.lessons2">dars</span> · 58%</div><div class="hm-bar"><i style="width:58%"></i></div></div>
           <div class="hm-course" onclick="go('pr')"><div class="tile">Pr</div><h4>Premiere Pro</h4><div class="pr">4 / 16 <span data-i18n="home.lessons2">dars</span> · 25%</div><div class="hm-bar"><i style="width:25%"></i></div></div>
           <div class="hm-course" onclick="go('dv')"><div class="tile">Dv</div><h4>DaVinci Resolve</h4><div class="pr">2 / 21 <span data-i18n="home.lessons2">dars</span> · 10%</div><div class="hm-bar"><i style="width:10%"></i></div></div>
         </div>
- 
+
         <div class="hm-sec-h" data-i18n="home.news">Yangi darslar va e'lonlar</div>
         <div class="hm-news">
           <div class="item" onclick="go('pr')"><span class="tag" data-i18n="home.new">YANGI</span><div><div class="it-t" data-i18n="home.n1">Premiere Pro: yangi eksport darsi</div><div class="it-m">Premiere Pro</div></div><span class="arr">→</span></div>
@@ -814,32 +852,32 @@
           <div class="item"><span class="tag" data-i18n="home.announce">E'LON</span><div><div class="it-t" data-i18n="home.n3">Platforma yangilandi — tungi rejim yaxshilandi</div><div class="it-m">CREATANDCOOK</div></div><span class="arr">→</span></div>
         </div>
       </section>
- 
+
       <section class="view" id="view-ae">
-        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Ae</div><div><h3>After Effects</h3><div class="pc-sub" data-i18n="ae.sub">MOTION GRAFIKA · VFX</div></div></div>
-          <div class="grid3">
-            <div class="cell"><div class="n">01</div><div class="t" data-i18n="ae.c1">Interfeys va asoslar</div><div class="m" data-i18n="l6">6 dars</div></div>
-            <div class="cell"><div class="n">02</div><div class="t" data-i18n="ae.c2">Animatsiya</div><div class="m" data-i18n="l9">9 dars</div></div>
-            <div class="cell"><div class="n">03</div><div class="t" data-i18n="ae.c3">Effektlar</div><div class="m" data-i18n="l9">9 dars</div></div>
-          </div></div>
+        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Ae</div><div><h3>After Effects</h3><div class="pc-sub" data-i18n="ae.sub">MOTION GRAFIKA · VFX</div></div></div></div>
+        <div id="prog-ae"></div>
       </section>
       <section class="view" id="view-pr">
-        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Pr</div><div><h3>Premier Pro</h3><div class="pc-sub" data-i18n="pr.sub">MONTAJ · WORKFLOW</div></div></div>
-          <div class="grid3">
-            <div class="cell"><div class="n">01</div><div class="t" data-i18n="pr.c1">Sequence va kesish</div><div class="m" data-i18n="l7">7 dars</div></div>
-            <div class="cell"><div class="n">02</div><div class="t" data-i18n="pr.c2">Ovoz va musiqa</div><div class="m" data-i18n="l5">5 dars</div></div>
-            <div class="cell"><div class="n">03</div><div class="t" data-i18n="pr.c3">Eksport</div><div class="m" data-i18n="l4">4 dars</div></div>
-          </div></div>
+        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Pr</div><div><h3>Premiere Pro</h3><div class="pc-sub" data-i18n="pr.sub">MONTAJ · WORKFLOW</div></div></div></div>
+        <div id="prog-pr"></div>
       </section>
       <section class="view" id="view-dv">
-        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Dv</div><div><h3>DaVinci Resolve</h3><div class="pc-sub" data-i18n="dv.sub">COLOR GRADING</div></div></div>
-          <div class="grid3">
-            <div class="cell"><div class="n">01</div><div class="t" data-i18n="dv.c1">Color asoslari</div><div class="m" data-i18n="l6">6 dars</div></div>
-            <div class="cell"><div class="n">02</div><div class="t" data-i18n="dv.c2">Node tizimi</div><div class="m" data-i18n="l8">8 dars</div></div>
-            <div class="cell"><div class="n">03</div><div class="t" data-i18n="dv.c3">Look yaratish</div><div class="m" data-i18n="l7">7 dars</div></div>
-          </div></div>
+        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Dv</div><div><h3>DaVinci Resolve</h3><div class="pc-sub" data-i18n="dv.sub">COLOR GRADING</div></div></div></div>
+        <div id="prog-dv"></div>
       </section>
- 
+
+      <section class="view" id="view-lesson">
+        <button class="lsn-back" onclick="lessonBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Orqaga</button>
+        <div class="lsn-player">
+          <video id="lsn-video" controls playsinline style="display:none"></video>
+          <div class="lsn-novideo" id="lsn-novideo">Video hali yuklanmagan</div>
+        </div>
+        <h2 class="lsn-title" id="lsn-title"></h2>
+        <p class="lsn-desc" id="lsn-desc"></p>
+        <div class="lsn-mats" id="lsn-mats"></div>
+        <button class="lsn-complete" id="lsn-complete" onclick="markComplete()">Bajarildi deb belgilash</button>
+      </section>
+
       <section class="view" id="view-reyting">
         <div class="lb-row top"><div class="rk">1</div><div class="who"><div class="avatar">A</div><b>aziz_motion</b></div><div class="pts">2 480 ⌁</div></div>
         <div class="lb-row top"><div class="rk">2</div><div class="who"><div class="avatar">M</div><b>malika.edit</b></div><div class="pts">2 210 ⌁</div></div>
@@ -847,7 +885,7 @@
         <div class="lb-row"><div class="rk">4</div><div class="who"><div class="avatar">D</div><b>dilnoza_c</b></div><div class="pts">1 750 ⌁</div></div>
         <div class="lb-row"><div class="rk">5</div><div class="who"><div class="avatar">J</div><b>jasur.pro</b></div><div class="pts">1 600 ⌁</div></div>
       </section>
- 
+
       <section class="view" id="view-sozlamalar">
         <div class="photo-row">
           <div class="photo-prev" id="photo-prev">U</div>
@@ -870,12 +908,12 @@
         </div>
         <button class="submit" style="margin-top:14px;max-width:240px" onclick="saveSettings()"><span data-i18n="set.save">Saqlash</span> <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
       </section>
- 
+
       <section class="view" id="view-obuna">
         <div class="panel-card"><div class="pc-head"><div class="pc-tile red">★</div><div><h3 data-i18n="menu.subscription">Obuna</h3><div class="pc-sub" data-i18n="obuna.sub">PRO TARIF</div></div></div>
           <div class="pc-body"><p data-i18n="obuna.body">Bu yerga obuna tariflari, to'lov usuli va karta ma'lumotlari qo'shiladi.</p></div></div>
       </section>
- 
+
       <section class="view" id="view-admin">
         <div class="ad-bar">
           <div class="ad-sel">
@@ -887,7 +925,12 @@
             <select id="ad-course" onchange="adLoadLessons()"></select>
           </div>
         </div>
- 
+        <div class="ad-modacts">
+          <button onclick="adAddModule()">+ Yangi modul</button>
+          <button onclick="adRenameModule()">Modul nomini o'zgartirish</button>
+          <button class="del" onclick="adDeleteModule()">Modulni o'chirish</button>
+        </div>
+
         <div class="ad-card">
           <h3>Yangi dars qo'shish</h3>
           <div class="ad-form">
@@ -895,9 +938,9 @@
               <label>Dars nomi</label>
               <input type="text" id="ad-title" placeholder="Masalan: Keyframe asoslari">
             </div>
-            <div>
-              <label>Davomiyligi (daqiqa)</label>
-              <input type="number" id="ad-dur" placeholder="12" min="0">
+            <div class="full">
+              <label>Tavsif (ixtiyoriy)</label>
+              <textarea id="ad-desc" rows="3" placeholder="Dars haqida qisqacha..."></textarea>
             </div>
             <div class="full">
               <label>Video</label>
@@ -907,22 +950,29 @@
                 <span class="fname" id="ad-fname">Fayl tanlanmagan</span>
               </div>
             </div>
+            <div class="full">
+              <label>Materiallar (PDF, rasm, MP3 — bir nechta bo'lishi mumkin)</label>
+              <div class="ad-file">
+                <button class="pick" onclick="document.getElementById('ad-mats').click()">Fayllar tanlash</button>
+                <input type="file" id="ad-mats" multiple accept=".pdf,image/*,audio/*,.doc,.docx,.zip,.aep,.prproj" style="display:none" onchange="adPickedMats()">
+                <span class="fname" id="ad-mname">Fayl tanlanmagan</span>
+              </div>
+            </div>
           </div>
           <div class="ad-prog" id="ad-prog"><i id="ad-prog-bar"></i></div>
           <button class="ad-save" id="ad-save" onclick="adSaveLesson()">Darsni saqlash</button>
           <div class="ad-note" id="ad-note"></div>
         </div>
- 
+
         <div class="ad-card">
           <h3>Modul darslari</h3>
           <div id="ad-lessons"><div class="ad-empty">Modul tanlang…</div></div>
-          <button class="ad-save" style="margin-top:6px;background:var(--field);color:var(--text);border:1px solid var(--line2)" onclick="adAddModule()">+ Yangi modul qo'shish</button>
         </div>
       </section>
     </div>
   </main>
 </div>
- 
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ---------------- SUPABASE ---------------- */
@@ -932,10 +982,10 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 function _val(id){const e=document.getElementById(id);return e?e.value.trim():'';}
 function _setVal(id,v){const e=document.getElementById(id);if(e&&v!=null)e.value=v;}
 function _setText(id,v){const e=document.getElementById(id);if(e&&v!=null)e.textContent=v;}
- 
+
 /* ---------------- THEME ---------------- */
 function toggleTheme(){const b=document.body;b.setAttribute('data-theme',b.getAttribute('data-theme')==='dark'?'light':'dark');}
- 
+
 /* ---------------- AUTH: view switch ---------------- */
 function showView(name){
   document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
@@ -951,10 +1001,10 @@ function clearErrors(){document.querySelectorAll('.err-msg').forEach(e=>e.classL
 const isGmail=v=>/^[^\s@]+@gmail\.com$/i.test(v.trim());
 const isEmail=v=>/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim());
 const isPhone=v=>{const d=v.replace(/\D/g,'');return /^[+]?[\d\s()-]{7,}$/.test(v.trim())&&d.length>=7;};
- 
+
 let regMode='email';
 let forgotMode='email';
- 
+
 let currentUsername='username';
 async function doLogin(){
   clearErrors();
@@ -1015,7 +1065,7 @@ document.querySelectorAll('.cd').forEach((box,i,arr)=>{
   box.addEventListener('input',()=>{box.value=box.value.replace(/\D/g,'');if(box.value&&arr[i+1])arr[i+1].focus();});
   box.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!box.value&&arr[i-1])arr[i-1].focus();});
 });
- 
+
 /* ENTER / EXIT */
 async function loadProfileAndEnter(){
   const {data:{user}}=await sb.auth.getUser();
@@ -1028,6 +1078,7 @@ async function loadProfileAndEnter(){
   if(profile.gender){const g=document.getElementById('s-gender'); if(g)g.value=profile.gender;}
   if(profile.birthday){const b=document.getElementById('s-bday'); if(b)b.value=profile.birthday;}
   _setText('hm-points',profile.points||0); _setText('hm-streak',profile.streak||0); _setText('hm-streak2',profile.streak||0);
+  myPoints=profile.points||0; const nb=document.querySelector('.nav-badge'); if(nb) nb.textContent='★ '+myPoints;
   if(profile.avatar_url){
     document.getElementById('side-avatar').innerHTML='<img src="'+profile.avatar_url+'">';
     document.getElementById('photo-prev').innerHTML='<img src="'+profile.avatar_url+'">';
@@ -1056,10 +1107,10 @@ async function logout(){
   document.getElementById('l-pw').value='';
   window.scrollTo(0,0);
 }
- 
+
 /* SIDEBAR NAV */
-const TITLES={asosiy:'nav.home',ae:'After Effects',pr:'Premier Pro',dv:'DaVinci Resolve',reyting:'nav.rating',sozlamalar:'menu.settings',obuna:'menu.subscription'};
-const RAW_TITLE={ae:'After Effects',pr:'Premier Pro',dv:'DaVinci Resolve',admin:'Admin panel'};
+const TITLES={asosiy:'nav.home',ae:'After Effects',pr:'Premiere Pro',dv:'DaVinci Resolve',reyting:'nav.rating',sozlamalar:'menu.settings',obuna:'menu.subscription'};
+const RAW_TITLE={ae:'After Effects',pr:'Premiere Pro',dv:'DaVinci Resolve',admin:'Admin panel'};
 function go(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   const el=document.getElementById('view-'+view); if(el)el.classList.add('on');
@@ -1068,14 +1119,14 @@ function go(view){
   const t=document.getElementById('page-title');
   if(RAW_TITLE[view]){t.removeAttribute('data-i18n');t.textContent=RAW_TITLE[view];}
   else{t.setAttribute('data-i18n',TITLES[view]||'nav.home');t.textContent=tr(TITLES[view]||'nav.home');}
-  if(['ae','pr','dv'].includes(view)){document.getElementById('subnav').classList.add('open');document.getElementById('prog-toggle').classList.add('open');}
+  if(['ae','pr','dv'].includes(view)){document.getElementById('subnav').classList.add('open');document.getElementById('prog-toggle').classList.add('open');loadProgram(view);}
   if(view==='admin') adInit();
   closeNav();
 }
 function togglePrograms(){document.getElementById('subnav').classList.toggle('open');document.getElementById('prog-toggle').classList.toggle('open');}
 function openNav(){document.body.classList.add('nav-open');}
 function closeNav(){document.body.classList.remove('nav-open');}
- 
+
 /* ---------------- ADMIN PANEL ---------------- */
 let adLessonsCache=[];
 function adNote(m){const e=document.getElementById('ad-note'); if(e)e.textContent=m||'';}
@@ -1111,46 +1162,75 @@ async function adLoadLessons(){
   if(!adLessonsCache.length){box.innerHTML='<div class="ad-empty">Bu modulda hali dars yo\'q.</div>';return;}
   box.innerHTML=adLessonsCache.map((l,i)=>{
     const vtag=l.video_url?'<span class="ad-vtag has">VIDEO</span>':'<span class="ad-vtag no">VIDEO YO\'Q</span>';
-    const dur=l.duration_min?(l.duration_min+' daq'):'—';
-    return '<div class="ad-lesson"><div class="ord">'+(i+1)+'</div><div class="sp"><div class="lt">'+adEsc(l.title)+'</div><div class="lm">'+dur+'</div></div>'+vtag+
+    const nmat=Array.isArray(l.materials)?l.materials.length:0;
+    const meta=(nmat?nmat+' material':'material yo\'q')+(l.description?' · tavsifli':'');
+    const up=i>0?'<button class="ic" title="Yuqoriga" onclick="adReorder('+i+',-1)"><svg viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg></button>':'<span style="width:34px;flex-shrink:0"></span>';
+    const dn=i<adLessonsCache.length-1?'<button class="ic" title="Pastga" onclick="adReorder('+i+',1)"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>':'<span style="width:34px;flex-shrink:0"></span>';
+    return '<div class="ad-lesson"><div class="ord">'+(i+1)+'</div><div class="sp"><div class="lt">'+adEsc(l.title)+'</div><div class="lm">'+meta+'</div></div>'+vtag+up+dn+
       '<button class="ic" title="Tahrirlash" onclick="adEditLesson(\''+l.id+'\')"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>'+
       '<button class="ic del" title="O\'chirish" onclick="adDeleteLesson(\''+l.id+'\')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>';
   }).join('');
 }
+async function adReorder(i,dir){
+  const j=i+dir; if(j<0||j>=adLessonsCache.length)return;
+  const a=adLessonsCache[i],b=adLessonsCache[j];
+  const as=a.sort,bs=b.sort;
+  await sb.from('lessons').update({sort:bs}).eq('id',a.id);
+  await sb.from('lessons').update({sort:as}).eq('id',b.id);
+  adLoadLessons();
+}
 function adEsc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 function adPickedFile(){const f=document.getElementById('ad-video').files[0];document.getElementById('ad-fname').textContent=f?f.name:'Fayl tanlanmagan';}
+function adPickedMats(){const fs=document.getElementById('ad-mats').files;document.getElementById('ad-mname').textContent=fs&&fs.length?(fs.length+' ta fayl tanlandi'):'Fayl tanlanmagan';}
+function adMatKind(f){const t=(f.type||'');if(t.startsWith('image/'))return 'image';if(t.startsWith('audio/'))return 'audio';if(t==='application/pdf'||/\.pdf$/i.test(f.name))return 'pdf';return 'file';}
 async function adSaveLesson(){
   const cid=document.getElementById('ad-course').value;
   if(!cid){adNote('Avval modul tanlang (yoki qo\'shing).');return;}
   const title=_val('ad-title'); if(!title){adNote('Dars nomini kiriting.');return;}
-  const dur=parseInt(_val('ad-dur')); const duration_min=isNaN(dur)?null:dur;
+  const description=document.getElementById('ad-desc').value.trim()||null;
   const file=document.getElementById('ad-video').files[0];
+  const mats=document.getElementById('ad-mats').files;
   const btn=document.getElementById('ad-save'); btn.disabled=true; adNote('');
   const {count}=await sb.from('lessons').select('*',{count:'exact',head:true}).eq('course_id',cid);
   const sort=(count||0)+1;
   let video_url=null,video_path=null;
-  if(file){
-    const ext=(file.name.split('.').pop()||'mp4').toLowerCase();
-    video_path=cid+'/'+Date.now()+'.'+ext;
-    adNote('Video yuklanmoqda… (hajmiga qarab biroz vaqt olishi mumkin)'); adShowProg(true);
-    const {error:upErr}=await sb.storage.from('videos').upload(video_path,file,{contentType:file.type,upsert:false});
-    adShowProg(false);
-    if(upErr){btn.disabled=false;adNote('Video yuklashda xato: '+upErr.message);return;}
-    video_url=sb.storage.from('videos').getPublicUrl(video_path).data.publicUrl;
-  }
-  const {error}=await sb.from('lessons').insert({course_id:cid,title,duration_min,sort,video_url,video_path});
-  btn.disabled=false;
-  if(error){adNote('Saqlashda xato: '+error.message);return;}
-  document.getElementById('ad-title').value=''; document.getElementById('ad-dur').value='';
-  document.getElementById('ad-video').value=''; document.getElementById('ad-fname').textContent='Fayl tanlanmagan';
-  adNote('✓ Dars qo\'shildi.');
-  adLoadLessons();
+  try{
+    if(file){
+      const ext=(file.name.split('.').pop()||'mp4').toLowerCase();
+      video_path=cid+'/'+Date.now()+'.'+ext;
+      adNote('Video yuklanmoqda… (hajmiga qarab biroz vaqt olishi mumkin)'); adShowProg(true);
+      const {error:upErr}=await sb.storage.from('videos').upload(video_path,file,{contentType:file.type,upsert:false});
+      adShowProg(false);
+      if(upErr){btn.disabled=false;adNote('Video yuklashda xato: '+upErr.message);return;}
+      video_url=sb.storage.from('videos').getPublicUrl(video_path).data.publicUrl;
+    }
+    const materials=[];
+    if(mats&&mats.length){
+      adNote('Materiallar yuklanmoqda…');
+      for(const m of mats){
+        const mext=(m.name.split('.').pop()||'bin').toLowerCase();
+        const mpath=cid+'/'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'.'+mext;
+        const {error:mErr}=await sb.storage.from('materials').upload(mpath,m,{contentType:m.type,upsert:false});
+        if(mErr){btn.disabled=false;adNote('Material yuklashda xato: '+mErr.message);return;}
+        const murl=sb.storage.from('materials').getPublicUrl(mpath).data.publicUrl;
+        materials.push({name:m.name,url:murl,path:mpath,kind:adMatKind(m)});
+      }
+    }
+    const {error}=await sb.from('lessons').insert({course_id:cid,title,description,sort,video_url,video_path,materials});
+    btn.disabled=false;
+    if(error){adNote('Saqlashda xato: '+error.message);return;}
+    document.getElementById('ad-title').value=''; document.getElementById('ad-desc').value='';
+    document.getElementById('ad-video').value=''; document.getElementById('ad-fname').textContent='Fayl tanlanmagan';
+    document.getElementById('ad-mats').value=''; document.getElementById('ad-mname').textContent='Fayl tanlanmagan';
+    adNote('✓ Dars qo\'shildi.');
+    adLoadLessons();
+  }catch(e){btn.disabled=false;adShowProg(false);adNote('Xato: '+e.message);}
 }
 async function adEditLesson(id){
   const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
   const t=prompt('Dars nomi:',l.title); if(t==null)return;
-  const d=prompt('Davomiyligi (daqiqa):', l.duration_min||'');
-  const dn=parseInt(d); const upd={title:t.trim(),duration_min:isNaN(dn)?null:dn};
+  const d=prompt('Tavsif (ixtiyoriy):', l.description||'');
+  const upd={title:t.trim(),description:(d==null?l.description:(d.trim()||null))};
   const {error}=await sb.from('lessons').update(upd).eq('id',id);
   if(error){adNote('Tahrirlashda xato: '+error.message);return;}
   adLoadLessons();
@@ -1159,6 +1239,7 @@ async function adDeleteLesson(id){
   const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
   if(!confirm('"'+l.title+'" darsini o\'chirasizmi?'))return;
   if(l.video_path){ await sb.storage.from('videos').remove([l.video_path]); }
+  if(Array.isArray(l.materials)&&l.materials.length){ await sb.storage.from('materials').remove(l.materials.map(m=>m.path).filter(Boolean)); }
   const {error}=await sb.from('lessons').delete().eq('id',id);
   if(error){adNote('O\'chirishda xato: '+error.message);return;}
   adLoadLessons();
@@ -1173,12 +1254,106 @@ async function adAddModule(){
   await adLoadCourses();
   adNote('✓ Modul qo\'shildi.');
 }
- 
+/* ---------------- STUDENT: PROGRAMS + LESSON PAGE ---------------- */
+let myPoints=0, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null;
+async function loadProgram(slug){
+  currentProgSlug=slug;
+  const box=document.getElementById('prog-'+slug); if(!box)return;
+  box.innerHTML='<div class="pm-empty">Yuklanmoqda…</div>';
+  const {data:prog}=await sb.from('programs').select('id').eq('slug',slug).maybeSingle();
+  if(!prog){box.innerHTML='<div class="pm-empty">Dastur topilmadi.</div>';return;}
+  const {data:courses}=await sb.from('courses').select('id,title,sort').eq('program_id',prog.id).order('sort');
+  if(!courses||!courses.length){box.innerHTML='<div class="pm-empty">Hali modul yo\'q.</div>';return;}
+  const cids=courses.map(c=>c.id);
+  const {data:lessons}=await sb.from('lessons').select('id,course_id,title,sort,video_url,description,materials').in('course_id',cids).order('sort');
+  const {data:{user}}=await sb.auth.getUser();
+  lessonDone={};
+  if(user){const {data:pr}=await sb.from('lesson_progress').select('lesson_id,completed').eq('user_id',user.id);(pr||[]).forEach(p=>{if(p.completed)lessonDone[p.lesson_id]=true;});}
+  (lessons||[]).forEach(l=>{lessonCache[l.id]=l;});
+  let html='';
+  courses.forEach(c=>{
+    const ls=(lessons||[]).filter(l=>l.course_id===c.id);
+    html+='<div class="pm-mod"><div class="pm-mod-h">'+adEsc(c.title)+'<span>'+ls.length+' dars</span></div>';
+    if(!ls.length){html+='<div class="pm-empty">Darslar tez orada…</div>';}
+    else ls.forEach((l,i)=>{
+      const chk=lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>';
+      html+='<button class="pm-lesson" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'</span>'+chk+'</button>';
+    });
+    html+='</div>';
+  });
+  box.innerHTML=html;
+}
+function matKind(k){return k==='pdf'?'PDF':k==='image'?'IMG':k==='audio'?'MP3':'FILE';}
+function openLesson(id){
+  const l=lessonCache[id]; if(!l)return;
+  currentLessonId=id;
+  document.getElementById('lsn-title').textContent=l.title;
+  const dsc=document.getElementById('lsn-desc'); dsc.textContent=l.description||''; dsc.style.display=l.description?'block':'none';
+  const vid=document.getElementById('lsn-video'), nov=document.getElementById('lsn-novideo');
+  if(l.video_url){vid.src=l.video_url;vid.style.display='block';nov.style.display='none';}
+  else {vid.removeAttribute('src');vid.style.display='none';nov.style.display='flex';}
+  const mbox=document.getElementById('lsn-mats');
+  const mats=Array.isArray(l.materials)?l.materials:[];
+  if(mats.length){mbox.innerHTML='<div class="lsn-mh">MATERIALLAR</div>'+mats.map(m=>'<a class="lsn-mat" href="'+m.url+'" target="_blank" rel="noopener"><span class="mi">'+matKind(m.kind)+'</span><span>'+adEsc(m.name)+'</span><span class="dl">Yuklab olish</span></a>').join('');}
+  else {mbox.innerHTML='';}
+  updateCompleteBtn();
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('view-lesson').classList.add('on');
+  const t=document.getElementById('page-title'); t.removeAttribute('data-i18n'); t.textContent='Dars';
+  window.scrollTo(0,0); closeNav();
+}
+function updateCompleteBtn(){
+  const b=document.getElementById('lsn-complete');
+  if(lessonDone[currentLessonId]){b.textContent='✓ Bajarildi';b.classList.add('done');b.disabled=true;}
+  else {b.textContent='Bajarildi deb belgilash';b.classList.remove('done');b.disabled=false;}
+}
+async function markComplete(){
+  const {data:{user}}=await sb.auth.getUser(); if(!user)return;
+  const id=currentLessonId; if(!id)return;
+  const {error}=await sb.from('lesson_progress').upsert({user_id:user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()},{onConflict:'user_id,lesson_id'});
+  if(error){alert('Xato: '+error.message);return;}
+  if(!lessonDone[id]){
+    myPoints+=10;
+    await sb.from('profiles').update({points:myPoints}).eq('id',user.id);
+    _setText('hm-points',myPoints);
+    const nb=document.querySelector('.nav-badge'); if(nb) nb.textContent='★ '+myPoints;
+  }
+  lessonDone[id]=true;
+  updateCompleteBtn();
+}
+function lessonBack(){ const v=document.getElementById('lsn-video'); if(v){v.pause&&v.pause();} go(currentProgSlug||'asosiy'); }
+
+async function adRenameModule(){
+  const cid=document.getElementById('ad-course').value; if(!cid){adNote('Avval modul tanlang.');return;}
+  const cur=document.getElementById('ad-course').selectedOptions[0]?.textContent||'';
+  const name=prompt('Modulning yangi nomi:',cur); if(name==null||!name.trim())return;
+  const {error}=await sb.from('courses').update({title:name.trim()}).eq('id',cid);
+  if(error){adNote('O\'zgartirishda xato: '+error.message);return;}
+  await adLoadCourses();
+  adNote('✓ Modul nomi o\'zgartirildi.');
+}
+async function adDeleteModule(){
+  const cid=document.getElementById('ad-course').value; if(!cid){adNote('Avval modul tanlang.');return;}
+  const cur=document.getElementById('ad-course').selectedOptions[0]?.textContent||'';
+  if(!confirm('"'+cur+'" modulini va undagi BARCHA darslarni o\'chirasizmi? Bu qaytarib bo\'lmaydi.'))return;
+  const {data:ls}=await sb.from('lessons').select('video_path,materials').eq('course_id',cid);
+  if(ls&&ls.length){
+    const vids=ls.map(l=>l.video_path).filter(Boolean);
+    const mts=[]; ls.forEach(l=>{ if(Array.isArray(l.materials)) l.materials.forEach(m=>{ if(m&&m.path) mts.push(m.path); }); });
+    if(vids.length) await sb.storage.from('videos').remove(vids);
+    if(mts.length) await sb.storage.from('materials').remove(mts);
+  }
+  const {error}=await sb.from('courses').delete().eq('id',cid);
+  if(error){adNote('O\'chirishda xato: '+error.message);return;}
+  await adLoadCourses();
+  adNote('✓ Modul o\'chirildi.');
+}
+
 /* PROFILE MENU */
 function toggleProfile(e){e.stopPropagation();document.getElementById('profile').classList.toggle('open');}
 function closeProfile(){document.getElementById('profile').classList.remove('open');}
 document.addEventListener('click',e=>{const p=document.getElementById('profile');if(p&&!p.contains(e.target))closeProfile();});
- 
+
 /* PHOTO */
 async function loadPhoto(e){const f=e.target.files[0];if(!f)return;
   const r=new FileReader();r.onload=ev=>{document.getElementById('photo-prev').innerHTML='<img src="'+ev.target.result+'">';document.getElementById('side-avatar').innerHTML='<img src="'+ev.target.result+'">';};r.readAsDataURL(f);
@@ -1204,7 +1379,7 @@ async function saveSettings(){
   const u=payload.username; if(u){currentUsername=u;document.getElementById('side-username').textContent=u;const hn=document.getElementById('home-name');if(hn)hn.textContent=u;if(!document.querySelector('#side-avatar img'))document.getElementById('side-avatar').textContent=(u[0]||'U').toUpperCase();}
   alert('\u2713 Sozlamalar saqlandi.');
 }
- 
+
 /* LANGUAGE */
 const I18N={
   uz:{'nav.home':'Asosiy','nav.programs':'Programmalar','nav.rating':'Reyting','menu.settings':'Sozlamalar','menu.subscription':'Obuna','menu.logout':'Chiqish','set.upload':'Rasm yuklash','set.first':'Ism','set.last':'Familiya','set.user':'Username','set.gender':'Jins','set.bday':"Tug'ilgan kun",'set.phone':'Telefon raqam','set.email':'Gmail','set.save':'Saqlash','gender.sel':'Tanlang','gender.m':'Erkak','gender.f':'Ayol','gender.o':'Boshqa','set.photonote':'JPG / PNG · max 5MB','ph.email':'ism@gmail.com','profile.status':'PROFIL · ONLINE','ae.sub':'MOTION GRAFIKA · VFX','pr.sub':'MONTAJ · WORKFLOW','dv.sub':'COLOR GRADING','ae.c1':'Interfeys va asoslar','ae.c2':'Animatsiya','ae.c3':'Effektlar','pr.c1':'Sequence va kesish','pr.c2':'Ovoz va musiqa','pr.c3':'Eksport','dv.c1':'Color asoslari','dv.c2':'Node tizimi','dv.c3':'Look yaratish','l4':'4 dars','l5':'5 dars','l6':'6 dars','l7':'7 dars','l8':'8 dars','l9':'9 dars','obuna.sub':'PRO TARIF','obuna.body':"Bu yerga obuna tariflari, to'lov usuli va karta ma'lumotlari qo'shiladi.",'home.hi':'Xush kelibsiz','home.sub':"Bugun qayerdan davom etamiz?",'home.day':'KUN','home.day2':'kun','home.cont_k':'DAVOM ETTIRISH','home.cont_lesson':'Animatsiya asoslari','home.cont_btn':'Davom ettirish','home.lessons2':'dars','home.s_progress':'Umumiy progress','home.s_lessons':'Darslar','home.s_points':'Ballar','home.s_streak':'Streak','home.daily_title':'Kunlik maqsad','home.daily_note':'Bugun bajarildi','home.courses':'Kurslarim','home.news':"Yangi darslar va e'lonlar",'home.new':'YANGI','home.announce':"E'LON",'home.n1':'Premiere Pro: yangi eksport darsi','home.n2':'After Effects: 3 ta yangi effekt darsi','home.n3':'Platforma yangilandi — tungi rejim yaxshilandi'},
@@ -1216,13 +1391,13 @@ function applyLang(){
   document.querySelectorAll('[data-i18n-ph]').forEach(el=>{const k=el.getAttribute('data-i18n-ph');const v=I18N.uz[k];if(v!=null)el.setAttribute('placeholder',v);});
 }
 applyLang();
- 
+
 /* ---------------- KINETIC AUTH BACKGROUND ---------------- */
 (function(){
   const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
   const verbs=document.querySelectorAll('#auth .verb');
   if(verbs.length&&!reduce){let vi=0;setInterval(()=>{verbs[vi].classList.remove('on');vi=(vi+1)%verbs.length;verbs[vi].classList.add('on');},2300);}
- 
+
   const cv=document.getElementById('auth-grid'); if(!cv) return;
   const hero=document.getElementById('auth'), orbs=document.getElementById('auth-orbs'), ctx=cv.getContext('2d');
   let w=0,h=0,dpr,dots=[],GAP=46,tmx=-9999,tmy=-9999,mx=-9999,my=-9999,running=false;
@@ -1263,7 +1438,7 @@ function showLanding(){document.getElementById('app').classList.remove('on');doc
   window.addEventListener('scroll',()=>{if(nv)nv.classList.toggle('scrolled',window.scrollY>40);},{passive:true});
   const rio=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('in');}),{threshold:.14});
   document.querySelectorAll('.ld-reveal').forEach(el=>rio.observe(el));
- 
+
   const cv=document.getElementById('ld-bg'); if(!cv) return;
   const orbs=document.getElementById('ld-orbs'), ctx=cv.getContext('2d');
   let w=0,h=0,dpr,parts=[],mx=-9999,my=-9999,tmx=-9999,tmy=-9999,t=0;
@@ -1300,7 +1475,7 @@ function showLanding(){document.getElementById('app').classList.remove('on');doc
   if(reduce){ for(let i=0;i<70;i++) step(); }
   else draw();
 })();
- 
+
 /* ---------------- SESSION RESTORE (avto-kirish) ---------------- */
 (async function(){
   try{
