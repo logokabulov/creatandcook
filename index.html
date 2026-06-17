@@ -372,6 +372,42 @@
   .gbtn svg{width:18px;height:18px}
   .or-div{display:flex;align-items:center;gap:12px;margin:18px 0 2px;color:var(--faint);font-size:12px;font-family:'JetBrains Mono',monospace}
   .or-div::before,.or-div::after{content:"";flex:1;height:1px;background:var(--line)}
+  /* ===== ADMIN PANEL ===== */
+  .ad-bar{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+  .ad-sel{flex:1;min-width:200px}
+  .ad-sel label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px}
+  .ad-sel select{width:100%;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--text);outline:none}
+  .ad-sel select:focus{border-color:var(--accent)}
+  .ad-card{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:22px;margin-bottom:18px}
+  .ad-card h3{font-family:var(--display);font-weight:800;font-size:17px;margin-bottom:16px}
+  .ad-form{display:grid;grid-template-columns:1fr 130px;gap:12px}
+  .ad-form .full{grid-column:1/-1}
+  .ad-form label{display:block;font-size:12px;font-weight:600;color:var(--muted);margin-bottom:7px}
+  .ad-form input{width:100%;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--text);outline:none}
+  .ad-form input:focus{border-color:var(--accent)}
+  .ad-file{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ad-file .pick{font-family:var(--font);font-weight:600;font-size:13px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:11px 16px;cursor:pointer}
+  .ad-file .pick:hover{background:var(--hover)}
+  .ad-file .fname{font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;max-width:60%}
+  .ad-save{margin-top:14px;display:inline-flex;align-items:center;gap:8px;font-family:var(--font);font-weight:700;font-size:14px;color:#0b0b11;background:var(--grad);border:none;border-radius:12px;padding:13px 22px;cursor:pointer}
+  .ad-save:disabled{opacity:.55;cursor:default}
+  .ad-prog{height:7px;border-radius:6px;background:var(--field);overflow:hidden;margin-top:14px;display:none}
+  .ad-prog i{display:block;height:100%;width:0;background:var(--grad);transition:width .2s}
+  .ad-note{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:10px}
+  .ad-lesson{display:flex;align-items:center;gap:12px;border:1px solid var(--line);border-radius:12px;background:var(--surface2);padding:12px 14px;margin-bottom:8px}
+  .ad-lesson .ord{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent);width:24px;flex-shrink:0}
+  .ad-lesson .lt{font-weight:600;font-size:14px}
+  .ad-lesson .lm{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px}
+  .ad-lesson .sp{flex:1;min-width:0}
+  .ad-lesson .ic{width:34px;height:34px;border-radius:9px;border:1px solid var(--line);background:var(--field);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;transition:.15s}
+  .ad-lesson .ic:hover{color:var(--text);border-color:var(--line2)}
+  .ad-lesson .ic.del:hover{color:var(--danger);border-color:var(--danger)}
+  .ad-lesson .ic svg{width:16px;height:16px;stroke:currentColor;stroke-width:1.8;fill:none}
+  .ad-empty{color:var(--muted);font-size:14px;padding:14px 2px}
+  .ad-vtag{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:3px 7px;border-radius:5px;flex-shrink:0}
+  .ad-vtag.has{color:#0b0b11;background:var(--grad)}
+  .ad-vtag.no{color:var(--muted);border:1px solid var(--line2)}
+  @media(max-width:680px){.ad-form{grid-template-columns:1fr}}
 </style>
 </head>
 <body data-theme="dark">
@@ -672,6 +708,10 @@
         <span data-i18n="nav.rating">Reyting</span>
         <span class="nav-badge">★ 53</span>
       </button>
+      <button class="nav-item" id="nav-admin" data-view="admin" onclick="go('admin')" style="display:none">
+        <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
+        <span>Admin panel</span>
+      </button>
     </nav>
  
     <div class="profile" id="profile">
@@ -835,6 +875,50 @@
         <div class="panel-card"><div class="pc-head"><div class="pc-tile red">★</div><div><h3 data-i18n="menu.subscription">Obuna</h3><div class="pc-sub" data-i18n="obuna.sub">PRO TARIF</div></div></div>
           <div class="pc-body"><p data-i18n="obuna.body">Bu yerga obuna tariflari, to'lov usuli va karta ma'lumotlari qo'shiladi.</p></div></div>
       </section>
+ 
+      <section class="view" id="view-admin">
+        <div class="ad-bar">
+          <div class="ad-sel">
+            <label>Dastur</label>
+            <select id="ad-program" onchange="adLoadCourses()"></select>
+          </div>
+          <div class="ad-sel">
+            <label>Modul</label>
+            <select id="ad-course" onchange="adLoadLessons()"></select>
+          </div>
+        </div>
+ 
+        <div class="ad-card">
+          <h3>Yangi dars qo'shish</h3>
+          <div class="ad-form">
+            <div class="full">
+              <label>Dars nomi</label>
+              <input type="text" id="ad-title" placeholder="Masalan: Keyframe asoslari">
+            </div>
+            <div>
+              <label>Davomiyligi (daqiqa)</label>
+              <input type="number" id="ad-dur" placeholder="12" min="0">
+            </div>
+            <div class="full">
+              <label>Video</label>
+              <div class="ad-file">
+                <button class="pick" onclick="document.getElementById('ad-video').click()">Video tanlash</button>
+                <input type="file" id="ad-video" accept="video/*" style="display:none" onchange="adPickedFile()">
+                <span class="fname" id="ad-fname">Fayl tanlanmagan</span>
+              </div>
+            </div>
+          </div>
+          <div class="ad-prog" id="ad-prog"><i id="ad-prog-bar"></i></div>
+          <button class="ad-save" id="ad-save" onclick="adSaveLesson()">Darsni saqlash</button>
+          <div class="ad-note" id="ad-note"></div>
+        </div>
+ 
+        <div class="ad-card">
+          <h3>Modul darslari</h3>
+          <div id="ad-lessons"><div class="ad-empty">Modul tanlang…</div></div>
+          <button class="ad-save" style="margin-top:6px;background:var(--field);color:var(--text);border:1px solid var(--line2)" onclick="adAddModule()">+ Yangi modul qo'shish</button>
+        </div>
+      </section>
     </div>
   </main>
 </div>
@@ -948,6 +1032,7 @@ async function loadProfileAndEnter(){
     document.getElementById('side-avatar').innerHTML='<img src="'+profile.avatar_url+'">';
     document.getElementById('photo-prev').innerHTML='<img src="'+profile.avatar_url+'">';
   }
+  if(profile.is_admin){const na=document.getElementById('nav-admin'); if(na) na.style.display='flex';}
   enterApp();
 }
 function enterApp(){
@@ -974,7 +1059,7 @@ async function logout(){
  
 /* SIDEBAR NAV */
 const TITLES={asosiy:'nav.home',ae:'After Effects',pr:'Premier Pro',dv:'DaVinci Resolve',reyting:'nav.rating',sozlamalar:'menu.settings',obuna:'menu.subscription'};
-const RAW_TITLE={ae:'After Effects',pr:'Premier Pro',dv:'DaVinci Resolve'};
+const RAW_TITLE={ae:'After Effects',pr:'Premier Pro',dv:'DaVinci Resolve',admin:'Admin panel'};
 function go(view){
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   const el=document.getElementById('view-'+view); if(el)el.classList.add('on');
@@ -984,11 +1069,110 @@ function go(view){
   if(RAW_TITLE[view]){t.removeAttribute('data-i18n');t.textContent=RAW_TITLE[view];}
   else{t.setAttribute('data-i18n',TITLES[view]||'nav.home');t.textContent=tr(TITLES[view]||'nav.home');}
   if(['ae','pr','dv'].includes(view)){document.getElementById('subnav').classList.add('open');document.getElementById('prog-toggle').classList.add('open');}
+  if(view==='admin') adInit();
   closeNav();
 }
 function togglePrograms(){document.getElementById('subnav').classList.toggle('open');document.getElementById('prog-toggle').classList.toggle('open');}
 function openNav(){document.body.classList.add('nav-open');}
 function closeNav(){document.body.classList.remove('nav-open');}
+ 
+/* ---------------- ADMIN PANEL ---------------- */
+let adLessonsCache=[];
+function adNote(m){const e=document.getElementById('ad-note'); if(e)e.textContent=m||'';}
+function adShowProg(on){const p=document.getElementById('ad-prog'),b=document.getElementById('ad-prog-bar');
+  if(on){p.style.display='block';b.style.transition='none';b.style.width='0';requestAnimationFrame(()=>{b.style.transition='width 10s ease-out';b.style.width='92%';});}
+  else{b.style.transition='width .25s';b.style.width='100%';setTimeout(()=>{p.style.display='none';b.style.width='0';},450);}
+}
+async function adInit(){
+  const sel=document.getElementById('ad-program');
+  if(sel.dataset.loaded){return;}
+  const {data,error}=await sb.from('programs').select('id,title,sort').order('sort');
+  if(error){adNote('Dasturlarni olishda xato: '+error.message);return;}
+  sel.innerHTML=(data||[]).map(p=>'<option value="'+p.id+'">'+p.title+'</option>').join('');
+  sel.dataset.loaded='1';
+  await adLoadCourses();
+}
+async function adLoadCourses(){
+  const pid=document.getElementById('ad-program').value;
+  const csel=document.getElementById('ad-course');
+  if(!pid){csel.innerHTML='';return;}
+  const {data,error}=await sb.from('courses').select('id,title,sort').eq('program_id',pid).order('sort');
+  if(error){adNote('Modullarni olishda xato: '+error.message);return;}
+  csel.innerHTML=(data&&data.length)?data.map(c=>'<option value="'+c.id+'">'+c.title+'</option>').join(''):'<option value="">— modul yo\'q —</option>';
+  await adLoadLessons();
+}
+async function adLoadLessons(){
+  const cid=document.getElementById('ad-course').value;
+  const box=document.getElementById('ad-lessons');
+  if(!cid){box.innerHTML='<div class="ad-empty">Avval modul tanlang yoki qo\'shing.</div>';adLessonsCache=[];return;}
+  const {data,error}=await sb.from('lessons').select('*').eq('course_id',cid).order('sort');
+  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
+  adLessonsCache=data||[];
+  if(!adLessonsCache.length){box.innerHTML='<div class="ad-empty">Bu modulda hali dars yo\'q.</div>';return;}
+  box.innerHTML=adLessonsCache.map((l,i)=>{
+    const vtag=l.video_url?'<span class="ad-vtag has">VIDEO</span>':'<span class="ad-vtag no">VIDEO YO\'Q</span>';
+    const dur=l.duration_min?(l.duration_min+' daq'):'—';
+    return '<div class="ad-lesson"><div class="ord">'+(i+1)+'</div><div class="sp"><div class="lt">'+adEsc(l.title)+'</div><div class="lm">'+dur+'</div></div>'+vtag+
+      '<button class="ic" title="Tahrirlash" onclick="adEditLesson(\''+l.id+'\')"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>'+
+      '<button class="ic del" title="O\'chirish" onclick="adDeleteLesson(\''+l.id+'\')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>';
+  }).join('');
+}
+function adEsc(s){return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function adPickedFile(){const f=document.getElementById('ad-video').files[0];document.getElementById('ad-fname').textContent=f?f.name:'Fayl tanlanmagan';}
+async function adSaveLesson(){
+  const cid=document.getElementById('ad-course').value;
+  if(!cid){adNote('Avval modul tanlang (yoki qo\'shing).');return;}
+  const title=_val('ad-title'); if(!title){adNote('Dars nomini kiriting.');return;}
+  const dur=parseInt(_val('ad-dur')); const duration_min=isNaN(dur)?null:dur;
+  const file=document.getElementById('ad-video').files[0];
+  const btn=document.getElementById('ad-save'); btn.disabled=true; adNote('');
+  const {count}=await sb.from('lessons').select('*',{count:'exact',head:true}).eq('course_id',cid);
+  const sort=(count||0)+1;
+  let video_url=null,video_path=null;
+  if(file){
+    const ext=(file.name.split('.').pop()||'mp4').toLowerCase();
+    video_path=cid+'/'+Date.now()+'.'+ext;
+    adNote('Video yuklanmoqda… (hajmiga qarab biroz vaqt olishi mumkin)'); adShowProg(true);
+    const {error:upErr}=await sb.storage.from('videos').upload(video_path,file,{contentType:file.type,upsert:false});
+    adShowProg(false);
+    if(upErr){btn.disabled=false;adNote('Video yuklashda xato: '+upErr.message);return;}
+    video_url=sb.storage.from('videos').getPublicUrl(video_path).data.publicUrl;
+  }
+  const {error}=await sb.from('lessons').insert({course_id:cid,title,duration_min,sort,video_url,video_path});
+  btn.disabled=false;
+  if(error){adNote('Saqlashda xato: '+error.message);return;}
+  document.getElementById('ad-title').value=''; document.getElementById('ad-dur').value='';
+  document.getElementById('ad-video').value=''; document.getElementById('ad-fname').textContent='Fayl tanlanmagan';
+  adNote('✓ Dars qo\'shildi.');
+  adLoadLessons();
+}
+async function adEditLesson(id){
+  const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
+  const t=prompt('Dars nomi:',l.title); if(t==null)return;
+  const d=prompt('Davomiyligi (daqiqa):', l.duration_min||'');
+  const dn=parseInt(d); const upd={title:t.trim(),duration_min:isNaN(dn)?null:dn};
+  const {error}=await sb.from('lessons').update(upd).eq('id',id);
+  if(error){adNote('Tahrirlashda xato: '+error.message);return;}
+  adLoadLessons();
+}
+async function adDeleteLesson(id){
+  const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
+  if(!confirm('"'+l.title+'" darsini o\'chirasizmi?'))return;
+  if(l.video_path){ await sb.storage.from('videos').remove([l.video_path]); }
+  const {error}=await sb.from('lessons').delete().eq('id',id);
+  if(error){adNote('O\'chirishda xato: '+error.message);return;}
+  adLoadLessons();
+}
+async function adAddModule(){
+  const pid=document.getElementById('ad-program').value; if(!pid){adNote('Avval dastur tanlang.');return;}
+  const name=prompt('Yangi modul nomi:'); if(!name||!name.trim())return;
+  const {count}=await sb.from('courses').select('*',{count:'exact',head:true}).eq('program_id',pid);
+  const sort=(count||0)+1;
+  const {error}=await sb.from('courses').insert({program_id:pid,title:name.trim(),sort});
+  if(error){adNote('Modul qo\'shishda xato: '+error.message);return;}
+  await adLoadCourses();
+  adNote('✓ Modul qo\'shildi.');
+}
  
 /* PROFILE MENU */
 function toggleProfile(e){e.stopPropagation();document.getElementById('profile').classList.toggle('open');}
