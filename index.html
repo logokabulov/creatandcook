@@ -546,6 +546,20 @@
   .ch-act.del:hover{color:#e0476b;border-color:#e0476b}
   .ch-allh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--accent);font-weight:700;padding:10px 4px 6px;text-transform:uppercase}
   .ch-input.readonly{opacity:.7}
+
+  /* ===== IN-APP MODAL (prompt/confirm/alert) ===== */
+  .ui-modal-wrap{display:none;position:fixed;inset:0;z-index:9999;background:rgba(5,5,9,.66);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px}
+  .ui-modal-wrap.open{display:flex}
+  .ui-modal{width:100%;max-width:420px;background:var(--surface);border:1px solid var(--line2);border-radius:18px;padding:22px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7);animation:uipop .16s ease-out}
+  @keyframes uipop{from{transform:translateY(8px) scale(.98);opacity:0}to{transform:none;opacity:1}}
+  .ui-modal-title{font-family:var(--display);font-weight:800;font-size:17px;line-height:1.4;margin-bottom:14px;white-space:pre-wrap}
+  .ui-modal-input{width:100%;font-family:var(--font);font-size:15px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:13px 15px;color:var(--text);outline:none}
+  .ui-modal-input:focus{border-color:var(--accent)}
+  .ui-modal-btns{display:flex;justify-content:flex-end;gap:10px;margin-top:18px}
+  .ui-modal-btns button{font-family:var(--font);font-weight:700;font-size:14px;border-radius:11px;padding:11px 20px;cursor:pointer;border:none}
+  .ui-modal-cancel{background:var(--field);color:var(--text);border:1px solid var(--line2)}
+  .ui-modal-cancel:hover{border-color:var(--text)}
+  .ui-modal-ok{background:var(--grad);color:#0b0b11}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -894,7 +908,7 @@
             <div class="err-msg" id="f-code-e">To'liq 6 xonali kodni kiriting</div>
           </div>
           <button class="submit" onclick="forgotVerify()">Tasdiqlash <svg viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg></button>
-          <div class="below"><button class="link" onclick="forgotStep(1)">← Orqaga</button><span class="note">Kelmadimi? <button class="link" onclick="alert('Kod qayta yuborildi (demo)')" style="border:none">QAYTA</button></span></div>
+          <div class="below"><button class="link" onclick="forgotStep(1)">← Orqaga</button><span class="note">Kelmadimi? <button class="link" onclick="uiAlert('Kod qayta yuborildi (demo)')" style="border:none">QAYTA</button></span></div>
         </div>
         <div id="fs-3" style="display:none">
           <div class="step-meta">C·3 / YANGI PAROL</div>
@@ -1163,6 +1177,7 @@
               <input type="text" id="ch-search" placeholder="Username bo'yicha qidirish..." oninput="chatSearch()">
             </div>
             <div id="ch-results"></div>
+            <div id="ch-myconvs" style="overflow-y:auto"></div>
             <div id="ch-allconvs" style="overflow-y:auto"></div>
           </aside>
           <div class="ch-main">
@@ -1289,6 +1304,17 @@
   </main>
 </div>
 
+<div class="ui-modal-wrap" id="ui-modal">
+  <div class="ui-modal">
+    <div class="ui-modal-title" id="ui-modal-title"></div>
+    <input class="ui-modal-input" id="ui-modal-input" type="text">
+    <div class="ui-modal-btns">
+      <button class="ui-modal-cancel" id="ui-modal-cancel">Bekor</button>
+      <button class="ui-modal-ok" id="ui-modal-ok">OK</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 /* ---------------- SUPABASE ---------------- */
@@ -1298,6 +1324,35 @@ const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
 function _val(id){const e=document.getElementById(id);return e?e.value.trim():'';}
 function _setVal(id,v){const e=document.getElementById(id);if(e&&v!=null)e.value=v;}
 function _setText(id,v){const e=document.getElementById(id);if(e&&v!=null)e.textContent=v;}
+
+/* ---------------- IN-APP MODAL (prompt/confirm/alert o'rniga) ---------------- */
+let _uiResolve=null,_uiMode='alert';
+function _uiShow(mode,title,value,okText,cancelText){
+  _uiMode=mode;
+  const w=document.getElementById('ui-modal');
+  document.getElementById('ui-modal-title').textContent=title||'';
+  const inp=document.getElementById('ui-modal-input');
+  inp.style.display=(mode==='prompt')?'block':'none';
+  inp.value=value!=null?value:'';
+  const cancel=document.getElementById('ui-modal-cancel');
+  cancel.style.display=(mode==='alert')?'none':'';
+  cancel.textContent=cancelText||'Bekor';
+  document.getElementById('ui-modal-ok').textContent=okText||'OK';
+  w.classList.add('open');
+  if(mode==='prompt'){setTimeout(()=>{inp.focus();try{inp.select();}catch(e){}},40);}
+  return new Promise(res=>{_uiResolve=res;});
+}
+function _uiDone(val){const w=document.getElementById('ui-modal');w.classList.remove('open');const r=_uiResolve;_uiResolve=null;if(r)r(val);}
+function uiPrompt(title,value){return _uiShow('prompt',title,value);}
+function uiConfirm(title){return _uiShow('confirm',title);}
+function uiAlert(title){return _uiShow('alert',title);}
+(function(){
+  const ok=document.getElementById('ui-modal-ok'), cancel=document.getElementById('ui-modal-cancel'), inp=document.getElementById('ui-modal-input'), w=document.getElementById('ui-modal');
+  ok.onclick=()=>_uiDone(_uiMode==='prompt'?inp.value:true);
+  cancel.onclick=()=>_uiDone(_uiMode==='prompt'?null:false);
+  inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();_uiDone(inp.value);}else if(e.key==='Escape'){_uiDone(null);}};
+  w.onclick=e=>{if(e.target===w)_uiDone(_uiMode==='prompt'?null:(_uiMode==='confirm'?false:true));};
+})();
 
 /* ---------------- THEME ---------------- */
 function toggleTheme(){const b=document.body;b.setAttribute('data-theme',b.getAttribute('data-theme')==='dark'?'light':'dark');}
@@ -1345,9 +1400,9 @@ async function doRegister(){
   const {data,error}=await sb.auth.signUp({email,password:pw,options:{data:{username:u},emailRedirectTo:window.location.origin}});
   if(error){
     const msg=error.message||'';
-    if(/rate limit|after \d+ seconds|For security/i.test(msg)){ alert('Hozircha juda ko\u2018p urinish bo\u2018ldi. Bir necha daqiqa kutib, qayta urinib ko\u2018ring.'); }
-    else if(/already registered|already been registered/i.test(msg)){ alert('Bu Gmail allaqachon ro\u2018yxatdan o\u2018tgan. \u201CKirish\u201D orqali kiring.'); }
-    else { alert('Xatolik: '+msg); }
+    if(/rate limit|after \d+ seconds|For security/i.test(msg)){ uiAlert('Hozircha juda ko\u2018p urinish bo\u2018ldi. Bir necha daqiqa kutib, qayta urinib ko\u2018ring.'); }
+    else if(/already registered|already been registered/i.test(msg)){ uiAlert('Bu Gmail allaqachon ro\u2018yxatdan o\u2018tgan. \u201CKirish\u201D orqali kiring.'); }
+    else { uiAlert('Xatolik: '+msg); }
     return;
   }
   currentUsername=u;
@@ -1364,15 +1419,15 @@ function showRegDone(email){
 async function resendConfirm(){
   const email=document.getElementById('rd-email').textContent;
   const {error}=await sb.auth.resend({type:'signup',email,options:{emailRedirectTo:window.location.origin}});
-  if(error){ alert(/rate limit|seconds/i.test(error.message)?'Biroz kuting va qayta urining.':error.message); return; }
-  alert('\u2713 Tasdiqlash xati qayta yuborildi.');
+  if(error){ uiAlert(/rate limit|seconds/i.test(error.message)?'Biroz kuting va qayta urining.':error.message); return; }
+  uiAlert('\u2713 Tasdiqlash xati qayta yuborildi.');
 }
 function forgotStep(n){[1,2,3,4].forEach(i=>document.getElementById('fs-'+i).style.display=(i===n)?'block':'none');clearErrors();}
 async function forgotSendCode(){
   clearErrors();
   const e=_val('f-email'); if(!isEmail(e)){setErr('f-email',true);return;}
   const {error}=await sb.auth.resetPasswordForEmail(e,{redirectTo:window.location.origin});
-  if(error){alert('Xatolik: '+error.message);return;}
+  if(error){uiAlert('Xatolik: '+error.message);return;}
   forgotStep(4);
 }
 function forgotVerify(){const code=Array.from(document.querySelectorAll('.cd')).map(i=>i.value).join('');const ok=/^\d{6}$/.test(code);setErr('f-code',!ok);if(ok)forgotStep(3);}
@@ -1483,17 +1538,17 @@ async function adLoadUsers(){
 }
 async function adAddPoints(uid,sign){
   const amt=parseInt(document.getElementById('up-'+uid).value);
-  if(isNaN(amt)||amt<=0){alert('Ball miqdorini kiriting (musbat son).');return;}
+  if(isNaN(amt)||amt<=0){uiAlert('Ball miqdorini kiriting (musbat son).');return;}
   const {data:prof}=await sb.from('profiles').select('points').eq('id',uid).maybeSingle();
   let np=((prof&&prof.points)||0)+sign*amt; if(np<0)np=0;
   const {error}=await sb.from('profiles').update({points:np}).eq('id',uid);
-  if(error){alert('Xato: '+error.message+'\\n(v8 SQL — admin profiles update — Run qilinganmi?)');return;}
+  if(error){uiAlert('Xato: '+error.message+'\\n(v8 SQL — admin profiles update — Run qilinganmi?)');return;}
   adLoadUsers();
 }
 async function adResetPoints(uid){
-  if(!confirm('Bu foydalanuvchining ballari 0 ga tushiriladi. Davom etamizmi?'))return;
+  if(!await uiConfirm('Bu foydalanuvchining ballari 0 ga tushiriladi. Davom etamizmi?'))return;
   const {error}=await sb.from('profiles').update({points:0}).eq('id',uid);
-  if(error){alert('Xato: '+error.message);return;}
+  if(error){uiAlert('Xato: '+error.message);return;}
   adLoadUsers();
 }
 let adHwCache={};
@@ -1528,17 +1583,17 @@ async function adLoadHomework(){
 async function adGradeHomework(id){
   const meta=adHwCache[id]; if(!meta)return;
   const g=parseInt(document.getElementById('g-'+id).value);
-  if(isNaN(g)||g<1||g>meta.max){alert('Ball 1 dan '+meta.max+' gacha bo\'lsin.');return;}
+  if(isNaN(g)||g<1||g>meta.max){uiAlert('Ball 1 dan '+meta.max+' gacha bo\'lsin.');return;}
   const feedback=document.getElementById('f-'+id).value.trim()||null;
   const {error}=await sb.from('homework_submissions').update({grade:g,feedback,status:'graded',graded_at:new Date().toISOString()}).eq('id',id);
-  if(error){alert('Xato: '+error.message);return;}
+  if(error){uiAlert('Xato: '+error.message);return;}
   // o'quvchiga ball qo'shish (avvalgi baho bo'lsa, farqini hisoblaymiz)
   const delta=g-(meta.grade||0);
   if(delta!==0){
     const {data:prof}=await sb.from('profiles').select('points').eq('id',meta.user_id).maybeSingle();
     const np=((prof&&prof.points)||0)+delta;
     const {error:pe}=await sb.from('profiles').update({points:np}).eq('id',meta.user_id);
-    if(pe){alert('Baho saqlandi, lekin ball qo\'shishda xato: '+pe.message+'\\n(Admin profiles update siyosatini Run qildingizmi?)');}
+    if(pe){uiAlert('Baho saqlandi, lekin ball qo\'shishda xato: '+pe.message+'\\n(Admin profiles update siyosatini Run qildingizmi?)');}
   }
   adLoadHomework();
 }
@@ -1653,9 +1708,9 @@ async function adSaveLesson(){
 }
 async function adEditLesson(id){
   const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
-  const t=prompt('Dars nomi:',l.title); if(t==null)return;
-  const d=prompt('Tavsif (ixtiyoriy):', l.description||'');
-  const p=prompt('Ball (1-100):', l.points||10);
+  const t=await uiPrompt('Dars nomi:',l.title); if(t==null)return;
+  const d=await uiPrompt('Tavsif (ixtiyoriy):', l.description||'');
+  const p=await uiPrompt('Ball (1-100):', l.points||10);
   const pn=parseInt(p); const points=(isNaN(pn)||pn<1)?(l.points||10):pn;
   const upd={title:t.trim(),description:(d==null?l.description:(d.trim()||null)),points};
   const {error}=await sb.from('lessons').update(upd).eq('id',id);
@@ -1664,7 +1719,7 @@ async function adEditLesson(id){
 }
 async function adDeleteLesson(id){
   const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
-  if(!confirm('"'+l.title+'" darsini o\'chirasizmi?'))return;
+  if(!await uiConfirm('"'+l.title+'" darsini o\'chirasizmi?'))return;
   if(l.video_path){ await sb.storage.from('videos').remove([l.video_path]); }
   if(Array.isArray(l.materials)&&l.materials.length){ await sb.storage.from('materials').remove(l.materials.map(m=>m.path).filter(Boolean)); }
   const {error}=await sb.from('lessons').delete().eq('id',id);
@@ -1673,7 +1728,7 @@ async function adDeleteLesson(id){
 }
 async function adAddModule(){
   const pid=document.getElementById('ad-program').value; if(!pid){adNote('Avval dastur tanlang.');return;}
-  const name=prompt('Yangi modul nomi:'); if(!name||!name.trim())return;
+  const name=await uiPrompt('Yangi modul nomi:'); if(!name||!name.trim())return;
   const {count}=await sb.from('courses').select('*',{count:'exact',head:true}).eq('program_id',pid);
   const sort=(count||0)+1;
   const {error}=await sb.from('courses').insert({program_id:pid,title:name.trim(),sort});
@@ -1703,7 +1758,7 @@ async function adAddAnnouncement(){
   adLoadAnnouncements();
 }
 async function adDeleteAnnouncement(id){
-  if(!confirm('E\'lonni o\'chirasizmi?'))return;
+  if(!await uiConfirm('E\'lonni o\'chirasizmi?'))return;
   const {error}=await sb.from('announcements').delete().eq('id',id);
   if(error){document.getElementById('an-note').textContent='Xato: '+error.message;return;}
   adLoadAnnouncements();
@@ -1711,7 +1766,7 @@ async function adDeleteAnnouncement(id){
 /* ---------------- STUDENT: PROGRAMS + LESSON PAGE ---------------- */
 let myPoints=0, myStreak=0, myLastActive=null, iAmAdmin=false, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
 const LOCK_SVG='<svg class="lk" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
-function lockedMsg(){alert("Bu dars hozircha qulflangan.");}
+function lockedMsg(){uiAlert("Bu dars hozircha qulflangan.");}
 let playlistData=null;
 async function buildPlaylist(slug){
   const {data:prog}=await sb.from('programs').select('id').eq('slug',slug).maybeSingle();
@@ -2035,7 +2090,28 @@ async function loadChat(){
   document.getElementById('ch-search').value=''; document.getElementById('ch-results').innerHTML='';
   document.getElementById('ch-allconvs').innerHTML='';
   openChannel('general',null,'Umumiy guruh');
+  loadMyConversations();
   if(iAmAdmin) adminLoadConversations();
+}
+async function loadMyConversations(){
+  const box=document.getElementById('ch-myconvs'); if(!box||!myId)return;
+  const {data,error}=await sb.from('messages').select('channel,content,type,created_at')
+    .like('channel','dm:%').or('sender_id.eq.'+myId+',recipient_id.eq.'+myId)
+    .order('created_at',{ascending:false}).limit(300);
+  if(error||!data){return;}
+  const seen={}; const convs=[];
+  data.forEach(m=>{ if(!seen[m.channel]){seen[m.channel]=1;convs.push(m);} });
+  if(!convs.length){box.innerHTML='';return;}
+  const others=convs.map(m=>m.channel.slice(3).split(':').filter(x=>x!==myId)[0]).filter(Boolean);
+  const {data:ps}=await sb.from('profiles').select('id,username,avatar_url').in('id',[...new Set(others)]);
+  const um={}; (ps||[]).forEach(p=>um[p.id]=p);
+  box.innerHTML='<div class="ch-allh">Suhbatlar</div>'+convs.map(m=>{
+    const oid=m.channel.slice(3).split(':').filter(x=>x!==myId)[0]; if(!oid)return '';
+    const p=um[oid]||{}; const nm=p.username||'foydalanuvchi';
+    const av=p.avatar_url?'<div class="ch-cav"><img src="'+p.avatar_url+'"></div>':'<div class="ch-cav">'+chLtr(nm)+'</div>';
+    const prev=m.type==='image'?'📷 rasm':m.type==='audio'?'🎤 ovozli xabar':m.type==='sticker'?(m.content||'stiker'):(m.content||'');
+    return '<button class="ch-conv" onclick="openDM(\''+oid+'\',\''+adEsc(nm)+'\')">'+av+'<div class="ch-cinfo"><b>'+adEsc(nm)+'</b><span>'+adEsc(prev).slice(0,28)+'</span></div></button>';
+  }).join('');
 }
 async function adminLoadConversations(){
   const box=document.getElementById('ch-allconvs'); if(!box)return;
@@ -2109,17 +2185,17 @@ function renderMsg(m){
   box.appendChild(el);
 }
 async function deleteMsg(id){
-  if(!confirm('Xabarni o\'chirasizmi?'))return;
+  if(!await uiConfirm('Xabarni o\'chirasizmi?'))return;
   const {error}=await sb.from('messages').delete().eq('id',id);
-  if(error){alert('Xato: '+error.message);return;}
+  if(error){uiAlert('Xato: '+error.message);return;}
   const el=document.querySelector('.ch-m[data-id="'+id+'"]'); if(el)el.remove();
 }
 async function editMsg(id){
   const el=document.querySelector('.ch-m[data-id="'+id+'"]'); if(!el)return;
   const cur=el.querySelector('.tx')?el.querySelector('.tx').textContent:(el.querySelector('.ch-stk')?el.querySelector('.ch-stk').textContent:'');
-  const t=prompt('Xabarni tahrirlash:',cur); if(t==null)return;
+  const t=await uiPrompt('Xabarni tahrirlash:',cur); if(t==null)return;
   const {error}=await sb.from('messages').update({content:t}).eq('id',id);
-  if(error){alert('Xato: '+error.message);return;}
+  if(error){uiAlert('Xato: '+error.message);return;}
   const tx=el.querySelector('.tx'); if(tx)tx.textContent=t; const stk=el.querySelector('.ch-stk'); if(stk)stk.textContent=t;
 }
 async function _chatInsert(extra){
@@ -2127,8 +2203,8 @@ async function _chatInsert(extra){
   if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
   const row=Object.assign({channel:chatChannel,sender_id:myId,recipient_id:chatRecipient,content:''},extra);
   const {data,error}=await sb.from('messages').insert(row).select().maybeSingle();
-  if(error){alert('Yuborishda xato: '+error.message);return null;}
-  if(data){ if(!chatProf[myId])chatProf[myId]={id:myId,username:currentUsername}; renderMsg(data); const b=document.getElementById('ch-msgs'); b.scrollTop=b.scrollHeight; }
+  if(error){uiAlert('Yuborishda xato: '+error.message);return null;}
+  if(data){ if(!chatProf[myId])chatProf[myId]={id:myId,username:currentUsername}; renderMsg(data); const b=document.getElementById('ch-msgs'); b.scrollTop=b.scrollHeight; if(chatChannel&&chatChannel.indexOf('dm:')===0) loadMyConversations(); }
   return data;
 }
 async function sendChatMessage(){
@@ -2150,11 +2226,11 @@ function sendSticker(s){ document.getElementById('ch-stickers').classList.remove
 async function sendImage(){
   const f=document.getElementById('ch-img').files[0]; if(!f)return;
   document.getElementById('ch-img').value='';
-  if(f.size>20*1024*1024){alert('Rasm 20 MB dan oshmasin.');return;}
+  if(f.size>20*1024*1024){uiAlert('Rasm 20 MB dan oshmasin.');return;}
   const ext=(f.name.split('.').pop()||'jpg').toLowerCase();
   const path=chatChannel.replace(/[^a-zA-Z0-9_-]/g,'_')+'/'+myId+'-'+Date.now()+'.'+ext;
   const {error:e}=await sb.storage.from('chat').upload(path,f,{contentType:f.type,upsert:false});
-  if(e){alert('Rasm yuklashda xato: '+e.message);return;}
+  if(e){uiAlert('Rasm yuklashda xato: '+e.message);return;}
   const url=sb.storage.from('chat').getPublicUrl(path).data.publicUrl;
   _chatInsert({type:'image',media_url:url});
 }
@@ -2162,7 +2238,7 @@ let mediaRec=null, recChunks=[];
 async function toggleRecord(){
   const btn=document.getElementById('ch-mic');
   if(mediaRec&&mediaRec.state==='recording'){ mediaRec.stop(); return; }
-  if(!navigator.mediaDevices||!window.MediaRecorder){alert('Brauzer ovoz yozishni qo\'llab-quvvatlamaydi.');return;}
+  if(!navigator.mediaDevices||!window.MediaRecorder){uiAlert('Brauzer ovoz yozishni qo\'llab-quvvatlamaydi.');return;}
   try{
     const stream=await navigator.mediaDevices.getUserMedia({audio:true});
     mediaRec=new MediaRecorder(stream); recChunks=[];
@@ -2173,12 +2249,12 @@ async function toggleRecord(){
       if(blob.size<800)return;
       const path=chatChannel.replace(/[^a-zA-Z0-9_-]/g,'_')+'/'+myId+'-'+Date.now()+'.webm';
       const {error:e}=await sb.storage.from('chat').upload(path,blob,{contentType:'audio/webm',upsert:false});
-      if(e){alert('Ovoz yuklashda xato: '+e.message);return;}
+      if(e){uiAlert('Ovoz yuklashda xato: '+e.message);return;}
       const url=sb.storage.from('chat').getPublicUrl(path).data.publicUrl;
       _chatInsert({type:'audio',media_url:url});
     };
     mediaRec.start(); btn.classList.add('rec');
-  }catch(err){ alert('Mikrofonga ruxsat berilmadi.'); }
+  }catch(err){ uiAlert('Mikrofonga ruxsat berilmadi.'); }
 }
 let chatSearchT=null;
 function chatSearch(){
@@ -2205,7 +2281,7 @@ function openDM(uid,username){
 async function adRenameModule(){
   const cid=document.getElementById('ad-course').value; if(!cid){adNote('Avval modul tanlang.');return;}
   const cur=document.getElementById('ad-course').selectedOptions[0]?.textContent||'';
-  const name=prompt('Modulning yangi nomi:',cur); if(name==null||!name.trim())return;
+  const name=await uiPrompt('Modulning yangi nomi:',cur); if(name==null||!name.trim())return;
   const {error}=await sb.from('courses').update({title:name.trim()}).eq('id',cid);
   if(error){adNote('O\'zgartirishda xato: '+error.message);return;}
   await adLoadCourses();
@@ -2214,7 +2290,7 @@ async function adRenameModule(){
 async function adDeleteModule(){
   const cid=document.getElementById('ad-course').value; if(!cid){adNote('Avval modul tanlang.');return;}
   const cur=document.getElementById('ad-course').selectedOptions[0]?.textContent||'';
-  if(!confirm('"'+cur+'" modulini va undagi BARCHA darslarni o\'chirasizmi? Bu qaytarib bo\'lmaydi.'))return;
+  if(!await uiConfirm('"'+cur+'" modulini va undagi BARCHA darslarni o\'chirasizmi? Bu qaytarib bo\'lmaydi.'))return;
   const {data:ls}=await sb.from('lessons').select('video_path,materials').eq('course_id',cid);
   if(ls&&ls.length){
     const vids=ls.map(l=>l.video_path).filter(Boolean);
@@ -2236,10 +2312,10 @@ document.addEventListener('click',e=>{const p=document.getElementById('profile')
 /* PHOTO */
 async function loadPhoto(e){const f=e.target.files[0];if(!f)return;
   const r=new FileReader();r.onload=ev=>{document.getElementById('photo-prev').innerHTML='<img src="'+ev.target.result+'">';document.getElementById('side-avatar').innerHTML='<img src="'+ev.target.result+'">';};r.readAsDataURL(f);
-  const {data:{user}}=await sb.auth.getUser(); if(!user){alert('Avval tizimga kiring.');return;}
+  const {data:{user}}=await sb.auth.getUser(); if(!user){uiAlert('Avval tizimga kiring.');return;}
   const ext=(f.name.split('.').pop()||'jpg').toLowerCase(); const path=user.id+'/avatar.'+ext;
   const {error:upErr}=await sb.storage.from('avatars').upload(path,f,{upsert:true,contentType:f.type});
-  if(upErr){alert('Rasm yuklashda xato: '+upErr.message);return;}
+  if(upErr){uiAlert('Rasm yuklashda xato: '+upErr.message);return;}
   const {data:pub}=sb.storage.from('avatars').getPublicUrl(path); const url=pub.publicUrl+'?t='+Date.now();
   await sb.from('profiles').update({avatar_url:url}).eq('id',user.id);
   document.getElementById('photo-prev').innerHTML='<img src="'+url+'">';
@@ -2247,16 +2323,16 @@ async function loadPhoto(e){const f=e.target.files[0];if(!f)return;
 }
 async function signInGoogle(){
   const {error}=await sb.auth.signInWithOAuth({provider:'google',options:{redirectTo:window.location.origin}});
-  if(error) alert('Google xato: '+error.message);
+  if(error) uiAlert('Google xato: '+error.message);
 }
 async function saveSettings(){
   const {data:{user}}=await sb.auth.getUser();
-  if(!user){alert('Avval tizimga kiring.');return;}
+  if(!user){uiAlert('Avval tizimga kiring.');return;}
   const payload={first_name:_val('s-first'),last_name:_val('s-last'),username:_val('s-user'),gender:_val('s-gender'),birthday:_val('s-bday')||null,phone:_val('s-phone'),email:_val('s-email')};
   const {error}=await sb.from('profiles').update(payload).eq('id',user.id);
-  if(error){alert('Xatolik: '+error.message);return;}
+  if(error){uiAlert('Xatolik: '+error.message);return;}
   const u=payload.username; if(u){currentUsername=u;document.getElementById('side-username').textContent=u;const hn=document.getElementById('home-name');if(hn)hn.textContent=u;if(!document.querySelector('#side-avatar img'))document.getElementById('side-avatar').textContent=(u[0]||'U').toUpperCase();}
-  alert('\u2713 Sozlamalar saqlandi.');
+  uiAlert('\u2713 Sozlamalar saqlandi.');
 }
 
 /* LANGUAGE */
