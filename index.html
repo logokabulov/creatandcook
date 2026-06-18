@@ -1475,11 +1475,20 @@ async function adSaveLesson(){
     const {error}=await sb.from('lessons').insert({course_id:cid,title,description,sort,video_url,video_path,materials,points});
     btn.disabled=false;
     if(error){adNote('Saqlashda xato: '+error.message);return;}
+    // yangi dars => avtomatik e'lon
+    try{
+      const pid=document.getElementById('ad-program').value;
+      const {data:prog}=await sb.from('programs').select('slug,title').eq('id',pid).maybeSingle();
+      if(prog){
+        await sb.from('announcements').insert({kind:'yangi',title:prog.title+' — yangi dars: '+title,subtitle:prog.title,link_slug:prog.slug});
+      }
+    }catch(e){}
     document.getElementById('ad-title').value=''; document.getElementById('ad-desc').value=''; document.getElementById('ad-points').value='10';
     document.getElementById('ad-video').value=''; document.getElementById('ad-fname').textContent='Fayl tanlanmagan';
     document.getElementById('ad-mats').value=''; document.getElementById('ad-mname').textContent='Fayl tanlanmagan';
-    adNote('✓ Dars qo\'shildi.');
+    adNote('✓ Dars qo\'shildi. Asosiy sahifada e\'lon avtomatik chiqdi.');
     adLoadLessons();
+    if(typeof adLoadAnnouncements==='function') adLoadAnnouncements();
   }catch(e){btn.disabled=false;adShowProg(false);adNote('Xato: '+e.message);}
 }
 async function adEditLesson(id){
