@@ -523,6 +523,29 @@
   .ch-input input:focus{border-color:var(--accent)}
   .ch-send{width:46px;flex-shrink:0;border:none;border-radius:12px;background:var(--grad);color:#0b0b11;cursor:pointer;display:flex;align-items:center;justify-content:center}
   .ch-send svg{width:19px;height:19px}
+  .ch-tool{width:42px;flex-shrink:0;border:1px solid var(--line);border-radius:12px;background:var(--field);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.12s}
+  .ch-tool svg{width:19px;height:19px}
+  .ch-tool:hover{color:var(--text);border-color:var(--line2)}
+  .ch-tool#ch-mic.rec{background:#e0476b;color:#fff;border-color:transparent;animation:chpulse 1s infinite}
+  @keyframes chpulse{0%,100%{opacity:1}50%{opacity:.55}}
+  .ch-stickers{display:none;flex-wrap:wrap;gap:6px;padding:12px;border-top:1px solid var(--line);background:var(--surface2);max-height:160px;overflow-y:auto}
+  .ch-stickers.open{display:flex}
+  .ch-stickers button{font-size:28px;line-height:1;background:none;border:none;cursor:pointer;border-radius:10px;padding:6px;transition:.12s}
+  .ch-stickers button:hover{background:var(--hover);transform:scale(1.15)}
+  .ch-img-msg{max-width:240px;max-height:280px;border-radius:10px;display:block;cursor:pointer}
+  .ch-audio{height:40px;max-width:240px}
+  .ch-stk{font-size:54px;line-height:1.1}
+  .ch-m .bub.stk-bub{background:none;border:none;padding:2px 0}
+  .ch-m.me .bub.stk-bub{background:none}
+  .ch-m{position:relative}
+  .ch-actions{display:none;gap:4px;align-self:center}
+  .ch-m:hover .ch-actions{display:flex}
+  .ch-act{width:28px;height:28px;border-radius:8px;border:1px solid var(--line);background:var(--surface);color:var(--muted);cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .ch-act svg{width:14px;height:14px;fill:none;stroke:currentColor;stroke-width:2}
+  .ch-act:hover{color:var(--text)}
+  .ch-act.del:hover{color:#e0476b;border-color:#e0476b}
+  .ch-allh{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--accent);font-weight:700;padding:10px 4px 6px;text-transform:uppercase}
+  .ch-input.readonly{opacity:.7}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -1140,11 +1163,17 @@
               <input type="text" id="ch-search" placeholder="Username bo'yicha qidirish..." oninput="chatSearch()">
             </div>
             <div id="ch-results"></div>
+            <div id="ch-allconvs" style="overflow-y:auto"></div>
           </aside>
           <div class="ch-main">
             <div class="ch-head"><span id="ch-title">Umumiy guruh</span></div>
             <div class="ch-msgs" id="ch-msgs"></div>
+            <div class="ch-stickers" id="ch-stickers"></div>
             <div class="ch-input">
+              <button class="ch-tool" onclick="toggleStickers()" title="Stiker"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2M9 9h.01M15 9h.01"/></svg></button>
+              <button class="ch-tool" onclick="document.getElementById('ch-img').click()" title="Rasm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+              <input type="file" id="ch-img" accept="image/*" style="display:none" onchange="sendImage()">
+              <button class="ch-tool" id="ch-mic" onclick="toggleRecord()" title="Ovoz xabar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0M12 19v3"/></svg></button>
               <input type="text" id="ch-text" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')sendChatMessage()">
               <button class="ch-send" onclick="sendChatMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
             </div>
@@ -1992,19 +2021,47 @@ async function loadReyting(){
 }
 
 /* ---------------- MESSENJER ---------------- */
-let myId=null, chatChannel=null, chatRecipient=null, chatSub=null, chatIds=new Set(), chatProf={};
+let myId=null, chatChannel=null, chatRecipient=null, chatSub=null, chatIds=new Set(), chatProf={}, chatReadonly=false;
 function chFmt(ts){const d=new Date(ts);return d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();}
 function chLtr(s){return ((s&&s[0])||'U').toUpperCase();}
 function dmChannel(a,b){return 'dm:'+[a,b].sort().join(':');}
+function chIsParticipant(channel){
+  if(channel==='general')return true;
+  if(channel.indexOf('dm:')===0)return channel.slice(3).split(':').indexOf(myId)>=0;
+  return true;
+}
 async function loadChat(){
   if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id;}
   document.getElementById('ch-search').value=''; document.getElementById('ch-results').innerHTML='';
+  document.getElementById('ch-allconvs').innerHTML='';
   openChannel('general',null,'Umumiy guruh');
+  if(iAmAdmin) adminLoadConversations();
+}
+async function adminLoadConversations(){
+  const box=document.getElementById('ch-allconvs'); if(!box)return;
+  const {data,error}=await sb.from('messages').select('channel,sender_id,recipient_id,created_at').order('created_at',{ascending:false}).limit(800);
+  if(error||!data){return;}
+  const seen={}; const dms=[];
+  data.forEach(m=>{ if(m.channel&&m.channel.indexOf('dm:')===0&&!seen[m.channel]){seen[m.channel]=1;dms.push(m);} });
+  if(!dms.length){box.innerHTML='<div class="ch-allh">Shaxsiy suhbatlar yo\'q</div>';return;}
+  const uids=[...new Set(dms.flatMap(m=>m.channel.slice(3).split(':')))];
+  const {data:ps}=await sb.from('profiles').select('id,username').in('id',uids);
+  const um={}; (ps||[]).forEach(p=>um[p.id]=p.username||'foydalanuvchi');
+  box.innerHTML='<div class="ch-allh">Barcha suhbatlar (admin)</div>'+dms.map(m=>{
+    const pair=m.channel.slice(3).split(':');
+    const label=(um[pair[0]]||'?')+' ↔ '+(um[pair[1]]||'?');
+    return '<button class="ch-conv" onclick="openChannel(\''+m.channel+'\',null,\''+adEsc(label)+'\')"><div class="ch-cav">DM</div><div class="ch-cinfo"><b>'+adEsc(label)+'</b><span>shaxsiy (o\'qish)</span></div></button>';
+  }).join('');
 }
 async function openChannel(channel,recipientId,title){
   chatChannel=channel; chatRecipient=recipientId; chatIds=new Set();
-  document.getElementById('ch-title').textContent=title;
+  chatReadonly=!chIsParticipant(channel);
+  document.getElementById('ch-title').textContent=title+(chatReadonly?' · moderatsiya':'');
   document.getElementById('ch-general').classList.toggle('active',channel==='general');
+  const inp=document.getElementById('ch-text');
+  inp.disabled=chatReadonly; inp.placeholder=chatReadonly?'Moderatsiya rejimi — faqat o\'qish':'Xabar yozing...';
+  document.querySelector('.ch-input').classList.toggle('readonly',chatReadonly);
+  document.querySelectorAll('.ch-input .ch-tool, .ch-input .ch-send').forEach(b=>b.style.display=chatReadonly?'none':'');
   const box=document.getElementById('ch-msgs'); box.innerHTML='<div class="ch-empty">Yuklanmoqda…</div>';
   if(chatSub){ try{sb.removeChannel(chatSub);}catch(e){} chatSub=null; }
   const {data:msgs,error}=await sb.from('messages').select('*').eq('channel',channel).order('created_at',{ascending:true}).limit(100);
@@ -2012,7 +2069,7 @@ async function openChannel(channel,recipientId,title){
   const ids=[...new Set((msgs||[]).map(m=>m.sender_id))];
   if(ids.length){const {data:ps}=await sb.from('profiles').select('id,username,avatar_url').in('id',ids);(ps||[]).forEach(p=>chatProf[p.id]=p);}
   box.innerHTML='';
-  if(!msgs||!msgs.length){box.innerHTML='<div class="ch-empty">Hali xabar yo\'q. Birinchi bo\'lib yozing!</div>';}
+  if(!msgs||!msgs.length){box.innerHTML='<div class="ch-empty">Hali xabar yo\'q.</div>';}
   else msgs.forEach(m=>renderMsg(m));
   box.scrollTop=box.scrollHeight;
   chatSub=sb.channel('room:'+channel)
@@ -2020,7 +2077,11 @@ async function openChannel(channel,recipientId,title){
       const m=payload.new;
       if(!chatProf[m.sender_id]){const {data:p}=await sb.from('profiles').select('id,username,avatar_url').eq('id',m.sender_id).maybeSingle();if(p)chatProf[m.sender_id]=p;}
       renderMsg(m); const b=document.getElementById('ch-msgs'); b.scrollTop=b.scrollHeight;
-    }).subscribe();
+    })
+    .on('postgres_changes',{event:'DELETE',schema:'public',table:'messages',filter:'channel=eq.'+channel},payload=>{
+      const el=document.querySelector('.ch-m[data-id="'+payload.old.id+'"]'); if(el)el.remove();
+    })
+    .subscribe();
 }
 function renderMsg(m){
   if(chatIds.has(m.id))return; chatIds.add(m.id);
@@ -2029,19 +2090,95 @@ function renderMsg(m){
   const me=m.sender_id===myId;
   const p=chatProf[m.sender_id]||{};
   const av=p.avatar_url?'<img src="'+p.avatar_url+'">':chLtr(p.username);
+  let inner, bubCls='bub';
+  if(m.type==='image') inner='<a href="'+m.media_url+'" target="_blank" rel="noopener"><img class="ch-img-msg" src="'+m.media_url+'"></a>';
+  else if(m.type==='audio') inner='<audio class="ch-audio" controls src="'+m.media_url+'"></audio>';
+  else if(m.type==='sticker'){ inner='<div class="ch-stk">'+adEsc(m.content||'')+'</div>'; bubCls='bub stk-bub'; }
+  else inner='<div class="tx">'+adEsc(m.content||'')+'</div>';
   const el=document.createElement('div');
   el.className='ch-m'+(me?' me':'');
-  el.innerHTML='<div class="av">'+av+'</div><div class="bub"><div class="nm">'+adEsc(p.username||'foydalanuvchi')+'</div><div class="tx">'+adEsc(m.content)+'</div><div class="tm">'+chFmt(m.created_at)+'</div></div>';
+  el.dataset.id=m.id;
+  const canManage=me||iAmAdmin;
+  let actions='';
+  if(canManage){
+    const editBtn=(m.type==='text'||m.type==='sticker')?'<button class="ch-act" title="Tahrirlash" onclick="editMsg(\''+m.id+'\')"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>':'';
+    actions='<div class="ch-actions">'+editBtn+'<button class="ch-act del" title="O\'chirish" onclick="deleteMsg(\''+m.id+'\')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>';
+  }
+  const bubble='<div class="'+bubCls+'"><div class="nm">'+adEsc(p.username||'foydalanuvchi')+'</div>'+inner+'<div class="tm">'+chFmt(m.created_at)+'</div></div>';
+  el.innerHTML='<div class="av">'+av+'</div>'+bubble+actions;
   box.appendChild(el);
+}
+async function deleteMsg(id){
+  if(!confirm('Xabarni o\'chirasizmi?'))return;
+  const {error}=await sb.from('messages').delete().eq('id',id);
+  if(error){alert('Xato: '+error.message);return;}
+  const el=document.querySelector('.ch-m[data-id="'+id+'"]'); if(el)el.remove();
+}
+async function editMsg(id){
+  const el=document.querySelector('.ch-m[data-id="'+id+'"]'); if(!el)return;
+  const cur=el.querySelector('.tx')?el.querySelector('.tx').textContent:(el.querySelector('.ch-stk')?el.querySelector('.ch-stk').textContent:'');
+  const t=prompt('Xabarni tahrirlash:',cur); if(t==null)return;
+  const {error}=await sb.from('messages').update({content:t}).eq('id',id);
+  if(error){alert('Xato: '+error.message);return;}
+  const tx=el.querySelector('.tx'); if(tx)tx.textContent=t; const stk=el.querySelector('.ch-stk'); if(stk)stk.textContent=t;
+}
+async function _chatInsert(extra){
+  if(chatReadonly)return null;
+  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
+  const row=Object.assign({channel:chatChannel,sender_id:myId,recipient_id:chatRecipient,content:''},extra);
+  const {data,error}=await sb.from('messages').insert(row).select().maybeSingle();
+  if(error){alert('Yuborishda xato: '+error.message);return null;}
+  if(data){ if(!chatProf[myId])chatProf[myId]={id:myId,username:currentUsername}; renderMsg(data); const b=document.getElementById('ch-msgs'); b.scrollTop=b.scrollHeight; }
+  return data;
 }
 async function sendChatMessage(){
   const inp=document.getElementById('ch-text'); const text=inp.value.trim(); if(!text)return;
-  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
   inp.value='';
-  const row={channel:chatChannel,sender_id:myId,recipient_id:chatRecipient,content:text};
-  const {data,error}=await sb.from('messages').insert(row).select().maybeSingle();
-  if(error){inp.value=text;alert('Yuborishda xato: '+error.message);return;}
-  if(data){ if(!chatProf[myId])chatProf[myId]={id:myId,username:currentUsername}; renderMsg(data); const b=document.getElementById('ch-msgs'); b.scrollTop=b.scrollHeight; }
+  const ok=await _chatInsert({type:'text',content:text});
+  if(!ok) inp.value=text;
+}
+function toggleStickers(){
+  const box=document.getElementById('ch-stickers');
+  if(!box.dataset.filled){
+    const pack=['😀','😂','😍','😎','🔥','👍','👏','🙌','💯','🎬','🎥','✂️','🎨','💡','🚀','❤️','😅','🤔','👀','🎉','😭','🥳','💪','✅'];
+    box.innerHTML=pack.map(s=>'<button onclick="sendSticker(\''+s+'\')">'+s+'</button>').join('');
+    box.dataset.filled='1';
+  }
+  box.classList.toggle('open');
+}
+function sendSticker(s){ document.getElementById('ch-stickers').classList.remove('open'); _chatInsert({type:'sticker',content:s}); }
+async function sendImage(){
+  const f=document.getElementById('ch-img').files[0]; if(!f)return;
+  document.getElementById('ch-img').value='';
+  if(f.size>20*1024*1024){alert('Rasm 20 MB dan oshmasin.');return;}
+  const ext=(f.name.split('.').pop()||'jpg').toLowerCase();
+  const path=chatChannel.replace(/[^a-zA-Z0-9_-]/g,'_')+'/'+myId+'-'+Date.now()+'.'+ext;
+  const {error:e}=await sb.storage.from('chat').upload(path,f,{contentType:f.type,upsert:false});
+  if(e){alert('Rasm yuklashda xato: '+e.message);return;}
+  const url=sb.storage.from('chat').getPublicUrl(path).data.publicUrl;
+  _chatInsert({type:'image',media_url:url});
+}
+let mediaRec=null, recChunks=[];
+async function toggleRecord(){
+  const btn=document.getElementById('ch-mic');
+  if(mediaRec&&mediaRec.state==='recording'){ mediaRec.stop(); return; }
+  if(!navigator.mediaDevices||!window.MediaRecorder){alert('Brauzer ovoz yozishni qo\'llab-quvvatlamaydi.');return;}
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    mediaRec=new MediaRecorder(stream); recChunks=[];
+    mediaRec.ondataavailable=e=>{if(e.data&&e.data.size)recChunks.push(e.data);};
+    mediaRec.onstop=async()=>{
+      btn.classList.remove('rec'); stream.getTracks().forEach(t=>t.stop());
+      const blob=new Blob(recChunks,{type:'audio/webm'});
+      if(blob.size<800)return;
+      const path=chatChannel.replace(/[^a-zA-Z0-9_-]/g,'_')+'/'+myId+'-'+Date.now()+'.webm';
+      const {error:e}=await sb.storage.from('chat').upload(path,blob,{contentType:'audio/webm',upsert:false});
+      if(e){alert('Ovoz yuklashda xato: '+e.message);return;}
+      const url=sb.storage.from('chat').getPublicUrl(path).data.publicUrl;
+      _chatInsert({type:'audio',media_url:url});
+    };
+    mediaRec.start(); btn.classList.add('rec');
+  }catch(err){ alert('Mikrofonga ruxsat berilmadi.'); }
 }
 let chatSearchT=null;
 function chatSearch(){
