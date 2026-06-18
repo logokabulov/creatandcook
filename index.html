@@ -560,6 +560,7 @@
   .ui-modal-cancel{background:var(--field);color:var(--text);border:1px solid var(--line2)}
   .ui-modal-cancel:hover{border-color:var(--text)}
   .ui-modal-ok{background:var(--grad);color:#0b0b11}
+  .prog-tile img,.pc-tile img,.hm-course .tile img{width:100%;height:100%;border-radius:inherit;object-fit:cover;display:block}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -951,11 +952,7 @@
         <span data-i18n="nav.programs">Programmalar</span>
         <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 6l6 6-6 6"/></svg>
       </button>
-      <div class="subnav" id="subnav">
-        <button class="sub-item" data-view="ae" onclick="go('ae')"><span class="prog-tile">Ae</span>After Effects</button>
-        <button class="sub-item" data-view="pr" onclick="go('pr')"><span class="prog-tile">Pr</span>Premiere Pro</button>
-        <button class="sub-item" data-view="dv" onclick="go('dv')"><span class="prog-tile">Dv</span>DaVinci Resolve</button>
-      </div>
+      <div class="subnav" id="subnav"></div>
       <button class="nav-item" data-view="reyting" onclick="go('reyting')">
         <svg viewBox="0 0 24 24"><path d="M8 21h8M12 17v4M7 4h10v4a5 5 0 01-10 0zM7 5H4v2a3 3 0 003 3M17 5h3v2a3 3 0 01-3 3"/></svg>
         <span data-i18n="nav.rating">Reyting</span>
@@ -1058,27 +1055,15 @@
         </div>
 
         <div class="hm-sec-h" data-i18n="home.courses">Kurslarim</div>
-        <div class="hm-courses">
-          <div class="hm-course" onclick="go('ae')"><div class="tile">Ae</div><h4>After Effects</h4><div class="pr"><span id="hm-ae-done">0</span> / <span id="hm-ae-total">0</span> <span data-i18n="home.lessons2">dars</span> · <span id="hm-ae-pct">0</span>%</div><div class="hm-bar"><i id="hm-ae-bar" style="width:0%"></i></div></div>
-          <div class="hm-course" onclick="go('pr')"><div class="tile">Pr</div><h4>Premiere Pro</h4><div class="pr"><span id="hm-pr-done">0</span> / <span id="hm-pr-total">0</span> <span data-i18n="home.lessons2">dars</span> · <span id="hm-pr-pct">0</span>%</div><div class="hm-bar"><i id="hm-pr-bar" style="width:0%"></i></div></div>
-          <div class="hm-course" onclick="go('dv')"><div class="tile">Dv</div><h4>DaVinci Resolve</h4><div class="pr"><span id="hm-dv-done">0</span> / <span id="hm-dv-total">0</span> <span data-i18n="home.lessons2">dars</span> · <span id="hm-dv-pct">0</span>%</div><div class="hm-bar"><i id="hm-dv-bar" style="width:0%"></i></div></div>
-        </div>
+        <div class="hm-courses" id="hm-courses"></div>
 
         <div class="hm-sec-h" data-i18n="home.news">Yangi darslar va e'lonlar</div>
         <div class="hm-news" id="hm-news"></div>
       </section>
 
-      <section class="view" id="view-ae">
-        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Ae</div><div><h3>After Effects</h3><div class="pc-sub" data-i18n="ae.sub">MOTION GRAFIKA · VFX</div></div></div></div>
-        <div id="prog-ae"></div>
-      </section>
-      <section class="view" id="view-pr">
-        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Pr</div><div><h3>Premiere Pro</h3><div class="pc-sub" data-i18n="pr.sub">MONTAJ · WORKFLOW</div></div></div></div>
-        <div id="prog-pr"></div>
-      </section>
-      <section class="view" id="view-dv">
-        <div class="panel-card"><div class="pc-head"><div class="pc-tile">Dv</div><div><h3>DaVinci Resolve</h3><div class="pc-sub" data-i18n="dv.sub">COLOR GRADING</div></div></div></div>
-        <div id="prog-dv"></div>
+      <section class="view" id="view-program">
+        <div class="panel-card"><div class="pc-head"><div class="pc-tile" id="pgv-tile">Ae</div><div><h3 id="pgv-title">Dastur</h3><div class="pc-sub" id="pgv-sub"></div></div></div></div>
+        <div id="prog-list"></div>
       </section>
 
       <section class="view" id="view-lesson">
@@ -1197,6 +1182,31 @@
       </section>
 
       <section class="view" id="view-admin">
+        <div class="ad-card">
+          <h3>Dasturlar</h3>
+          <div class="ad-form">
+            <div class="full">
+              <label>Yangi dastur nomi</label>
+              <input type="text" id="pg-title" placeholder="Masalan: CapCut, Photoshop, Blender">
+            </div>
+            <div class="full">
+              <label>Tagsatr (ixtiyoriy)</label>
+              <input type="text" id="pg-sub" placeholder="Masalan: MOBIL MONTAJ">
+            </div>
+            <div class="full">
+              <label>Ikonka / stiker (ixtiyoriy, rasm)</label>
+              <div class="ad-file">
+                <button class="pick" onclick="document.getElementById('pg-icon').click()">Rasm tanlash</button>
+                <input type="file" id="pg-icon" accept="image/*" style="display:none" onchange="pgPicked()">
+                <span class="fname" id="pg-iconname">Fayl tanlanmagan</span>
+              </div>
+            </div>
+          </div>
+          <button class="ad-save" id="pg-save" onclick="adAddProgram()">Dastur qo'shish</button>
+          <div class="ad-note" id="pg-note"></div>
+          <div id="pg-list" style="margin-top:16px"></div>
+        </div>
+
         <div class="ad-bar">
           <div class="ad-sel">
             <label>Dastur</label>
@@ -1469,6 +1479,7 @@ function enterApp(){
   document.getElementById('side-username').textContent=currentUsername;
   if(!_val('s-user')) document.getElementById('s-user').value=currentUsername;
   const hn=document.getElementById('home-name'); if(hn) hn.textContent=currentUsername;
+  loadPrograms();
   go('asosiy');
 }
 async function logout(){
@@ -1500,6 +1511,36 @@ function go(view){
   closeNav();
 }
 function togglePrograms(){document.getElementById('subnav').classList.toggle('open');document.getElementById('prog-toggle').classList.toggle('open');}
+
+/* ---------------- DASTURLAR (dinamik) ---------------- */
+let progList=[], progMap={};
+function progInitials(t){const w=(t||'').trim().split(/\s+/);let s=w.length>1?(w[0][0]+w[1][0]):(t||'P').slice(0,2);return s.toUpperCase();}
+function progTileInner(p){return p&&p.icon_url?'<img src="'+p.icon_url+'">':progInitials(p?p.title:'');}
+function progName(slug){return progMap[slug]?progMap[slug].title:'';}
+async function loadPrograms(){
+  const {data,error}=await sb.from('programs').select('id,slug,title,subtitle,icon_url,sort').order('sort');
+  if(error)return;
+  progList=data||[]; progMap={}; progList.forEach(p=>progMap[p.slug]=p);
+  const sn=document.getElementById('subnav');
+  if(sn) sn.innerHTML=progList.map(p=>'<button class="sub-item" data-slug="'+p.slug+'" onclick="openProgram(\''+p.slug+'\')"><span class="prog-tile">'+progTileInner(p)+'</span>'+adEsc(p.title)+'</button>').join('');
+  // e'lon havola ro'yxati
+  const al=document.getElementById('an-link');
+  if(al) al.innerHTML='<option value="">Yo\'q</option>'+progList.map(p=>'<option value="'+p.slug+'">'+adEsc(p.title)+'</option>').join('');
+}
+function openProgram(slug){
+  const p=progMap[slug]; if(!p)return;
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  document.getElementById('view-program').classList.add('on');
+  document.querySelectorAll('.nav-item,.sub-item').forEach(n=>n.classList.remove('active'));
+  const sb2=document.querySelector('.sub-item[data-slug="'+slug+'"]'); if(sb2)sb2.classList.add('active');
+  document.getElementById('subnav').classList.add('open'); document.getElementById('prog-toggle').classList.add('open');
+  document.getElementById('pgv-tile').innerHTML=progTileInner(p);
+  document.getElementById('pgv-title').textContent=p.title;
+  document.getElementById('pgv-sub').textContent=p.subtitle||'';
+  const t=document.getElementById('page-title'); t.removeAttribute('data-i18n'); t.textContent=p.title;
+  loadProgram(slug);
+  closeNav();
+}
 function openNav(){document.body.classList.add('nav-open');}
 function closeNav(){document.body.classList.remove('nav-open');}
 
@@ -1521,6 +1562,65 @@ async function adInit(){
   adLoadAnnouncements();
   adLoadHomework();
   adLoadUsers();
+  adLoadPrograms();
+}
+function pgPicked(){const f=document.getElementById('pg-icon').files[0];document.getElementById('pg-iconname').textContent=f?f.name:'Fayl tanlanmagan';}
+function pgSlugify(t){
+  let s=(t||'').toLowerCase().replace(/[^a-z0-9]+/g,'-').replace(/^-+|-+$/g,'');
+  if(!s) s='dastur';
+  return s;
+}
+async function adLoadPrograms(){
+  const box=document.getElementById('pg-list'); if(!box)return;
+  const {data,error}=await sb.from('programs').select('id,slug,title,subtitle,icon_url,sort').order('sort');
+  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
+  if(!data||!data.length){box.innerHTML='<div class="ad-empty">Hali dastur yo\'q.</div>';return;}
+  box.innerHTML=data.map(p=>{
+    const tile=p.icon_url?'<span class="prog-tile" style="width:34px;height:34px"><img src="'+p.icon_url+'"></span>':'<span class="prog-tile" style="width:34px;height:34px">'+progInitials(p.title)+'</span>';
+    return '<div class="an-row">'+tile+'<div class="sp"><div class="at">'+adEsc(p.title)+'</div><div class="am">'+adEsc(p.subtitle||'')+' · /'+adEsc(p.slug)+'</div></div><button class="ic del" title="O\'chirish" onclick="adDeleteProgram(\''+p.id+'\',\''+adEsc(p.title)+'\')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>';
+  }).join('');
+}
+async function adAddProgram(){
+  const title=_val('pg-title'); if(!title){document.getElementById('pg-note').textContent='Dastur nomini kiriting.';return;}
+  const subtitle=_val('pg-sub')||null;
+  const file=document.getElementById('pg-icon').files[0];
+  const btn=document.getElementById('pg-save'); btn.disabled=true; document.getElementById('pg-note').textContent='Saqlanmoqda…';
+  try{
+    // unikal slug
+    let base=pgSlugify(title), slug=base, n=1;
+    while(true){
+      const {data:ex}=await sb.from('programs').select('id').eq('slug',slug).maybeSingle();
+      if(!ex)break; n++; slug=base+'-'+n;
+    }
+    const {count}=await sb.from('programs').select('*',{count:'exact',head:true});
+    let icon_url=null;
+    if(file){
+      const ext=(file.name.split('.').pop()||'png').toLowerCase();
+      const path='icons/'+slug+'-'+Date.now()+'.'+ext;
+      const {error:ue}=await sb.storage.from('programs').upload(path,file,{contentType:file.type,upsert:false});
+      if(ue){btn.disabled=false;document.getElementById('pg-note').textContent='Rasm yuklashda xato: '+ue.message;return;}
+      icon_url=sb.storage.from('programs').getPublicUrl(path).data.publicUrl;
+    }
+    const {error}=await sb.from('programs').insert({slug,title,subtitle,icon_url,sort:(count||0)+1});
+    btn.disabled=false;
+    if(error){document.getElementById('pg-note').textContent='Xato: '+error.message;return;}
+    document.getElementById('pg-title').value=''; document.getElementById('pg-sub').value='';
+    document.getElementById('pg-icon').value=''; document.getElementById('pg-iconname').textContent='Fayl tanlanmagan';
+    document.getElementById('pg-note').textContent='✓ Dastur qo\'shildi.';
+    adLoadPrograms(); adRefreshProgramSelect(); loadPrograms();
+  }catch(e){btn.disabled=false;document.getElementById('pg-note').textContent='Xato: '+e.message;}
+}
+async function adDeleteProgram(id,title){
+  if(!(await uiConfirm('"'+title+'" dasturini o\'chirasizmi? Uning barcha modullari va darslari ham o\'chadi.')))return;
+  const {error}=await sb.from('programs').delete().eq('id',id);
+  if(error){await uiAlert('Xato: '+error.message);return;}
+  adLoadPrograms(); adRefreshProgramSelect(); loadPrograms();
+}
+async function adRefreshProgramSelect(){
+  const sel=document.getElementById('ad-program'); if(!sel)return;
+  const {data}=await sb.from('programs').select('id,title,sort').order('sort');
+  sel.innerHTML=(data||[]).map(p=>'<option value="'+p.id+'">'+adEsc(p.title)+'</option>').join('');
+  await adLoadCourses();
 }
 async function adLoadUsers(){
   const box=document.getElementById('us-list'); if(!box)return;
@@ -1784,7 +1884,7 @@ async function buildPlaylist(slug){
 }
 async function loadProgram(slug){
   currentProgSlug=slug;
-  const box=document.getElementById('prog-'+slug); if(!box)return;
+  const box=document.getElementById('prog-list'); if(!box)return;
   box.innerHTML='<div class="pm-empty">Yuklanmoqda…</div>';
   const pd=await buildPlaylist(slug);
   if(!pd){box.innerHTML='<div class="pm-empty">Dastur topilmadi.</div>';return;}
@@ -1809,7 +1909,7 @@ async function loadProgram(slug){
 function matKind(k){return k==='pdf'?'PDF':k==='image'?'IMG':k==='audio'?'MP3':'FILE';}
 function renderPlaylist(){
   const box=document.getElementById('lsn-playlist'); if(!box)return;
-  const hd=document.getElementById('lsn-side-h'); if(hd) hd.textContent=PNAME[currentProgSlug]||'Darslar';
+  const hd=document.getElementById('lsn-side-h'); if(hd) hd.textContent=progName(currentProgSlug)||'Darslar';
   if(!playlistData||!playlistData.mods.length){box.innerHTML='<div class="pm-empty" style="padding:14px 18px">Darslar yo\'q.</div>';return;}
   let html='';
   playlistData.mods.forEach(c=>{
@@ -1977,14 +2077,13 @@ async function submitHomework(){
     renderPlaylist();
   }catch(e){btn.disabled=false;_setText('lsn-hw-note','Xato: '+e.message);}
 }
-function lessonBack(){ const v=document.getElementById('lsn-video'); if(v){v.pause&&v.pause();} go(currentProgSlug||'asosiy'); }
+function lessonBack(){ const v=document.getElementById('lsn-video'); if(v){try{v.pause();}catch(e){}} if(currentProgSlug&&progMap[currentProgSlug]) openProgram(currentProgSlug); else go('asosiy'); }
 function continueLesson(){ if(homeNext){ currentProgSlug=homeNext.slug; openLesson(homeNext.id); } }
 
-const PNAME={ae:'After Effects',pr:'Premiere Pro',dv:'DaVinci Resolve'};
 async function loadHome(){
   const {data:{user}}=await sb.auth.getUser(); if(!user)return;
   _setText('hm-points',myPoints); _setText('hm-streak',myStreak); _setText('hm-streak2',myStreak);
-  const {data:programs}=await sb.from('programs').select('id,slug').order('sort');
+  const {data:programs}=await sb.from('programs').select('id,slug,title,subtitle,icon_url,sort').order('sort');
   const {data:lessons}=await sb.from('lessons').select('id,title,sort,video_url,description,materials,points,locked,course_id,courses(program_id,sort)').order('sort');
   const {data:pr}=await sb.from('lesson_progress').select('lesson_id,completed,completed_at').eq('user_id',user.id);
   const done=new Set((pr||[]).filter(p=>p.completed).map(p=>p.lesson_id));
@@ -1993,20 +2092,25 @@ async function loadHome(){
   const pct=total?Math.round(ndone/total*100):0;
   _setText('hm-progress',pct); _setText('hm-ldone',ndone); _setText('hm-ltotal',total);
   const slugById={}; (programs||[]).forEach(p=>{slugById[p.id]=p.slug;});
-  (programs||[]).forEach(p=>{
-    const pl=all.filter(l=>l.courses&&l.courses.program_id===p.id);
-    const pd=pl.filter(l=>done.has(l.id)).length;
-    const ppct=pl.length?Math.round(pd/pl.length*100):0;
-    _setText('hm-'+p.slug+'-done',pd); _setText('hm-'+p.slug+'-total',pl.length); _setText('hm-'+p.slug+'-pct',ppct);
-    const bar=document.getElementById('hm-'+p.slug+'-bar'); if(bar)bar.style.width=ppct+'%';
-  });
+  // Kurslarim — dinamik kartalar
+  const cbox=document.getElementById('hm-courses');
+  if(cbox){
+    if(!programs||!programs.length){cbox.innerHTML='<div class="pm-empty">Hali dastur yo\'q.</div>';}
+    else cbox.innerHTML=programs.map(p=>{
+      const pl=all.filter(l=>l.courses&&l.courses.program_id===p.id);
+      const pd=pl.filter(l=>done.has(l.id)).length;
+      const ppct=pl.length?Math.round(pd/pl.length*100):0;
+      const tile=p.icon_url?'<img src="'+p.icon_url+'">':progInitials(p.title);
+      return '<div class="hm-course" onclick="openProgram(\''+p.slug+'\')"><div class="tile">'+tile+'</div><h4>'+adEsc(p.title)+'</h4><div class="pr">'+pd+' / '+pl.length+' dars · '+ppct+'%</div><div class="hm-bar"><i style="width:'+ppct+'%"></i></div></div>';
+    }).join('');
+  }
   all.forEach(l=>{ if(!lessonCache[l.id]) lessonCache[l.id]=l; });
   const next=all.find(l=>!done.has(l.id)&&!l.locked);
   if(next){
     const pid=next.courses&&next.courses.program_id;
-    const slug=slugById[pid]||'ae';
+    const slug=slugById[pid]||'';
     homeNext={id:next.id,slug};
-    _setText('hm-cont-title',next.title); _setText('hm-cont-meta',PNAME[slug]||'');
+    _setText('hm-cont-title',next.title); _setText('hm-cont-meta',progName(slug));
     const pl=all.filter(l=>l.courses&&l.courses.program_id===pid);
     const pd=pl.filter(l=>done.has(l.id)).length; const ppct=pl.length?Math.round(pd/pl.length*100):0;
     const cb=document.getElementById('hm-cont-bar'); if(cb)cb.style.width=ppct+'%';
