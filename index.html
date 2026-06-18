@@ -1027,7 +1027,7 @@
             <div class="lsn-hw" id="lsn-hw">
               <div class="lsn-hw-h">Uy vazifasi</div>
               <div id="lsn-hw-status"></div>
-              <textarea id="lsn-hw-text" rows="3" placeholder="Vazifa javobingiz yoki izoh (ixtiyoriy)..."></textarea>
+              <textarea id="lsn-hw-text" rows="3" placeholder="Vazifa javobingiz yoki izoh. Katta video bo'lsa — YouTube/Google Drive havolasini shu yerga tashlang."></textarea>
               <div class="ad-file" style="margin-top:10px">
                 <button class="pick" onclick="document.getElementById('lsn-hw-file').click()">Fayl biriktirish</button>
                 <input type="file" id="lsn-hw-file" style="display:none" accept="image/*,video/*,.pdf,.zip,.aep,.prproj,audio/*" onchange="hwPicked()">
@@ -1700,6 +1700,7 @@ async function submitHomework(){
   const content=document.getElementById('lsn-hw-text').value.trim()||null;
   const file=document.getElementById('lsn-hw-file').files[0];
   if(!content&&!file){_setText('lsn-hw-note','Javob matni yoki fayl qo\'shing.');return;}
+  if(file&&file.size>1024*1024*1024){_setText('lsn-hw-note','Fayl 1 GB dan oshmasligi kerak. Katta video bo\'lsa, uni YouTube yoki Google Drive ga yuklab, havolasini yuqoridagi matn maydoniga tashlang.');return;}
   const btn=document.getElementById('lsn-hw-send'); btn.disabled=true; _setText('lsn-hw-note','Topshirilmoqda…');
   try{
     let file_url=null,file_path=null;
