@@ -485,6 +485,44 @@
   .pm-lesson.locked{opacity:.5}
   .pm-check svg,.pl-ic svg.lk{width:13px;height:13px;fill:none;stroke:currentColor;stroke-width:2}
   .ad-vtag.lock{color:#e0476b;border:1px solid #e0476b}
+
+  /* ===== MESSENJER ===== */
+  .ch-layout{display:grid;grid-template-columns:300px 1fr;gap:18px;height:calc(100vh - 150px);min-height:480px}
+  @media(max-width:820px){.ch-layout{grid-template-columns:1fr;height:auto}}
+  .ch-side{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:12px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+  @media(max-width:820px){.ch-side{max-height:300px}}
+  .ch-conv{display:flex;align-items:center;gap:11px;width:100%;text-align:left;background:none;border:1px solid transparent;border-radius:12px;padding:10px 12px;cursor:pointer;color:var(--text);transition:.12s}
+  .ch-conv:hover{background:var(--hover)}
+  .ch-conv.active{background:var(--hover);border-color:var(--line2)}
+  .ch-cav{width:40px;height:40px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:16px;overflow:hidden;background:var(--field);color:var(--accent)}
+  .ch-cav.grad{background:var(--grad);color:#0b0b11}
+  .ch-cav img{width:100%;height:100%;object-fit:cover}
+  .ch-cinfo{min-width:0}
+  .ch-cinfo b{display:block;font-size:14px;font-weight:700;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ch-cinfo span{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .ch-search input{width:100%;font-family:var(--font);font-size:13px;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:10px 12px;color:var(--text);outline:none}
+  .ch-search input:focus{border-color:var(--accent)}
+  #ch-results{overflow-y:auto;display:flex;flex-direction:column;gap:6px}
+  .ch-main{border:1px solid var(--line);border-radius:16px;background:var(--surface);display:flex;flex-direction:column;overflow:hidden;min-height:420px}
+  .ch-head{padding:15px 18px;font-family:var(--display);font-weight:800;font-size:16px;border-bottom:1px solid var(--line);flex-shrink:0}
+  .ch-msgs{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px}
+  .ch-empty{color:var(--muted);font-size:14px;margin:auto}
+  .ch-m{display:flex;gap:10px;max-width:78%}
+  .ch-m .av{width:32px;height:32px;flex-shrink:0;border-radius:50%;background:var(--field);color:var(--accent);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;overflow:hidden}
+  .ch-m .av img{width:100%;height:100%;object-fit:cover}
+  .ch-m .bub{background:var(--field);border:1px solid var(--line);border-radius:4px 14px 14px 14px;padding:9px 13px}
+  .ch-m .nm{font-size:11px;font-weight:700;color:var(--accent);margin-bottom:3px}
+  .ch-m .tx{font-size:14px;line-height:1.5;word-break:break-word;white-space:pre-wrap}
+  .ch-m .tm{font-family:'JetBrains Mono',monospace;font-size:9px;color:var(--muted);margin-top:4px;text-align:right}
+  .ch-m.me{margin-left:auto;flex-direction:row-reverse}
+  .ch-m.me .bub{background:var(--grad);border-color:transparent;border-radius:14px 4px 14px 14px;color:#0b0b11}
+  .ch-m.me .nm{display:none}
+  .ch-m.me .tm{color:rgba(11,11,17,.6)}
+  .ch-input{display:flex;gap:9px;padding:12px;border-top:1px solid var(--line);flex-shrink:0}
+  .ch-input input{flex:1;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px 15px;color:var(--text);outline:none}
+  .ch-input input:focus{border-color:var(--accent)}
+  .ch-send{width:46px;flex-shrink:0;border:none;border-radius:12px;background:var(--grad);color:#0b0b11;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .ch-send svg{width:19px;height:19px}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -886,6 +924,10 @@
         <span data-i18n="nav.rating">Reyting</span>
         <span class="nav-badge">★ 53</span>
       </button>
+      <button class="nav-item" data-view="chat" onclick="go('chat')">
+        <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+        <span>Suhbat</span>
+      </button>
       <button class="nav-item" id="nav-admin" data-view="admin" onclick="go('admin')" style="display:none">
         <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
         <span>Admin panel</span>
@@ -1085,6 +1127,29 @@
       <section class="view" id="view-obuna">
         <div class="panel-card"><div class="pc-head"><div class="pc-tile red">★</div><div><h3 data-i18n="menu.subscription">Obuna</h3><div class="pc-sub" data-i18n="obuna.sub">PRO TARIF</div></div></div>
           <div class="pc-body"><p data-i18n="obuna.body">Bu yerga obuna tariflari, to'lov usuli va karta ma'lumotlari qo'shiladi.</p></div></div>
+      </section>
+
+      <section class="view" id="view-chat">
+        <div class="ch-layout">
+          <aside class="ch-side">
+            <button class="ch-conv active" id="ch-general" onclick="openChannel('general',null,'Umumiy guruh')">
+              <div class="ch-cav grad">#</div>
+              <div class="ch-cinfo"><b>Umumiy guruh</b><span>Hamma birga</span></div>
+            </button>
+            <div class="ch-search">
+              <input type="text" id="ch-search" placeholder="Username bo'yicha qidirish..." oninput="chatSearch()">
+            </div>
+            <div id="ch-results"></div>
+          </aside>
+          <div class="ch-main">
+            <div class="ch-head"><span id="ch-title">Umumiy guruh</span></div>
+            <div class="ch-msgs" id="ch-msgs"></div>
+            <div class="ch-input">
+              <input type="text" id="ch-text" placeholder="Xabar yozing..." onkeydown="if(event.key==='Enter')sendChatMessage()">
+              <button class="ch-send" onclick="sendChatMessage()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="view" id="view-admin">
@@ -1295,6 +1360,7 @@ async function loadProfileAndEnter(){
   let {data:profile}=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
   if(!profile) profile={username:(user.email||'user').split('@')[0],email:user.email,points:0,streak:0};
   currentUsername=profile.username||(user.email||'user').split('@')[0];
+  myId=user.id;
   _setVal('s-first',profile.first_name); _setVal('s-last',profile.last_name); _setVal('s-user',profile.username);
   _setVal('s-phone',profile.phone); _setVal('s-email',profile.email||user.email);
   if(profile.gender){const g=document.getElementById('s-gender'); if(g)g.value=profile.gender;}
@@ -1346,6 +1412,7 @@ function go(view){
   if(view==='admin') adInit();
   if(view==='asosiy') loadHome();
   if(view==='reyting') loadReyting();
+  if(view==='chat') loadChat();
   closeNav();
 }
 function togglePrograms(){document.getElementById('subnav').classList.toggle('open');document.getElementById('prog-toggle').classList.toggle('open');}
@@ -1922,6 +1989,80 @@ async function loadReyting(){
     }).join('')+'</div>';
   }
   box.innerHTML=html;
+}
+
+/* ---------------- MESSENJER ---------------- */
+let myId=null, chatChannel=null, chatRecipient=null, chatSub=null, chatIds=new Set(), chatProf={};
+function chFmt(ts){const d=new Date(ts);return d.getHours()+':'+(d.getMinutes()<10?'0':'')+d.getMinutes();}
+function chLtr(s){return ((s&&s[0])||'U').toUpperCase();}
+function dmChannel(a,b){return 'dm:'+[a,b].sort().join(':');}
+async function loadChat(){
+  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id;}
+  document.getElementById('ch-search').value=''; document.getElementById('ch-results').innerHTML='';
+  openChannel('general',null,'Umumiy guruh');
+}
+async function openChannel(channel,recipientId,title){
+  chatChannel=channel; chatRecipient=recipientId; chatIds=new Set();
+  document.getElementById('ch-title').textContent=title;
+  document.getElementById('ch-general').classList.toggle('active',channel==='general');
+  const box=document.getElementById('ch-msgs'); box.innerHTML='<div class="ch-empty">Yuklanmoqda…</div>';
+  if(chatSub){ try{sb.removeChannel(chatSub);}catch(e){} chatSub=null; }
+  const {data:msgs,error}=await sb.from('messages').select('*').eq('channel',channel).order('created_at',{ascending:true}).limit(100);
+  if(error){box.innerHTML='<div class="ch-empty">Xato: '+error.message+'</div>';return;}
+  const ids=[...new Set((msgs||[]).map(m=>m.sender_id))];
+  if(ids.length){const {data:ps}=await sb.from('profiles').select('id,username,avatar_url').in('id',ids);(ps||[]).forEach(p=>chatProf[p.id]=p);}
+  box.innerHTML='';
+  if(!msgs||!msgs.length){box.innerHTML='<div class="ch-empty">Hali xabar yo\'q. Birinchi bo\'lib yozing!</div>';}
+  else msgs.forEach(m=>renderMsg(m));
+  box.scrollTop=box.scrollHeight;
+  chatSub=sb.channel('room:'+channel)
+    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages',filter:'channel=eq.'+channel},async payload=>{
+      const m=payload.new;
+      if(!chatProf[m.sender_id]){const {data:p}=await sb.from('profiles').select('id,username,avatar_url').eq('id',m.sender_id).maybeSingle();if(p)chatProf[m.sender_id]=p;}
+      renderMsg(m); const b=document.getElementById('ch-msgs'); b.scrollTop=b.scrollHeight;
+    }).subscribe();
+}
+function renderMsg(m){
+  if(chatIds.has(m.id))return; chatIds.add(m.id);
+  const box=document.getElementById('ch-msgs');
+  const empt=box.querySelector('.ch-empty'); if(empt)empt.remove();
+  const me=m.sender_id===myId;
+  const p=chatProf[m.sender_id]||{};
+  const av=p.avatar_url?'<img src="'+p.avatar_url+'">':chLtr(p.username);
+  const el=document.createElement('div');
+  el.className='ch-m'+(me?' me':'');
+  el.innerHTML='<div class="av">'+av+'</div><div class="bub"><div class="nm">'+adEsc(p.username||'foydalanuvchi')+'</div><div class="tx">'+adEsc(m.content)+'</div><div class="tm">'+chFmt(m.created_at)+'</div></div>';
+  box.appendChild(el);
+}
+async function sendChatMessage(){
+  const inp=document.getElementById('ch-text'); const text=inp.value.trim(); if(!text)return;
+  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
+  inp.value='';
+  const row={channel:chatChannel,sender_id:myId,recipient_id:chatRecipient,content:text};
+  const {data,error}=await sb.from('messages').insert(row).select().maybeSingle();
+  if(error){inp.value=text;alert('Yuborishda xato: '+error.message);return;}
+  if(data){ if(!chatProf[myId])chatProf[myId]={id:myId,username:currentUsername}; renderMsg(data); const b=document.getElementById('ch-msgs'); b.scrollTop=b.scrollHeight; }
+}
+let chatSearchT=null;
+function chatSearch(){
+  clearTimeout(chatSearchT);
+  chatSearchT=setTimeout(async()=>{
+    const term=document.getElementById('ch-search').value.trim();
+    const box=document.getElementById('ch-results');
+    if(!term){box.innerHTML='';return;}
+    const {data,error}=await sb.from('profiles').select('id,username,avatar_url').ilike('username','%'+term+'%').limit(20);
+    if(error){box.innerHTML='';return;}
+    const list=(data||[]).filter(u=>u.id!==myId);
+    if(!list.length){box.innerHTML='<div class="ch-empty" style="margin:8px 0;font-size:13px">Topilmadi</div>';return;}
+    box.innerHTML=list.map(u=>{
+      const av=u.avatar_url?'<div class="ch-cav"><img src="'+u.avatar_url+'"></div>':'<div class="ch-cav">'+chLtr(u.username)+'</div>';
+      return '<button class="ch-conv" onclick="openDM(\''+u.id+'\',\''+adEsc(u.username||'')+'\')">'+av+'<div class="ch-cinfo"><b>'+adEsc(u.username||'foydalanuvchi')+'</b><span>shaxsiy xabar</span></div></button>';
+    }).join('');
+  },250);
+}
+function openDM(uid,username){
+  document.getElementById('ch-general').classList.remove('active');
+  openChannel(dmChannel(myId,uid),uid,'@'+username);
 }
 
 async function adRenameModule(){
