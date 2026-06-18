@@ -1036,8 +1036,6 @@
               <button class="lsn-hw-send" id="lsn-hw-send" onclick="submitHomework()">Vazifani topshirish</button>
               <div class="ad-note" id="lsn-hw-note"></div>
             </div>
-
-            <button class="lsn-complete" id="lsn-complete" onclick="markComplete()">Bajarildi deb belgilash</button>
           </div>
         </div>
       </section>
@@ -1348,6 +1346,7 @@ async function adInit(){
   adLoadAnnouncements();
   adLoadHomework();
 }
+let adHwCache={};
 async function adLoadHomework(){
   const box=document.getElementById('hw-list'); if(!box)return;
   box.innerHTML='<div class="ad-empty">Yuklanmoqda…</div>';
@@ -1358,27 +1357,39 @@ async function adLoadHomework(){
   const {data:subs,error}=await q;
   if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
   if(!subs||!subs.length){box.innerHTML='<div class="ad-empty">Topshiriq yo\'q.</div>';return;}
-  // lesson titles + usernames
   const lids=[...new Set(subs.map(s=>s.lesson_id))];
   const uids=[...new Set(subs.map(s=>s.user_id))];
-  const {data:ls}=await sb.from('lessons').select('id,title').in('id',lids);
+  const {data:ls}=await sb.from('lessons').select('id,title,points').in('id',lids);
   const {data:us}=await sb.from('profiles').select('id,username').in('id',uids);
-  const lmap={}; (ls||[]).forEach(l=>lmap[l.id]=l.title);
+  const lmap={}; (ls||[]).forEach(l=>lmap[l.id]=l);
   const umap={}; (us||[]).forEach(u=>umap[u.id]=u.username);
+  adHwCache={};
   box.innerHTML=subs.map(s=>{
-    const badge=s.status==='graded'?'<span class="badge graded">BAHO: '+s.grade+'/10</span>':'<span class="badge pending">TEKSHIRILMAGAN</span>';
+    const max=(lmap[s.lesson_id]&&lmap[s.lesson_id].points)||10;
+    adHwCache[s.id]={user_id:s.user_id,grade:s.grade,status:s.status,max};
+    const badge=s.status==='graded'?'<span class="badge graded">BAHO: '+s.grade+'/'+max+'</span>':'<span class="badge pending">TEKSHIRILMAGAN</span>';
     const file=s.file_url?'<div style="margin-top:8px"><a class="hwfile" href="'+s.file_url+'" target="_blank" rel="noopener">Biriktirilgan fayl ↗</a></div>':'';
     const body=s.content?'<div class="body">'+adEsc(s.content)+'</div>':'<div class="body" style="color:var(--muted)">(matn yo\'q)</div>';
-    return '<div class="hw-card"><div class="hh"><span class="who">'+adEsc(umap[s.user_id]||'foydalanuvchi')+'</span><span class="lsn">'+adEsc(lmap[s.lesson_id]||'dars')+'</span>'+badge+'</div>'+body+file+
-      '<div class="grade-row"><input type="number" id="g-'+s.id+'" min="1" max="10" placeholder="1-10" value="'+(s.grade||'')+'"><input type="text" id="f-'+s.id+'" placeholder="Izoh (ixtiyoriy)" value="'+adEsc(s.feedback||'')+'"><button class="gbtn" onclick="adGradeHomework(\''+s.id+'\')">Baholash</button></div></div>';
+    const lt=(lmap[s.lesson_id]&&lmap[s.lesson_id].title)||'dars';
+    return '<div class="hw-card"><div class="hh"><span class="who">'+adEsc(umap[s.user_id]||'foydalanuvchi')+'</span><span class="lsn">'+adEsc(lt)+'</span>'+badge+'</div>'+body+file+
+      '<div class="grade-row"><input type="number" id="g-'+s.id+'" min="1" max="'+max+'" placeholder="1-'+max+'" value="'+(s.grade||'')+'"><input type="text" id="f-'+s.id+'" placeholder="Izoh (ixtiyoriy)" value="'+adEsc(s.feedback||'')+'"><button class="gbtn" onclick="adGradeHomework(\''+s.id+'\')">Baholash + ball berish</button></div></div>';
   }).join('');
 }
 async function adGradeHomework(id){
+  const meta=adHwCache[id]; if(!meta)return;
   const g=parseInt(document.getElementById('g-'+id).value);
-  if(isNaN(g)||g<1||g>10){alert('Ball 1 dan 10 gacha bo\'lsin.');return;}
+  if(isNaN(g)||g<1||g>meta.max){alert('Ball 1 dan '+meta.max+' gacha bo\'lsin.');return;}
   const feedback=document.getElementById('f-'+id).value.trim()||null;
   const {error}=await sb.from('homework_submissions').update({grade:g,feedback,status:'graded',graded_at:new Date().toISOString()}).eq('id',id);
   if(error){alert('Xato: '+error.message);return;}
+  // o'quvchiga ball qo'shish (avvalgi baho bo'lsa, farqini hisoblaymiz)
+  const delta=g-(meta.grade||0);
+  if(delta!==0){
+    const {data:prof}=await sb.from('profiles').select('points').eq('id',meta.user_id).maybeSingle();
+    const np=((prof&&prof.points)||0)+delta;
+    const {error:pe}=await sb.from('profiles').update({points:np}).eq('id',meta.user_id);
+    if(pe){alert('Baho saqlandi, lekin ball qo\'shishda xato: '+pe.message+'\\n(Admin profiles update siyosatini Run qildingizmi?)');}
+  }
   adLoadHomework();
 }
 async function adLoadCourses(){
@@ -1592,9 +1603,8 @@ async function openLesson(id){
   const mats=Array.isArray(l.materials)?l.materials:[];
   if(mats.length){mbox.innerHTML='<div class="lsn-mh">MATERIALLAR</div>'+mats.map(m=>'<a class="lsn-mat" href="'+m.url+'" target="_blank" rel="noopener"><span class="mi">'+matKind(m.kind)+'</span><span>'+adEsc(m.name)+'</span><span class="dl">Yuklab olish</span></a>').join('');}
   else {mbox.innerHTML='';}
-  _setText('lsn-pts','★ '+(l.points||10)+' ball');
+  _setText('lsn-pts','★ '+(l.points||10)+' ballgacha');
   loadLessonExtras(id);
-  updateCompleteBtn();
   if(!playlistData||playlistData.slug!==currentProgSlug){ await buildPlaylist(currentProgSlug); }
   renderPlaylist();
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
@@ -1681,9 +1691,10 @@ async function loadLessonExtras(id){
   if(hw){
     if(hw.content) document.getElementById('lsn-hw-text').value=hw.content;
     if(hw.status==='graded'){
-      st.innerHTML='<div class="hw-state graded"><div class="g">Baho: '+hw.grade+' / 10</div>'+(hw.feedback?'<div class="fb">'+adEsc(hw.feedback)+'</div>':'')+'</div>';
+      const mx=(lessonCache[id]&&lessonCache[id].points)||10;
+      st.innerHTML='<div class="hw-state graded"><div class="g">Baho: '+hw.grade+' / '+mx+'</div>'+(hw.feedback?'<div class="fb">'+adEsc(hw.feedback)+'</div>':'')+'</div>';
     } else {
-      st.innerHTML='<div class="hw-state pending">Vazifa topshirildi — tekshirilmoqda.</div>';
+      st.innerHTML='<div class="hw-state pending">Vazifa topshirildi — tekshirilmoqda. Baho qo\'yilgach ball qo\'shiladi.</div>';
     }
     if(hw.file_url) st.innerHTML+='<div class="ad-note"><a href="'+hw.file_url+'" target="_blank" rel="noopener" style="color:var(--accent)">Biriktirilgan fayl</a></div>';
   }
@@ -1716,38 +1727,20 @@ async function submitHomework(){
     const {error}=await sb.from('homework_submissions').upsert(row,{onConflict:'lesson_id,user_id'});
     btn.disabled=false;
     if(error){_setText('lsn-hw-note','Xato: '+error.message);return;}
+    // vazifa topshirildi => dars avtomatik bajarildi (ball BERILMAYDI — admin baho berганда qo'shiladi)
+    await sb.from('lesson_progress').upsert({user_id:user.id,lesson_id:currentLessonId,completed:true,completed_at:new Date().toISOString()},{onConflict:'user_id,lesson_id'});
+    const today=new Date().toISOString().slice(0,10);
+    if(myLastActive!==today){
+      const y=new Date(Date.now()-86400000).toISOString().slice(0,10);
+      myStreak=(myLastActive===y)?(myStreak+1):1; myLastActive=today;
+      await sb.from('profiles').update({streak:myStreak,last_active:today}).eq('id',user.id);
+      _setText('hm-streak',myStreak); _setText('hm-streak2',myStreak);
+    }
+    lessonDone[currentLessonId]=true;
     _setText('lsn-hw-note','');
     loadLessonExtras(currentLessonId);
+    renderPlaylist();
   }catch(e){btn.disabled=false;_setText('lsn-hw-note','Xato: '+e.message);}
-}
-function updateCompleteBtn(){
-  const b=document.getElementById('lsn-complete');
-  if(lessonDone[currentLessonId]){b.textContent='✓ Bajarildi';b.classList.add('done');b.disabled=true;}
-  else {b.textContent='Bajarildi deb belgilash';b.classList.remove('done');b.disabled=false;}
-}
-async function markComplete(){
-  const {data:{user}}=await sb.auth.getUser(); if(!user)return;
-  const id=currentLessonId; if(!id)return;
-  const {error}=await sb.from('lesson_progress').upsert({user_id:user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()},{onConflict:'user_id,lesson_id'});
-  if(error){alert('Xato: '+error.message);return;}
-  if(!lessonDone[id]){
-    const pts=(lessonCache[id]&&lessonCache[id].points)||10;
-    myPoints+=pts;
-    await sb.from('profiles').update({points:myPoints}).eq('id',user.id);
-    _setText('hm-points',myPoints);
-    const nb=document.querySelector('.nav-badge'); if(nb) nb.textContent='★ '+myPoints;
-  }
-  const today=new Date().toISOString().slice(0,10);
-  if(myLastActive!==today){
-    const y=new Date(Date.now()-86400000).toISOString().slice(0,10);
-    myStreak=(myLastActive===y)?(myStreak+1):1;
-    myLastActive=today;
-    await sb.from('profiles').update({streak:myStreak,last_active:today}).eq('id',user.id);
-    _setText('hm-streak',myStreak); _setText('hm-streak2',myStreak);
-  }
-  lessonDone[id]=true;
-  updateCompleteBtn();
-  renderPlaylist();
 }
 function lessonBack(){ const v=document.getElementById('lsn-video'); if(v){v.pause&&v.pause();} go(currentProgSlug||'asosiy'); }
 function continueLesson(){ if(homeNext){ currentProgSlug=homeNext.slug; openLesson(homeNext.id); } }
