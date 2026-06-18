@@ -457,6 +457,19 @@
   .an-row .sp{flex:1;min-width:0}
   .an-row .at{font-weight:600;font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
   .an-row .am{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px}
+  .hw-card{border:1px solid var(--line);border-radius:14px;background:var(--surface2);padding:15px 16px;margin-bottom:10px}
+  .hw-card .hh{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  .hw-card .who{font-weight:700;font-size:14px}
+  .hw-card .lsn{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted)}
+  .hw-card .badge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:3px 8px;border-radius:6px;margin-left:auto}
+  .hw-card .badge.pending{color:var(--muted);border:1px solid var(--line2)}
+  .hw-card .badge.graded{color:#0b0b11;background:var(--grad)}
+  .hw-card .body{font-size:14px;color:var(--text);margin-top:10px;white-space:pre-wrap;line-height:1.55}
+  .hw-card .grade-row{display:flex;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap}
+  .hw-card .grade-row input[type=number]{width:80px;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--text);outline:none}
+  .hw-card .grade-row input[type=text]{flex:1;min-width:160px;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:10px;padding:9px 12px;color:var(--text);outline:none}
+  .hw-card .gbtn{font-family:var(--font);font-weight:700;font-size:13px;color:#0b0b11;background:var(--grad);border:none;border-radius:10px;padding:10px 18px;cursor:pointer}
+  .hw-card a.hwfile{color:var(--accent);font-size:13px;font-family:'JetBrains Mono',monospace}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -472,15 +485,61 @@
   .pm-lesson:hover{background:var(--hover)}
   .pm-ord{width:26px;height:26px;flex-shrink:0;border-radius:8px;background:var(--field);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;color:var(--accent)}
   .pm-t{flex:1;min-width:0;font-weight:600;font-size:14px}
+  .pm-pts{display:block;font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:700;color:var(--accent);margin-top:3px}
   .pm-check{width:24px;height:24px;flex-shrink:0;border-radius:50%;border:1.5px solid var(--line2);display:flex;align-items:center;justify-content:center;font-size:13px;color:transparent}
   .pm-check.done{background:var(--grad);border-color:transparent;color:#0b0b11;font-weight:800}
 
   .lsn-back{display:inline-flex;align-items:center;gap:7px;background:var(--field);border:1px solid var(--line);border-radius:100px;padding:9px 16px;cursor:pointer;font-family:var(--font);font-weight:600;font-size:13px;color:var(--text);margin-bottom:16px}
   .lsn-back:hover{border-color:var(--line2)}
   .lsn-back svg{width:15px;height:15px}
-  .lsn-player{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--line)}
-  .lsn-player video{width:100%;height:100%;display:block;background:#000}
-  .lsn-novideo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:13px;background:linear-gradient(135deg,rgba(155,139,255,.12),rgba(255,77,141,.08))}
+  .lsn-layout{display:grid;grid-template-columns:330px 1fr;gap:20px;align-items:start}
+  @media(max-width:920px){.lsn-layout{grid-template-columns:1fr}}
+  .lsn-side{border:1px solid var(--line);border-radius:16px;background:var(--surface);overflow:hidden;max-height:78vh;display:flex;flex-direction:column}
+  @media(max-width:920px){.lsn-side{order:2;max-height:none}}
+  .lsn-side-h{padding:15px 18px;font-family:var(--display);font-weight:800;font-size:15px;border-bottom:1px solid var(--line);flex-shrink:0}
+  #lsn-playlist{overflow-y:auto}
+  .pl-mod{font-family:'JetBrains Mono',monospace;font-size:10px;letter-spacing:.1em;color:var(--muted);font-weight:700;padding:13px 18px 7px;text-transform:uppercase}
+  .pl-lesson{width:100%;display:flex;align-items:center;gap:11px;padding:11px 18px;background:none;border:none;cursor:pointer;font-family:var(--font);color:var(--text);text-align:left;transition:background .12s;border-left:3px solid transparent}
+  .pl-lesson:hover{background:var(--hover)}
+  .pl-lesson.active{background:var(--hover);border-left-color:var(--accent)}
+  .pl-ic{width:30px;height:30px;flex-shrink:0;border-radius:8px;background:var(--field);border:1px solid var(--line2);display:flex;align-items:center;justify-content:center;color:var(--accent)}
+  .pl-ic svg{width:13px;height:13px;fill:currentColor}
+  .pl-lesson.done .pl-ic{background:var(--grad);border-color:transparent;color:#0b0b11}
+  .pl-info{flex:1;min-width:0}
+  .pl-info .t{font-weight:600;font-size:13px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pl-info .m{font-family:'JetBrains Mono',monospace;font-size:10px;color:var(--muted);margin-top:2px}
+
+  /* custom player */
+  .vp{position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;overflow:hidden;background:#000;border:1px solid var(--line)}
+  .vp video{width:100%;height:100%;display:block;background:#000}
+  .vp-novideo{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-family:'JetBrains Mono',monospace;font-size:13px;background:linear-gradient(135deg,rgba(155,139,255,.12),rgba(255,77,141,.08))}
+  .vp-big{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:70px;height:70px;border-radius:50%;background:var(--grad);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer;box-shadow:0 14px 40px -10px var(--accent);transition:opacity .2s,transform .15s}
+  .vp-big svg{width:26px;height:26px;fill:#0b0b11;margin-left:3px}
+  .vp-big:hover{transform:translate(-50%,-50%) scale(1.06)}
+  .vp.playing .vp-big{opacity:0;pointer-events:none}
+  .vp-bar{position:absolute;left:0;right:0;bottom:0;padding:8px 12px 10px;background:linear-gradient(0deg,rgba(0,0,0,.78),transparent);opacity:0;transition:opacity .2s}
+  .vp:hover .vp-bar,.vp.paused .vp-bar,.vp.show-bar .vp-bar{opacity:1}
+  .vp-seek{position:relative;height:5px;border-radius:4px;background:rgba(255,255,255,.25);cursor:pointer;margin-bottom:9px}
+  .vp-prog{position:absolute;left:0;top:0;bottom:0;width:0;border-radius:4px;background:var(--grad)}
+  .vp-knob{position:absolute;top:50%;transform:translate(-50%,-50%);width:13px;height:13px;border-radius:50%;background:#fff;left:0;box-shadow:0 1px 4px rgba(0,0,0,.5);opacity:0;transition:opacity .15s}
+  .vp-seek:hover .vp-knob{opacity:1}
+  .vp-ctrls{display:flex;align-items:center;gap:6px}
+  .vp-ic{background:none;border:none;color:#fff;cursor:pointer;width:34px;height:34px;display:flex;align-items:center;justify-content:center;border-radius:8px;flex-shrink:0;transition:background .12s}
+  .vp-ic:hover{background:rgba(255,255,255,.16)}
+  .vp-ic svg{width:20px;height:20px;fill:currentColor}
+  .vp-ic.vp-txt{width:auto;padding:0 9px;font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700}
+  .vp-vol{width:74px;accent-color:#fff;cursor:pointer}
+  @media(max-width:560px){.vp-vol{width:46px}}
+  .vp-time{font-family:'JetBrains Mono',monospace;font-size:12px;color:#fff;margin-left:4px;white-space:nowrap}
+  .vp-spacer{flex:1}
+  .vp-mw{position:relative}
+  .vp-menu{position:absolute;bottom:44px;right:0;background:#15151d;border:1px solid var(--line2);border-radius:12px;padding:6px;min-width:120px;display:none;box-shadow:0 16px 40px -12px rgba(0,0,0,.7)}
+  .vp-menu.open{display:block}
+  .vp-menu button{display:block;width:100%;text-align:left;background:none;border:none;color:#fff;font-family:var(--font);font-size:13px;padding:9px 12px;border-radius:8px;cursor:pointer}
+  .vp-menu button:hover{background:rgba(255,255,255,.12)}
+  .vp-menu button.sel{color:var(--accent);font-weight:700}
+  .vp:fullscreen{border-radius:0;border:none}
+  .vp:fullscreen video{height:100%;object-fit:contain}
   .lsn-title{font-family:var(--display);font-weight:800;font-size:clamp(20px,3vw,28px);letter-spacing:-.02em;margin-top:20px}
   .lsn-desc{color:var(--muted);font-size:15px;line-height:1.65;margin-top:12px;white-space:pre-wrap}
   .lsn-mats{margin-top:20px}
@@ -493,6 +552,25 @@
   .lsn-complete{margin-top:24px;width:100%;max-width:320px;font-family:var(--font);font-weight:700;font-size:15px;color:#0b0b11;background:var(--grad);border:none;border-radius:12px;padding:15px;cursor:pointer;box-shadow:0 16px 40px -16px var(--accent);transition:transform .12s}
   .lsn-complete:hover{transform:translateY(-1px)}
   .lsn-complete.done{background:var(--field);color:var(--accent);border:1px solid var(--line2);box-shadow:none;cursor:default}
+  .lsn-meta-row{display:flex;align-items:center;gap:14px;margin-top:14px;flex-wrap:wrap}
+  .lsn-pts{display:inline-flex;align-items:center;gap:6px;font-family:'JetBrains Mono',monospace;font-weight:700;font-size:13px;color:#0b0b11;background:var(--grad);border-radius:100px;padding:7px 14px}
+  .lsn-rate{display:flex;gap:8px;margin-left:auto}
+  .lr-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--line2);background:var(--field);color:var(--muted);display:flex;align-items:center;justify-content:center;cursor:pointer;transition:.15s}
+  .lr-btn svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linejoin:round}
+  .lr-btn:hover{color:var(--text);border-color:var(--text)}
+  .lr-btn.on-like{color:#0b0b11;background:var(--grad);border-color:transparent}
+  .lr-btn.on-dislike{color:#fff;background:#e0476b;border-color:transparent}
+  .lsn-hw{border:1px solid var(--line);border-radius:16px;background:var(--surface);padding:20px;margin-top:24px}
+  .lsn-hw-h{font-family:var(--display);font-weight:800;font-size:17px;margin-bottom:14px}
+  .lsn-hw textarea{width:100%;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px 14px;color:var(--text);outline:none;resize:vertical;min-height:70px}
+  .lsn-hw textarea:focus{border-color:var(--accent)}
+  .lsn-hw-send{margin-top:12px;font-family:var(--font);font-weight:700;font-size:14px;color:#0b0b11;background:var(--grad);border:none;border-radius:12px;padding:12px 22px;cursor:pointer}
+  .lsn-hw-send:disabled{opacity:.55;cursor:default}
+  .hw-state{border-radius:12px;padding:13px 16px;margin-bottom:12px;font-size:14px}
+  .hw-state.pending{background:rgba(155,139,255,.12);border:1px solid var(--line2)}
+  .hw-state.graded{background:linear-gradient(110deg,rgba(155,139,255,.16),rgba(255,77,141,.10));border:1px solid var(--accent)}
+  .hw-state .g{font-family:var(--display);font-weight:800;font-size:18px}
+  .hw-state .fb{color:var(--muted);font-size:13px;margin-top:6px}
 </style>
 </head>
 <body data-theme="dark">
@@ -911,14 +989,57 @@
 
       <section class="view" id="view-lesson">
         <button class="lsn-back" onclick="lessonBack()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 18l-6-6 6-6"/></svg> Orqaga</button>
-        <div class="lsn-player">
-          <video id="lsn-video" controls playsinline style="display:none"></video>
-          <div class="lsn-novideo" id="lsn-novideo">Video hali yuklanmagan</div>
+        <div class="lsn-layout">
+          <aside class="lsn-side">
+            <div class="lsn-side-h" id="lsn-side-h">Darslar</div>
+            <div id="lsn-playlist"></div>
+          </aside>
+          <div class="lsn-main">
+            <div class="vp" id="vp">
+              <video id="lsn-video" playsinline></video>
+              <div class="vp-novideo" id="lsn-novideo">Video hali yuklanmagan</div>
+              <button class="vp-big" id="vp-big" onclick="vpToggle()"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+              <div class="vp-bar" id="vp-bar">
+                <div class="vp-seek" id="vp-seek"><div class="vp-prog" id="vp-prog"></div><div class="vp-knob" id="vp-knob"></div></div>
+                <div class="vp-ctrls">
+                  <button class="vp-ic" id="vp-play" onclick="vpToggle()"><svg viewBox="0 0 24 24" class="i-play"><path d="M8 5v14l11-7z"/></svg><svg viewBox="0 0 24 24" class="i-pause" style="display:none"><path d="M7 5h4v14H7zM13 5h4v14h-4z"/></svg></button>
+                  <button class="vp-ic" id="vp-vol-btn" onclick="vpMute()"><svg viewBox="0 0 24 24" class="i-vol"><path d="M5 9v6h4l5 5V4L9 9H5z"/><path d="M16 8a4 4 0 010 8" fill="none" stroke="currentColor" stroke-width="2"/></svg><svg viewBox="0 0 24 24" class="i-mute" style="display:none"><path d="M5 9v6h4l5 5V4L9 9H5z"/><path d="M22 9l-6 6M16 9l6 6" fill="none" stroke="currentColor" stroke-width="2"/></svg></button>
+                  <input type="range" id="vp-vol" min="0" max="1" step="0.05" value="1" class="vp-vol">
+                  <span class="vp-time"><span id="vp-cur">0:00</span> / <span id="vp-dur">0:00</span></span>
+                  <span class="vp-spacer"></span>
+                  <div class="vp-mw"><button class="vp-ic vp-txt" id="vp-speed-btn" onclick="vpMenu('speed')">1x</button><div class="vp-menu" id="vp-menu-speed"></div></div>
+                  <div class="vp-mw"><button class="vp-ic" id="vp-q-btn" onclick="vpMenu('q')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.6 1.6 0 00.3 1.8l.1.1a2 2 0 11-2.8 2.8l-.1-.1a1.6 1.6 0 00-2.7.7 1.6 1.6 0 01-3.2 0 1.6 1.6 0 00-2.7-.7l-.1.1a2 2 0 11-2.8-2.8l.1-.1a1.6 1.6 0 00-.7-2.7 1.6 1.6 0 010-3.2 1.6 1.6 0 00.7-2.7l-.1-.1a2 2 0 112.8-2.8l.1.1a1.6 1.6 0 001.8.3H9a1.6 1.6 0 001-1.5 1.6 1.6 0 013.2 0 1.6 1.6 0 001 1.5 1.6 1.6 0 001.8-.3l.1-.1a2 2 0 112.8 2.8l-.1.1a1.6 1.6 0 00-.3 1.8V9a1.6 1.6 0 001.5 1 1.6 1.6 0 010 3.2 1.6 1.6 0 00-1.5 1z"/></svg></button><div class="vp-menu" id="vp-menu-q"></div></div>
+                  <button class="vp-ic" id="vp-fs" onclick="vpFull()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 00-2 2v3M16 3h3a2 2 0 012 2v3M8 21H5a2 2 0 01-2-2v-3M16 21h3a2 2 0 002-2v-3"/></svg></button>
+                </div>
+              </div>
+            </div>
+            <h2 class="lsn-title" id="lsn-title"></h2>
+            <div class="lsn-meta-row">
+              <span class="lsn-pts" id="lsn-pts">★ 10 ball</span>
+              <div class="lsn-rate">
+                <button class="lr-btn" id="lr-like" onclick="rateLesson(true)" title="Yoqdi"><svg viewBox="0 0 24 24"><path d="M7 10v11M7 10l4-7a2 2 0 013 2l-1 5h5a2 2 0 012 2l-2 7a2 2 0 01-2 1H7"/></svg></button>
+                <button class="lr-btn" id="lr-dislike" onclick="rateLesson(false)" title="Yoqmadi"><svg viewBox="0 0 24 24"><path d="M17 14V3M17 14l-4 7a2 2 0 01-3-2l1-5H6a2 2 0 01-2-2l2-7a2 2 0 012-1h10"/></svg></button>
+              </div>
+            </div>
+            <p class="lsn-desc" id="lsn-desc"></p>
+            <div class="lsn-mats" id="lsn-mats"></div>
+
+            <div class="lsn-hw" id="lsn-hw">
+              <div class="lsn-hw-h">Uy vazifasi</div>
+              <div id="lsn-hw-status"></div>
+              <textarea id="lsn-hw-text" rows="3" placeholder="Vazifa javobingiz yoki izoh (ixtiyoriy)..."></textarea>
+              <div class="ad-file" style="margin-top:10px">
+                <button class="pick" onclick="document.getElementById('lsn-hw-file').click()">Fayl biriktirish</button>
+                <input type="file" id="lsn-hw-file" style="display:none" accept="image/*,video/*,.pdf,.zip,.aep,.prproj,audio/*" onchange="hwPicked()">
+                <span class="fname" id="lsn-hw-fname">Fayl tanlanmagan</span>
+              </div>
+              <button class="lsn-hw-send" id="lsn-hw-send" onclick="submitHomework()">Vazifani topshirish</button>
+              <div class="ad-note" id="lsn-hw-note"></div>
+            </div>
+
+            <button class="lsn-complete" id="lsn-complete" onclick="markComplete()">Bajarildi deb belgilash</button>
+          </div>
         </div>
-        <h2 class="lsn-title" id="lsn-title"></h2>
-        <p class="lsn-desc" id="lsn-desc"></p>
-        <div class="lsn-mats" id="lsn-mats"></div>
-        <button class="lsn-complete" id="lsn-complete" onclick="markComplete()">Bajarildi deb belgilash</button>
       </section>
 
       <section class="view" id="view-reyting">
@@ -981,6 +1102,10 @@
               <label>Tavsif (ixtiyoriy)</label>
               <textarea id="ad-desc" rows="3" placeholder="Dars haqida qisqacha..."></textarea>
             </div>
+            <div>
+              <label>Ball (dars bajarilganda beriladi)</label>
+              <input type="number" id="ad-points" value="10" min="1" max="100">
+            </div>
             <div class="full">
               <label>Video</label>
               <div class="ad-file">
@@ -1031,6 +1156,17 @@
           <button class="ad-save" id="an-save" onclick="adAddAnnouncement()">E'lonni qo'shish</button>
           <div class="ad-note" id="an-note"></div>
           <div id="an-list" style="margin-top:16px"></div>
+        </div>
+
+        <div class="ad-card">
+          <h3>Uy vazifalari</h3>
+          <div class="ad-bar" style="margin-bottom:14px">
+            <div class="ad-sel">
+              <label>Ko'rsatish</label>
+              <select id="hw-filter" onchange="adLoadHomework()"><option value="pending">Tekshirilmagan</option><option value="graded">Baholangan</option><option value="all">Hammasi</option></select>
+            </div>
+          </div>
+          <div id="hw-list"><div class="ad-empty">Yuklanmoqda…</div></div>
         </div>
       </section>
     </div>
@@ -1210,6 +1346,40 @@ async function adInit(){
   sel.dataset.loaded='1';
   await adLoadCourses();
   adLoadAnnouncements();
+  adLoadHomework();
+}
+async function adLoadHomework(){
+  const box=document.getElementById('hw-list'); if(!box)return;
+  box.innerHTML='<div class="ad-empty">Yuklanmoqda…</div>';
+  const filter=document.getElementById('hw-filter').value;
+  let q=sb.from('homework_submissions').select('*').order('created_at',{ascending:false}).limit(50);
+  if(filter==='pending') q=q.eq('status','pending');
+  else if(filter==='graded') q=q.eq('status','graded');
+  const {data:subs,error}=await q;
+  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
+  if(!subs||!subs.length){box.innerHTML='<div class="ad-empty">Topshiriq yo\'q.</div>';return;}
+  // lesson titles + usernames
+  const lids=[...new Set(subs.map(s=>s.lesson_id))];
+  const uids=[...new Set(subs.map(s=>s.user_id))];
+  const {data:ls}=await sb.from('lessons').select('id,title').in('id',lids);
+  const {data:us}=await sb.from('profiles').select('id,username').in('id',uids);
+  const lmap={}; (ls||[]).forEach(l=>lmap[l.id]=l.title);
+  const umap={}; (us||[]).forEach(u=>umap[u.id]=u.username);
+  box.innerHTML=subs.map(s=>{
+    const badge=s.status==='graded'?'<span class="badge graded">BAHO: '+s.grade+'/10</span>':'<span class="badge pending">TEKSHIRILMAGAN</span>';
+    const file=s.file_url?'<div style="margin-top:8px"><a class="hwfile" href="'+s.file_url+'" target="_blank" rel="noopener">Biriktirilgan fayl ↗</a></div>':'';
+    const body=s.content?'<div class="body">'+adEsc(s.content)+'</div>':'<div class="body" style="color:var(--muted)">(matn yo\'q)</div>';
+    return '<div class="hw-card"><div class="hh"><span class="who">'+adEsc(umap[s.user_id]||'foydalanuvchi')+'</span><span class="lsn">'+adEsc(lmap[s.lesson_id]||'dars')+'</span>'+badge+'</div>'+body+file+
+      '<div class="grade-row"><input type="number" id="g-'+s.id+'" min="1" max="10" placeholder="1-10" value="'+(s.grade||'')+'"><input type="text" id="f-'+s.id+'" placeholder="Izoh (ixtiyoriy)" value="'+adEsc(s.feedback||'')+'"><button class="gbtn" onclick="adGradeHomework(\''+s.id+'\')">Baholash</button></div></div>';
+  }).join('');
+}
+async function adGradeHomework(id){
+  const g=parseInt(document.getElementById('g-'+id).value);
+  if(isNaN(g)||g<1||g>10){alert('Ball 1 dan 10 gacha bo\'lsin.');return;}
+  const feedback=document.getElementById('f-'+id).value.trim()||null;
+  const {error}=await sb.from('homework_submissions').update({grade:g,feedback,status:'graded',graded_at:new Date().toISOString()}).eq('id',id);
+  if(error){alert('Xato: '+error.message);return;}
+  adLoadHomework();
 }
 async function adLoadCourses(){
   const pid=document.getElementById('ad-program').value;
@@ -1228,10 +1398,16 @@ async function adLoadLessons(){
   if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
   adLessonsCache=data||[];
   if(!adLessonsCache.length){box.innerHTML='<div class="ad-empty">Bu modulda hali dars yo\'q.</div>';return;}
+  // layk/dislayk sonlari (faqat admin ko'radi)
+  let fbCount={};
+  const ids=adLessonsCache.map(l=>l.id);
+  const {data:fb}=await sb.from('lesson_feedback').select('lesson_id,liked').in('lesson_id',ids);
+  (fb||[]).forEach(f=>{ const c=fbCount[f.lesson_id]||(fbCount[f.lesson_id]={up:0,down:0}); if(f.liked)c.up++; else c.down++; });
   box.innerHTML=adLessonsCache.map((l,i)=>{
     const vtag=l.video_url?'<span class="ad-vtag has">VIDEO</span>':'<span class="ad-vtag no">VIDEO YO\'Q</span>';
     const nmat=Array.isArray(l.materials)?l.materials.length:0;
-    const meta=(nmat?nmat+' material':'material yo\'q')+(l.description?' · tavsifli':'');
+    const c=fbCount[l.id]||{up:0,down:0};
+    const meta=(l.points||10)+' ball · '+(nmat?nmat+' material':'material yo\'q')+(l.description?' · tavsifli':'')+' · 👍 '+c.up+' / 👎 '+c.down;
     const up=i>0?'<button class="ic" title="Yuqoriga" onclick="adReorder('+i+',-1)"><svg viewBox="0 0 24 24"><path d="M18 15l-6-6-6 6"/></svg></button>':'<span style="width:34px;flex-shrink:0"></span>';
     const dn=i<adLessonsCache.length-1?'<button class="ic" title="Pastga" onclick="adReorder('+i+',1)"><svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></button>':'<span style="width:34px;flex-shrink:0"></span>';
     return '<div class="ad-lesson"><div class="ord">'+(i+1)+'</div><div class="sp"><div class="lt">'+adEsc(l.title)+'</div><div class="lm">'+meta+'</div></div>'+vtag+up+dn+
@@ -1256,6 +1432,7 @@ async function adSaveLesson(){
   if(!cid){adNote('Avval modul tanlang (yoki qo\'shing).');return;}
   const title=_val('ad-title'); if(!title){adNote('Dars nomini kiriting.');return;}
   const description=document.getElementById('ad-desc').value.trim()||null;
+  const points=Math.max(1,parseInt(_val('ad-points'))||10);
   const file=document.getElementById('ad-video').files[0];
   const mats=document.getElementById('ad-mats').files;
   const btn=document.getElementById('ad-save'); btn.disabled=true; adNote('');
@@ -1284,10 +1461,10 @@ async function adSaveLesson(){
         materials.push({name:m.name,url:murl,path:mpath,kind:adMatKind(m)});
       }
     }
-    const {error}=await sb.from('lessons').insert({course_id:cid,title,description,sort,video_url,video_path,materials});
+    const {error}=await sb.from('lessons').insert({course_id:cid,title,description,sort,video_url,video_path,materials,points});
     btn.disabled=false;
     if(error){adNote('Saqlashda xato: '+error.message);return;}
-    document.getElementById('ad-title').value=''; document.getElementById('ad-desc').value='';
+    document.getElementById('ad-title').value=''; document.getElementById('ad-desc').value=''; document.getElementById('ad-points').value='10';
     document.getElementById('ad-video').value=''; document.getElementById('ad-fname').textContent='Fayl tanlanmagan';
     document.getElementById('ad-mats').value=''; document.getElementById('ad-mname').textContent='Fayl tanlanmagan';
     adNote('✓ Dars qo\'shildi.');
@@ -1298,7 +1475,9 @@ async function adEditLesson(id){
   const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
   const t=prompt('Dars nomi:',l.title); if(t==null)return;
   const d=prompt('Tavsif (ixtiyoriy):', l.description||'');
-  const upd={title:t.trim(),description:(d==null?l.description:(d.trim()||null))};
+  const p=prompt('Ball (1-100):', l.points||10);
+  const pn=parseInt(p); const points=(isNaN(pn)||pn<1)?(l.points||10):pn;
+  const upd={title:t.trim(),description:(d==null?l.description:(d.trim()||null)),points};
   const {error}=await sb.from('lessons').update(upd).eq('id',id);
   if(error){adNote('Tahrirlashda xato: '+error.message);return;}
   adLoadLessons();
@@ -1351,51 +1530,194 @@ async function adDeleteAnnouncement(id){
 }
 /* ---------------- STUDENT: PROGRAMS + LESSON PAGE ---------------- */
 let myPoints=0, myStreak=0, myLastActive=null, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
+let playlistData=null;
+async function buildPlaylist(slug){
+  const {data:prog}=await sb.from('programs').select('id').eq('slug',slug).maybeSingle();
+  if(!prog) return null;
+  const {data:courses}=await sb.from('courses').select('id,title,sort').eq('program_id',prog.id).order('sort');
+  const cids=(courses||[]).map(c=>c.id);
+  let lessons=[];
+  if(cids.length){const {data:ls}=await sb.from('lessons').select('id,course_id,title,sort,video_url,description,materials,points').in('course_id',cids).order('sort');lessons=ls||[];}
+  const {data:{user}}=await sb.auth.getUser();
+  if(user){const {data:pr}=await sb.from('lesson_progress').select('lesson_id,completed').eq('user_id',user.id);(pr||[]).forEach(p=>{if(p.completed)lessonDone[p.lesson_id]=true;});}
+  lessons.forEach(l=>{lessonCache[l.id]=l;});
+  const mods=(courses||[]).map(c=>({title:c.title,lessons:lessons.filter(l=>l.course_id===c.id)}));
+  playlistData={slug,mods};
+  return playlistData;
+}
 async function loadProgram(slug){
   currentProgSlug=slug;
   const box=document.getElementById('prog-'+slug); if(!box)return;
   box.innerHTML='<div class="pm-empty">Yuklanmoqda…</div>';
-  const {data:prog}=await sb.from('programs').select('id').eq('slug',slug).maybeSingle();
-  if(!prog){box.innerHTML='<div class="pm-empty">Dastur topilmadi.</div>';return;}
-  const {data:courses}=await sb.from('courses').select('id,title,sort').eq('program_id',prog.id).order('sort');
-  if(!courses||!courses.length){box.innerHTML='<div class="pm-empty">Hali modul yo\'q.</div>';return;}
-  const cids=courses.map(c=>c.id);
-  const {data:lessons}=await sb.from('lessons').select('id,course_id,title,sort,video_url,description,materials').in('course_id',cids).order('sort');
-  const {data:{user}}=await sb.auth.getUser();
-  lessonDone={};
-  if(user){const {data:pr}=await sb.from('lesson_progress').select('lesson_id,completed').eq('user_id',user.id);(pr||[]).forEach(p=>{if(p.completed)lessonDone[p.lesson_id]=true;});}
-  (lessons||[]).forEach(l=>{lessonCache[l.id]=l;});
+  const pd=await buildPlaylist(slug);
+  if(!pd){box.innerHTML='<div class="pm-empty">Dastur topilmadi.</div>';return;}
+  if(!pd.mods.length){box.innerHTML='<div class="pm-empty">Hali modul yo\'q.</div>';return;}
   let html='';
-  courses.forEach(c=>{
-    const ls=(lessons||[]).filter(l=>l.course_id===c.id);
+  pd.mods.forEach(c=>{
+    const ls=c.lessons;
     html+='<div class="pm-mod"><div class="pm-mod-h">'+adEsc(c.title)+'<span>'+ls.length+' dars</span></div>';
     if(!ls.length){html+='<div class="pm-empty">Darslar tez orada…</div>';}
     else ls.forEach((l,i)=>{
       const chk=lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>';
-      html+='<button class="pm-lesson" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'</span>'+chk+'</button>';
+      html+='<button class="pm-lesson" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ball</span></span>'+chk+'</button>';
     });
     html+='</div>';
   });
   box.innerHTML=html;
 }
 function matKind(k){return k==='pdf'?'PDF':k==='image'?'IMG':k==='audio'?'MP3':'FILE';}
-function openLesson(id){
+function renderPlaylist(){
+  const box=document.getElementById('lsn-playlist'); if(!box)return;
+  const hd=document.getElementById('lsn-side-h'); if(hd) hd.textContent=PNAME[currentProgSlug]||'Darslar';
+  if(!playlistData||!playlistData.mods.length){box.innerHTML='<div class="pm-empty" style="padding:14px 18px">Darslar yo\'q.</div>';return;}
+  let html='';
+  playlistData.mods.forEach(c=>{
+    html+='<div class="pl-mod">'+adEsc(c.title)+'</div>';
+    c.lessons.forEach(l=>{
+      const active=l.id===currentLessonId?' active':'', done=lessonDone[l.id]?' done':'';
+      const ic=lessonDone[l.id]?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>':'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
+      html+='<button class="pl-lesson'+active+done+'" onclick="openLesson(\''+l.id+'\')"><span class="pl-ic">'+ic+'</span><span class="pl-info"><span class="t">'+adEsc(l.title)+'</span><span class="m">★ '+(l.points||10)+' ball</span></span></button>';
+    });
+  });
+  box.innerHTML=html;
+}
+async function openLesson(id){
   const l=lessonCache[id]; if(!l)return;
   currentLessonId=id;
   document.getElementById('lsn-title').textContent=l.title;
   const dsc=document.getElementById('lsn-desc'); dsc.textContent=l.description||''; dsc.style.display=l.description?'block':'none';
-  const vid=document.getElementById('lsn-video'), nov=document.getElementById('lsn-novideo');
-  if(l.video_url){vid.src=l.video_url;vid.style.display='block';nov.style.display='none';}
-  else {vid.removeAttribute('src');vid.style.display='none';nov.style.display='flex';}
+  const sources=(Array.isArray(l.qualities)&&l.qualities.length)?l.qualities:(l.video_url?[{label:'Auto',url:l.video_url}]:[]);
+  vpLoad(sources);
   const mbox=document.getElementById('lsn-mats');
   const mats=Array.isArray(l.materials)?l.materials:[];
   if(mats.length){mbox.innerHTML='<div class="lsn-mh">MATERIALLAR</div>'+mats.map(m=>'<a class="lsn-mat" href="'+m.url+'" target="_blank" rel="noopener"><span class="mi">'+matKind(m.kind)+'</span><span>'+adEsc(m.name)+'</span><span class="dl">Yuklab olish</span></a>').join('');}
   else {mbox.innerHTML='';}
+  _setText('lsn-pts','★ '+(l.points||10)+' ball');
+  loadLessonExtras(id);
   updateCompleteBtn();
+  if(!playlistData||playlistData.slug!==currentProgSlug){ await buildPlaylist(currentProgSlug); }
+  renderPlaylist();
   document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
   document.getElementById('view-lesson').classList.add('on');
   const t=document.getElementById('page-title'); t.removeAttribute('data-i18n'); t.textContent='Dars';
   window.scrollTo(0,0); closeNav();
+}
+
+/* ---- CUSTOM VIDEO PLAYER ---- */
+let vpSources=[], vpReady=false;
+function vpFmt(s){s=Math.floor(s||0);const m=Math.floor(s/60),x=s%60;return m+':'+(x<10?'0':'')+x;}
+function vpInit(){
+  if(vpReady)return; vpReady=true;
+  const v=document.getElementById('lsn-video'), vp=document.getElementById('vp');
+  v.addEventListener('timeupdate',()=>{
+    const d=v.duration||0, p=d?(v.currentTime/d*100):0;
+    document.getElementById('vp-prog').style.width=p+'%';
+    document.getElementById('vp-knob').style.left=p+'%';
+    _setText('vp-cur',vpFmt(v.currentTime));
+  });
+  v.addEventListener('loadedmetadata',()=>_setText('vp-dur',vpFmt(v.duration)));
+  v.addEventListener('play',()=>{vp.classList.add('playing');vp.classList.remove('paused');document.querySelector('#vp-play .i-play').style.display='none';document.querySelector('#vp-play .i-pause').style.display='';});
+  v.addEventListener('pause',()=>{vp.classList.remove('playing');vp.classList.add('paused');document.querySelector('#vp-play .i-play').style.display='';document.querySelector('#vp-play .i-pause').style.display='none';});
+  v.addEventListener('ended',()=>{vp.classList.remove('playing');vp.classList.add('paused');});
+  const seek=document.getElementById('vp-seek');
+  const seekTo=e=>{const r=seek.getBoundingClientRect();let x=((e.touches?e.touches[0].clientX:e.clientX)-r.left)/r.width;x=Math.max(0,Math.min(1,x));if(v.duration)v.currentTime=x*v.duration;};
+  let drag=false;
+  seek.addEventListener('mousedown',e=>{drag=true;seekTo(e);});
+  document.addEventListener('mousemove',e=>{if(drag)seekTo(e);});
+  document.addEventListener('mouseup',()=>{drag=false;});
+  seek.addEventListener('click',seekTo);
+  document.getElementById('vp-vol').addEventListener('input',e=>{v.volume=parseFloat(e.target.value);v.muted=(v.volume===0);vpVolIcon();});
+  // speed menu
+  const sm=document.getElementById('vp-menu-speed');
+  sm.innerHTML=[0.5,0.75,1,1.25,1.5,2].map(r=>'<button onclick="vpSpeed('+r+')" data-r="'+r+'">'+r+'x</button>').join('');
+  // keyboard
+  document.addEventListener('keydown',e=>{
+    if(!document.getElementById('view-lesson').classList.contains('on'))return;
+    if(['INPUT','TEXTAREA','SELECT'].includes((e.target.tagName||'')))return;
+    if(e.code==='Space'){e.preventDefault();vpToggle();}
+    else if(e.code==='ArrowRight'){v.currentTime=Math.min((v.duration||0),v.currentTime+5);}
+    else if(e.code==='ArrowLeft'){v.currentTime=Math.max(0,v.currentTime-5);}
+    else if(e.key==='f'||e.key==='F'){vpFull();}
+    else if(e.key==='m'||e.key==='M'){vpMute();}
+  });
+  document.addEventListener('click',e=>{ if(!e.target.closest('.vp-mw')){document.querySelectorAll('.vp-menu').forEach(m=>m.classList.remove('open'));} });
+}
+function vpVolIcon(){const v=document.getElementById('lsn-video');const mut=v.muted||v.volume===0;document.querySelector('#vp-vol-btn .i-vol').style.display=mut?'none':'';document.querySelector('#vp-vol-btn .i-mute').style.display=mut?'':'none';}
+function vpLoad(sources){
+  vpInit();
+  const v=document.getElementById('lsn-video'), nov=document.getElementById('lsn-novideo'), bar=document.getElementById('vp-bar'), big=document.getElementById('vp-big'), vp=document.getElementById('vp');
+  vpSources=sources||[];
+  document.querySelectorAll('.vp-menu').forEach(m=>m.classList.remove('open'));
+  if(!vpSources.length){ try{v.pause();}catch(e){} v.removeAttribute('src'); v.load&&v.load(); v.style.display='none'; nov.style.display='flex'; bar.style.display='none'; big.style.display='none'; return; }
+  v.style.display='block'; nov.style.display='none'; bar.style.display=''; big.style.display='';
+  v.src=vpSources[0].url; v.playbackRate=1; _setText('vp-speed-btn','1x');
+  vp.classList.add('paused'); vp.classList.remove('playing');
+  document.querySelector('#vp-play .i-play').style.display=''; document.querySelector('#vp-play .i-pause').style.display='none';
+  _setText('vp-cur','0:00'); _setText('vp-dur','0:00');
+  document.getElementById('vp-prog').style.width='0%'; document.getElementById('vp-knob').style.left='0%';
+  // quality menu
+  const qm=document.getElementById('vp-menu-q');
+  qm.innerHTML=vpSources.map((s,i)=>'<button onclick="vpQuality('+i+')" class="'+(i===0?'sel':'')+'">'+adEsc(s.label||('Sifat '+(i+1)))+'</button>').join('');
+  vpVolIcon();
+}
+function vpToggle(){const v=document.getElementById('lsn-video'); if(!vpSources.length)return; if(v.paused)v.play(); else v.pause();}
+function vpMute(){const v=document.getElementById('lsn-video'); v.muted=!v.muted; if(!v.muted&&v.volume===0){v.volume=1;document.getElementById('vp-vol').value=1;} document.getElementById('vp-vol').value=v.muted?0:v.volume; vpVolIcon();}
+function vpFull(){const vp=document.getElementById('vp'); if(document.fullscreenElement)document.exitFullscreen(); else vp.requestFullscreen&&vp.requestFullscreen();}
+function vpMenu(which){const id=which==='speed'?'vp-menu-speed':'vp-menu-q';document.querySelectorAll('.vp-menu').forEach(m=>{if(m.id!==id)m.classList.remove('open');});document.getElementById(id).classList.toggle('open');}
+function vpSpeed(r){const v=document.getElementById('lsn-video');v.playbackRate=r;_setText('vp-speed-btn',r+'x');document.querySelectorAll('#vp-menu-speed button').forEach(b=>b.classList.toggle('sel',parseFloat(b.dataset.r)===r));document.getElementById('vp-menu-speed').classList.remove('open');}
+function vpQuality(i){const v=document.getElementById('lsn-video');if(!vpSources[i])return;const t=v.currentTime,playing=!v.paused;v.src=vpSources[i].url;v.addEventListener('loadedmetadata',function h(){v.currentTime=t;if(playing)v.play();v.removeEventListener('loadedmetadata',h);});document.querySelectorAll('#vp-menu-q button').forEach((b,bi)=>b.classList.toggle('sel',bi===i));document.getElementById('vp-menu-q').classList.remove('open');}
+async function loadLessonExtras(id){
+  const {data:{user}}=await sb.auth.getUser(); if(!user)return;
+  // like/dislike state
+  document.getElementById('lr-like').classList.remove('on-like');
+  document.getElementById('lr-dislike').classList.remove('on-dislike');
+  const {data:fb}=await sb.from('lesson_feedback').select('liked').eq('lesson_id',id).eq('user_id',user.id).maybeSingle();
+  if(fb){ if(fb.liked) document.getElementById('lr-like').classList.add('on-like'); else document.getElementById('lr-dislike').classList.add('on-dislike'); }
+  // homework state
+  document.getElementById('lsn-hw-text').value='';
+  document.getElementById('lsn-hw-file').value=''; _setText('lsn-hw-fname','Fayl tanlanmagan'); _setText('lsn-hw-note','');
+  const st=document.getElementById('lsn-hw-status'); st.innerHTML='';
+  const {data:hw}=await sb.from('homework_submissions').select('*').eq('lesson_id',id).eq('user_id',user.id).maybeSingle();
+  if(hw){
+    if(hw.content) document.getElementById('lsn-hw-text').value=hw.content;
+    if(hw.status==='graded'){
+      st.innerHTML='<div class="hw-state graded"><div class="g">Baho: '+hw.grade+' / 10</div>'+(hw.feedback?'<div class="fb">'+adEsc(hw.feedback)+'</div>':'')+'</div>';
+    } else {
+      st.innerHTML='<div class="hw-state pending">Vazifa topshirildi — tekshirilmoqda.</div>';
+    }
+    if(hw.file_url) st.innerHTML+='<div class="ad-note"><a href="'+hw.file_url+'" target="_blank" rel="noopener" style="color:var(--accent)">Biriktirilgan fayl</a></div>';
+  }
+}
+async function rateLesson(liked){
+  const {data:{user}}=await sb.auth.getUser(); if(!user)return;
+  await sb.from('lesson_feedback').upsert({lesson_id:currentLessonId,user_id:user.id,liked},{onConflict:'lesson_id,user_id'});
+  document.getElementById('lr-like').classList.toggle('on-like',liked);
+  document.getElementById('lr-dislike').classList.toggle('on-dislike',!liked);
+}
+function hwPicked(){const f=document.getElementById('lsn-hw-file').files[0];_setText('lsn-hw-fname',f?f.name:'Fayl tanlanmagan');}
+async function submitHomework(){
+  const {data:{user}}=await sb.auth.getUser(); if(!user)return;
+  const content=document.getElementById('lsn-hw-text').value.trim()||null;
+  const file=document.getElementById('lsn-hw-file').files[0];
+  if(!content&&!file){_setText('lsn-hw-note','Javob matni yoki fayl qo\'shing.');return;}
+  const btn=document.getElementById('lsn-hw-send'); btn.disabled=true; _setText('lsn-hw-note','Topshirilmoqda…');
+  try{
+    let file_url=null,file_path=null;
+    if(file){
+      const ext=(file.name.split('.').pop()||'bin').toLowerCase();
+      file_path=currentLessonId+'/'+user.id+'-'+Date.now()+'.'+ext;
+      const {error:uErr}=await sb.storage.from('homework').upload(file_path,file,{contentType:file.type,upsert:true});
+      if(uErr){btn.disabled=false;_setText('lsn-hw-note','Fayl yuklashda xato: '+uErr.message);return;}
+      file_url=sb.storage.from('homework').getPublicUrl(file_path).data.publicUrl;
+    }
+    const row={lesson_id:currentLessonId,user_id:user.id,content,status:'pending',grade:null,feedback:null,created_at:new Date().toISOString()};
+    if(file_url){row.file_url=file_url;row.file_path=file_path;}
+    const {error}=await sb.from('homework_submissions').upsert(row,{onConflict:'lesson_id,user_id'});
+    btn.disabled=false;
+    if(error){_setText('lsn-hw-note','Xato: '+error.message);return;}
+    _setText('lsn-hw-note','');
+    loadLessonExtras(currentLessonId);
+  }catch(e){btn.disabled=false;_setText('lsn-hw-note','Xato: '+e.message);}
 }
 function updateCompleteBtn(){
   const b=document.getElementById('lsn-complete');
@@ -1408,7 +1730,8 @@ async function markComplete(){
   const {error}=await sb.from('lesson_progress').upsert({user_id:user.id,lesson_id:id,completed:true,completed_at:new Date().toISOString()},{onConflict:'user_id,lesson_id'});
   if(error){alert('Xato: '+error.message);return;}
   if(!lessonDone[id]){
-    myPoints+=10;
+    const pts=(lessonCache[id]&&lessonCache[id].points)||10;
+    myPoints+=pts;
     await sb.from('profiles').update({points:myPoints}).eq('id',user.id);
     _setText('hm-points',myPoints);
     const nb=document.querySelector('.nav-badge'); if(nb) nb.textContent='★ '+myPoints;
@@ -1423,6 +1746,7 @@ async function markComplete(){
   }
   lessonDone[id]=true;
   updateCompleteBtn();
+  renderPlaylist();
 }
 function lessonBack(){ const v=document.getElementById('lsn-video'); if(v){v.pause&&v.pause();} go(currentProgSlug||'asosiy'); }
 function continueLesson(){ if(homeNext){ currentProgSlug=homeNext.slug; openLesson(homeNext.id); } }
@@ -1432,7 +1756,7 @@ async function loadHome(){
   const {data:{user}}=await sb.auth.getUser(); if(!user)return;
   _setText('hm-points',myPoints); _setText('hm-streak',myStreak); _setText('hm-streak2',myStreak);
   const {data:programs}=await sb.from('programs').select('id,slug').order('sort');
-  const {data:lessons}=await sb.from('lessons').select('id,title,sort,video_url,description,materials,course_id,courses(program_id,sort)').order('sort');
+  const {data:lessons}=await sb.from('lessons').select('id,title,sort,video_url,description,materials,points,course_id,courses(program_id,sort)').order('sort');
   const {data:pr}=await sb.from('lesson_progress').select('lesson_id,completed,completed_at').eq('user_id',user.id);
   const done=new Set((pr||[]).filter(p=>p.completed).map(p=>p.lesson_id));
   const all=lessons||[];
