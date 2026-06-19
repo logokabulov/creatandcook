@@ -645,6 +645,27 @@
   .sup-input{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);align-items:center}
   .sup-input input[type=text]{flex:1;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px 15px;color:var(--text);outline:none}
   .sup-input input[type=text]:focus{border-color:var(--accent)}
+
+  /* ===== OBUNA (plans) ===== */
+  .plans{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:16px;margin-top:16px}
+  .plan{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:22px;display:flex;flex-direction:column;position:relative}
+  .plan.pop{border-color:transparent;background:linear-gradient(var(--surface),var(--surface)) padding-box,var(--grad) border-box;border:1.5px solid transparent}
+  .plan .pop-tag{position:absolute;top:-11px;left:22px;background:var(--grad);color:#0b0b11;font-size:10px;font-weight:800;letter-spacing:.06em;padding:4px 10px;border-radius:7px}
+  .plan h4{font-family:var(--display);font-weight:800;font-size:18px;margin:0 0 6px}
+  .plan .price{font-family:var(--display);font-weight:800;font-size:26px;margin-bottom:2px}
+  .plan .price small{font-size:13px;color:var(--muted);font-weight:600}
+  .plan .feats{list-style:none;padding:0;margin:14px 0 18px;display:flex;flex-direction:column;gap:9px;flex:1}
+  .plan .feats li{font-size:13.5px;color:var(--text);display:flex;gap:8px;align-items:flex-start;line-height:1.4}
+  .plan .feats li::before{content:"✓";color:var(--accent);font-weight:800;flex-shrink:0}
+  .plan .sub-btn{border:none;border-radius:12px;background:var(--grad);color:#0b0b11;font-weight:800;font-size:14px;padding:13px;cursor:pointer}
+  .plan.free .sub-btn{background:var(--field);color:var(--text);border:1px solid var(--line2)}
+  .plan .sub-btn:hover{transform:translateY(-1px)}
+  .plan .cur{font-size:11px;color:#8fd98f;font-weight:700;margin-top:8px;text-align:center}
+  /* admin plan editor */
+  .plan-edit{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--field);display:flex;align-items:center;gap:10px}
+  .plan-edit .pe-info{flex:1}
+  .plan-edit .pe-info b{font-size:15px}
+  .plan-edit .pe-info span{display:block;font-size:12px;color:var(--muted)}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -1235,8 +1256,8 @@
       </section>
 
       <section class="view" id="view-obuna">
-        <div class="panel-card"><div class="pc-head"><div class="pc-tile red">★</div><div><h3 data-i18n="menu.subscription">Obuna</h3><div class="pc-sub" data-i18n="obuna.sub">PRO TARIF</div></div></div>
-          <div class="pc-body"><p data-i18n="obuna.body">Bu yerga obuna tariflari, to'lov usuli va karta ma'lumotlari qo'shiladi.</p></div></div>
+        <div class="panel-card"><div class="pc-head"><div class="pc-tile red">★</div><div><h3>Obuna</h3><div class="pc-sub" id="obuna-status">TARIFNI TANLANG</div></div></div></div>
+        <div class="plans" id="plans-list"></div>
       </section>
 
       <section class="view" id="view-chat">
@@ -1322,6 +1343,28 @@
           <button class="ad-save" id="pg-save" onclick="adAddProgram()">Dastur qo'shish</button>
           <div class="ad-note" id="pg-note"></div>
           <div id="pg-list" style="margin-top:16px"></div>
+        </div>
+
+        <div class="ad-card" id="ad-card-plans">
+          <h3>Obuna tariflari</h3>
+          <div class="ad-form">
+            <div><label>Nom</label><input type="text" id="pl-name" placeholder="PRO"></div>
+            <div><label>Narx (raqam)</label><input type="number" id="pl-price" placeholder="199000" min="0"></div>
+            <div><label>Davr</label><select id="pl-period"><option value="oy">oylik</option><option value="yil">yillik</option><option value="umrbod">umrbod</option></select></div>
+            <div><label>Valyuta</label><input type="text" id="pl-cur" placeholder="so'm" value="so'm"></div>
+            <div class="full"><label>Imkoniyatlar (har qatorga bittadan)</label><textarea id="pl-feats" rows="4" placeholder="Barcha darslar&#10;Uy vazifa tekshiruvi&#10;Shaxsiy chat"></textarea></div>
+            <div class="full"><label>To'lov havolasi (Payme/Click/Uzum — ixtiyoriy)</label><input type="text" id="pl-url" placeholder="https://payme.uz/..."></div>
+            <div><label>Ommabop (popular)?</label><select id="pl-pop"><option value="no">Yo'q</option><option value="yes">Ha</option></select></div>
+          </div>
+          <button class="ad-save" id="pl-save" onclick="adSavePlan()">Tarif qo'shish</button>
+          <button class="ad-save" id="pl-cancel" onclick="adPlanCancel()" style="display:none;background:var(--field);color:var(--text);margin-left:8px">Bekor</button>
+          <div class="ad-note" id="pl-note"></div>
+          <div id="pl-list" style="margin-top:16px"></div>
+        </div>
+
+        <div class="ad-card" id="ad-card-subreq">
+          <h3>Obuna so'rovlari</h3>
+          <div id="sr-list"><div class="ad-empty">Yuklanmoqda…</div></div>
         </div>
 
         <div class="ad-bar">
@@ -1598,6 +1641,7 @@ async function loadProfileAndEnter(){
     document.getElementById('photo-prev').innerHTML='<img src="'+profile.avatar_url+'">';
   }
   iAmAdmin=!!profile.is_admin; iAmTeacher=!!profile.is_teacher; iAmStaff=iAmAdmin||iAmTeacher;
+  myPlanName=profile.plan_name||null; myPlanExpires=profile.plan_expires||null;
   if(iAmStaff){ const na=document.getElementById('nav-admin'); if(na){na.style.display='flex'; const lbl=na.querySelector('span'); if(lbl&&!iAmAdmin&&iAmTeacher)lbl.textContent='O\'qituvchi';} const ns=document.getElementById('nav-support'); if(ns) ns.style.display='flex'; }
   enterApp();
 }
@@ -1638,6 +1682,7 @@ function go(view){
   if(['ae','pr','dv'].includes(view)){document.getElementById('subnav').classList.add('open');document.getElementById('prog-toggle').classList.add('open');loadProgram(view);}
   if(view==='admin') adInit();
   if(view==='support') loadSupportAdmin();
+  if(view==='obuna') loadObuna();
   if(view==='asosiy') loadHome();
   if(view==='reyting') loadReyting();
   if(view==='chat') loadChat();
@@ -1686,7 +1731,7 @@ function adShowProg(on){const p=document.getElementById('ad-prog'),b=document.ge
 }
 async function adInit(){
   // O'qituvchiga admin-ga xos kartalarni yashiramiz
-  const adminOnly=['ad-card-programs','ad-card-users'];
+  const adminOnly=['ad-card-programs','ad-card-users','ad-card-plans','ad-card-subreq'];
   adminOnly.forEach(id=>{const el=document.getElementById(id); if(el)el.style.display=iAmAdmin?'':'none';});
   const sel=document.getElementById('ad-program');
   if(sel.dataset.loaded){return;}
@@ -1699,6 +1744,7 @@ async function adInit(){
   adLoadHomework();
   adLoadUsers();
   adLoadPrograms();
+  if(iAmAdmin){ adLoadPlans(); adLoadSubReqs(); }
 }
 function pgPicked(){const f=document.getElementById('pg-icon').files[0];document.getElementById('pg-iconname').textContent=f?f.name:'Fayl tanlanmagan';}
 function pgSlugify(t){
@@ -1935,6 +1981,126 @@ async function supDeleteThread(){
   document.getElementById('sup-placeholder').style.display='flex';
   loadSupportList();
 }
+
+/* ---------------- OBUNA (plans) ---------------- */
+function planFmtPrice(p){
+  if(!p.price||p.price<=0) return '<span class="price">Bepul</span>';
+  const per=p.period==='umrbod'?'umrbod':('/'+p.period);
+  return '<div class="price">'+Number(p.price).toLocaleString('uz')+' <small>'+adEsc(p.currency||'so\'m')+' '+per+'</small></div>';
+}
+async function loadObuna(){
+  const box=document.getElementById('plans-list'); if(!box)return;
+  box.innerHTML='<div class="lb-empty">Yuklanmoqda…</div>';
+  const {data,error}=await sb.from('plans').select('*').eq('active',true).order('sort');
+  if(error){box.innerHTML='<div class="lb-empty">Xato: '+error.message+'<br>(v16 SQL — plans — Run qildingizmi?)</div>';return;}
+  // joriy obuna holati
+  const st=document.getElementById('obuna-status');
+  if(myPlanName){ const exp=myPlanExpires?(' · '+new Date(myPlanExpires).toLocaleDateString('uz')+' gacha'):''; st.textContent='JORIY: '+myPlanName+exp; }
+  else st.textContent='TARIFNI TANLANG';
+  if(!data||!data.length){box.innerHTML='<div class="lb-empty">Hali tarif qo\'shilmagan.</div>';return;}
+  box.innerHTML=data.map(p=>{
+    const feats=(Array.isArray(p.features)?p.features:[]).map(f=>'<li>'+adEsc(String(f))+'</li>').join('');
+    const free=(!p.price||p.price<=0);
+    const cur=(myPlanName===p.name)?'<div class="cur">✓ Joriy tarifingiz</div>':'';
+    const btn=free?'':'<button class="sub-btn" onclick="subscribePlan(\''+p.id+'\')">Obuna bo\'lish</button>'+cur;
+    return '<div class="plan'+(p.popular?' pop':'')+(free?' free':'')+'">'+(p.popular?'<div class="pop-tag">OMMABOP</div>':'')+
+      '<h4>'+adEsc(p.name)+'</h4>'+planFmtPrice(p)+'<ul class="feats">'+feats+'</ul>'+(free?'<button class="sub-btn" disabled style="opacity:.6;cursor:default">Sukut bo\'yicha</button>':btn)+'</div>';
+  }).join('');
+}
+async function subscribePlan(planId){
+  const {data:p}=await sb.from('plans').select('*').eq('id',planId).maybeSingle();
+  if(!p)return;
+  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id;}
+  // so'rov yozamiz
+  await sb.from('subscription_requests').insert({user_id:myId,plan_id:p.id,plan_name:p.name,price:p.price,period:p.period});
+  if(p.checkout_url){
+    window.open(p.checkout_url,'_blank');
+    await uiAlert('To\'lov sahifasi ochildi. To\'lovni amalga oshirgach, administrator obunangizni tasdiqlaydi.');
+  } else {
+    await uiAlert('Obuna so\'rovingiz yuborildi. Administrator to\'lovni tekshirib, obunangizni faollashtiradi.');
+  }
+}
+/* ---- ADMIN: tariflar ---- */
+let plEditId=null;
+async function adLoadPlans(){
+  const box=document.getElementById('pl-list'); if(!box)return;
+  const {data,error}=await sb.from('plans').select('*').order('sort');
+  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
+  if(!data||!data.length){box.innerHTML='<div class="ad-empty">Hali tarif yo\'q.</div>';return;}
+  box.innerHTML=data.map(p=>{
+    const price=(!p.price||p.price<=0)?'Bepul':(Number(p.price).toLocaleString('uz')+' '+(p.currency||'so\'m')+'/'+p.period);
+    return '<div class="plan-edit"><div class="pe-info"><b>'+adEsc(p.name)+(p.popular?' ★':'')+'</b><span>'+price+' · '+((p.features||[]).length)+' imkoniyat'+(p.checkout_url?' · havola bor':'')+'</span></div>'+
+      '<button class="us-btn add" onclick="adEditPlan(\''+p.id+'\')">Tahrirlash</button><button class="us-btn rst" onclick="adDeletePlan(\''+p.id+'\',\''+adEsc(p.name)+'\')">O\'chirish</button></div>';
+  }).join('');
+}
+function adPlanCancel(){
+  plEditId=null;
+  ['pl-name','pl-price','pl-feats','pl-url'].forEach(id=>{const e=document.getElementById(id);if(e)e.value='';});
+  _setVal('pl-cur','so\'m');
+  document.getElementById('pl-period').value='oy'; document.getElementById('pl-pop').value='no';
+  document.getElementById('pl-save').textContent='Tarif qo\'shish';
+  document.getElementById('pl-cancel').style.display='none';
+  document.getElementById('pl-note').textContent='';
+}
+async function adEditPlan(id){
+  const {data:p}=await sb.from('plans').select('*').eq('id',id).maybeSingle(); if(!p)return;
+  plEditId=id;
+  _setVal('pl-name',p.name); _setVal('pl-price',p.price); _setVal('pl-cur',p.currency||'so\'m');
+  document.getElementById('pl-period').value=p.period||'oy';
+  _setVal('pl-feats',(Array.isArray(p.features)?p.features:[]).join('\n'));
+  _setVal('pl-url',p.checkout_url||'');
+  document.getElementById('pl-pop').value=p.popular?'yes':'no';
+  document.getElementById('pl-save').textContent='Saqlash';
+  document.getElementById('pl-cancel').style.display='';
+  document.getElementById('ad-card-plans').scrollIntoView({behavior:'smooth'});
+}
+async function adSavePlan(){
+  const name=_val('pl-name'); if(!name){document.getElementById('pl-note').textContent='Nom kiriting.';return;}
+  const feats=(document.getElementById('pl-feats').value||'').split('\n').map(s=>s.trim()).filter(Boolean);
+  const row={name,price:Number(_val('pl-price'))||0,currency:_val('pl-cur')||'so\'m',period:document.getElementById('pl-period').value,
+    features:feats,checkout_url:_val('pl-url')||null,popular:document.getElementById('pl-pop').value==='yes'};
+  let error;
+  if(plEditId){ ({error}=await sb.from('plans').update(row).eq('id',plEditId)); }
+  else { const {count}=await sb.from('plans').select('*',{count:'exact',head:true}); row.sort=(count||0)+1; ({error}=await sb.from('plans').insert(row)); }
+  if(error){document.getElementById('pl-note').textContent='Xato: '+error.message;return;}
+  document.getElementById('pl-note').textContent='✓ Saqlandi.';
+  adPlanCancel(); adLoadPlans();
+}
+async function adDeletePlan(id,name){
+  if(!await uiConfirm('"'+name+'" tarifini o\'chirasizmi?'))return;
+  const {error}=await sb.from('plans').delete().eq('id',id);
+  if(error){uiAlert('Xato: '+error.message);return;}
+  adLoadPlans();
+}
+/* ---- ADMIN: obuna so'rovlari ---- */
+async function adLoadSubReqs(){
+  const box=document.getElementById('sr-list'); if(!box)return;
+  const {data,error}=await sb.from('subscription_requests').select('*').order('created_at',{ascending:false}).limit(60);
+  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
+  if(!data||!data.length){box.innerHTML='<div class="ad-empty">So\'rov yo\'q.</div>';return;}
+  const uids=[...new Set(data.map(s=>s.user_id))];
+  const {data:us}=await sb.from('profiles').select('id,username').in('id',uids);
+  const um={}; (us||[]).forEach(u=>um[u.id]=u.username||'foydalanuvchi');
+  const SLBL={pending:'KUTILMOQDA',approved:'TASDIQLANDI',rejected:'RAD ETILDI'};
+  box.innerHTML=data.map(s=>{
+    const dt=new Date(s.created_at).toLocaleString('uz');
+    const price=(s.price?Number(s.price).toLocaleString('uz')+' so\'m':'—');
+    const acts=s.status==='pending'?'<button class="us-btn add" onclick="adDecideSub(\''+s.id+'\',\''+s.user_id+'\',\''+adEsc(s.plan_name||'')+'\',\''+(s.period||'oy')+'\',true)">Tasdiqlash</button><button class="us-btn rst" onclick="adDecideSub(\''+s.id+'\',\''+s.user_id+'\',\'\',\'\',false)">Rad etish</button>':'';
+    return '<div class="sp-row"><div class="sp-h"><span class="who">'+adEsc(um[s.user_id]||'foydalanuvchi')+'</span><span class="lsn">'+dt+'</span><span class="badge '+(s.status==='pending'?'pending':'graded')+'">'+(SLBL[s.status]||s.status)+'</span></div><div class="sp-msg">Tarif: <b>'+adEsc(s.plan_name||'—')+'</b> · '+price+' · '+adEsc(s.period||'')+'</div><div class="sp-reply" style="border:none;padding:0">'+acts+'</div></div>';
+  }).join('');
+}
+async function adDecideSub(id,uid,planName,period,approve){
+  if(approve){
+    const months=period==='yil'?12:(period==='umrbod'?1200:1);
+    const exp=new Date(); exp.setMonth(exp.getMonth()+months);
+    const {error:pe}=await sb.from('profiles').update({plan_name:planName,plan_expires:exp.toISOString()}).eq('id',uid);
+    if(pe){uiAlert('Profilni yangilashda xato: '+pe.message);return;}
+    await sb.from('subscription_requests').update({status:'approved',decided_at:new Date().toISOString()}).eq('id',id);
+  } else {
+    await sb.from('subscription_requests').update({status:'rejected',decided_at:new Date().toISOString()}).eq('id',id);
+  }
+  adLoadSubReqs();
+}
 async function adAddPoints(uid,sign){
   const amt=parseInt(document.getElementById('up-'+uid).value);
   if(isNaN(amt)||amt<=0){uiAlert('Ball miqdorini kiriting (musbat son).');return;}
@@ -2136,9 +2302,11 @@ async function adAddModule(){
 const AN_LABEL={yangi:'YANGI',elon:"E'LON"};
 async function adLoadAnnouncements(){
   const box=document.getElementById('an-list'); if(!box)return;
-  const {data,error}=await sb.from('announcements').select('*').order('created_at',{ascending:false}).limit(30);
+  try{await sb.rpc('purge_old_announcements');}catch(e){}
+  const cutoff=new Date(Date.now()-48*3600*1000).toISOString();
+  const {data,error}=await sb.from('announcements').select('*').gt('created_at',cutoff).order('created_at',{ascending:false}).limit(30);
   if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
-  if(!data||!data.length){box.innerHTML='<div class="ad-empty">Hali e\'lon yo\'q.</div>';return;}
+  if(!data||!data.length){box.innerHTML='<div class="ad-empty">Hali e\'lon yo\'q (yoki 48 soat o\'tgan).</div>';return;}
   box.innerHTML=data.map(a=>'<div class="an-row"><span class="tag">'+(AN_LABEL[a.kind]||'YANGI')+'</span><div class="sp"><div class="at">'+adEsc(a.title)+'</div><div class="am">'+adEsc(a.subtitle||'')+(a.link_slug?' · '+a.link_slug:'')+'</div></div><button class="ic del" title="O\'chirish" onclick="adDeleteAnnouncement(\''+a.id+'\')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>').join('');
 }
 async function adAddAnnouncement(){
@@ -2161,7 +2329,7 @@ async function adDeleteAnnouncement(id){
   adLoadAnnouncements();
 }
 /* ---------------- STUDENT: PROGRAMS + LESSON PAGE ---------------- */
-let myPoints=0, myStreak=0, myLastActive=null, iAmAdmin=false, iAmTeacher=false, iAmStaff=false, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
+let myPoints=0, myStreak=0, myLastActive=null, iAmAdmin=false, iAmTeacher=false, iAmStaff=false, myPlanName=null, myPlanExpires=null, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
 const LOCK_SVG='<svg class="lk" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
 function lockedMsg(){uiAlert("Bu dars hozircha qulflangan.");}
 let playlistData=null;
@@ -2430,10 +2598,11 @@ async function loadHome(){
 const AN_LBL={yangi:'YANGI',elon:"E'LON"};
 async function loadNews(){
   const box=document.getElementById('hm-news'); if(!box)return;
-  const {data,error}=await sb.from('announcements').select('*').order('created_at',{ascending:false}).limit(6);
+  const cutoff=new Date(Date.now()-48*3600*1000).toISOString();
+  const {data,error}=await sb.from('announcements').select('*').gt('created_at',cutoff).order('created_at',{ascending:false}).limit(6);
   if(error||!data||!data.length){box.innerHTML='<div class="item"><div><div class="it-t" style="color:var(--muted)">Hozircha yangilik yo\'q</div></div></div>';return;}
   box.innerHTML=data.map(a=>{
-    const click=a.link_slug?(' onclick="go(\''+a.link_slug+'\')" style="cursor:pointer"'):'';
+    const click=a.link_slug?(' onclick="openProgram(\''+a.link_slug+'\')" style="cursor:pointer"'):'';
     return '<div class="item"'+click+'><span class="tag">'+(AN_LBL[a.kind]||'YANGI')+'</span><div><div class="it-t">'+adEsc(a.title)+'</div>'+(a.subtitle?'<div class="it-m">'+adEsc(a.subtitle)+'</div>':'')+'</div>'+(a.link_slug?'<span class="arr">→</span>':'')+'</div>';
   }).join('');
 }
