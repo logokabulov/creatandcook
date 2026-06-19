@@ -576,6 +576,10 @@
   .help-panel.open{display:flex;animation:uipop .16s ease-out}
   .help-head{display:flex;align-items:center;justify-content:space-between;padding:15px 17px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:800;font-size:15px}
   .help-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px}
+  .help-st{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:middle}
+  .help-st.open{background:rgba(255,77,141,.16);color:#ff7db0}
+  .help-st.answered{background:rgba(120,200,120,.14);color:#8fd98f}
+  .help-st.closed{background:var(--field);color:var(--muted)}
   .help-x:hover{color:var(--text)}
   .help-body{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
   .help-empty{color:var(--muted);font-size:13px;text-align:center;margin:auto;line-height:1.6}
@@ -596,6 +600,51 @@
   .sp-reply{display:flex;gap:8px;margin-top:10px;align-items:flex-end}
   .sp-reply textarea{flex:1;resize:none;font-family:var(--font);font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 11px;color:var(--text);outline:none}
   .sp-reply button{border:none;border-radius:10px;background:var(--grad);color:#0b0b11;font-weight:700;font-size:13px;padding:9px 14px;cursor:pointer}
+
+  /* ===== ADMIN YORDAM bo'limi (messenjer uslubi) ===== */
+  .sup-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:#ff4d8d;margin-left:4px;vertical-align:middle}
+  .sup-wrap{display:flex;gap:14px;height:calc(100vh - 150px);min-height:460px}
+  .sup-side{width:300px;flex-shrink:0;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+  .sup-side-h{padding:15px 17px;font-family:var(--display);font-weight:800;font-size:15px;border-bottom:1px solid var(--line)}
+  #sup-convs{overflow-y:auto;flex:1}
+  .sup-conv{width:100%;text-align:left;display:flex;gap:11px;align-items:center;padding:12px 15px;background:none;border:none;border-bottom:1px solid var(--line);cursor:pointer;color:var(--text)}
+  .sup-conv:hover,.sup-conv.active{background:var(--hover)}
+  .sup-conv .ca{width:38px;height:38px;border-radius:50%;background:var(--grad);color:#0b0b11;display:flex;align-items:center;justify-content:center;font-weight:800;flex-shrink:0;overflow:hidden}
+  .sup-conv .ca img{width:100%;height:100%;object-fit:cover}
+  .sup-conv .ci{flex:1;min-width:0}
+  .sup-conv .ci b{display:block;font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .sup-conv .ci span{font-size:12px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  .sup-badge{font-family:'JetBrains Mono',monospace;font-size:8px;font-weight:700;letter-spacing:.05em;padding:3px 6px;border-radius:5px;flex-shrink:0}
+  .sup-badge.open{background:rgba(255,77,141,.16);color:#ff7db0}
+  .sup-badge.answered{background:rgba(120,200,120,.14);color:#8fd98f}
+  .sup-badge.closed{background:var(--field);color:var(--muted)}
+  .sup-main{flex:1;background:var(--surface);border:1px solid var(--line);border-radius:18px;overflow:hidden;display:flex;flex-direction:column}
+  .sup-empty{margin:auto;color:var(--muted)}
+  .sup-thread{display:flex;flex-direction:column;height:100%}
+  .sup-top{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:13px 16px;border-bottom:1px solid var(--line);flex-wrap:wrap}
+  .sup-top-l{display:flex;align-items:center;gap:11px}
+  .sup-av{width:40px;height:40px;border-radius:50%;background:var(--grad);color:#0b0b11;display:flex;align-items:center;justify-content:center;font-weight:800;overflow:hidden}
+  .sup-av img{width:100%;height:100%;object-fit:cover}
+  .sup-name{font-family:var(--display);font-weight:800;font-size:15px}
+  .sup-status{font-size:12px;color:var(--muted)}
+  .sup-acts{display:flex;gap:7px;flex-wrap:wrap}
+  .sup-st{font-size:12px;font-weight:700;border:1px solid var(--line2);background:var(--field);color:var(--text);border-radius:9px;padding:7px 11px;cursor:pointer}
+  .sup-st:hover{border-color:var(--text)}
+  .sup-st.del{color:#e0476b;border-color:rgba(224,71,107,.4)}
+  .sup-msgs{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:10px}
+  .sup-m{display:flex;max-width:78%}
+  .sup-m.staff{align-self:flex-end;justify-content:flex-end}
+  .sup-m.user{align-self:flex-start}
+  .sup-b{padding:9px 13px;border-radius:14px;font-size:14px;line-height:1.45;position:relative}
+  .sup-m.user .sup-b{background:var(--field);border:1px solid var(--line);border-bottom-left-radius:4px}
+  .sup-m.staff .sup-b{background:var(--grad);color:#0b0b11;border-bottom-right-radius:4px}
+  .sup-b img{max-width:220px;max-height:240px;border-radius:9px;display:block;cursor:pointer}
+  .sup-b .tm{font-size:10px;opacity:.6;margin-top:3px}
+  .sup-b .delx{position:absolute;top:-8px;right:-8px;width:22px;height:22px;border-radius:50%;border:1px solid var(--line2);background:var(--surface);color:#e0476b;cursor:pointer;display:none;align-items:center;justify-content:center;font-size:12px}
+  .sup-m:hover .sup-b .delx{display:flex}
+  .sup-input{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);align-items:center}
+  .sup-input input[type=text]{flex:1;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:12px 15px;color:var(--text);outline:none}
+  .sup-input input[type=text]:focus{border-color:var(--accent)}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -1001,6 +1050,10 @@
         <svg viewBox="0 0 24 24"><path d="M12 2l8 4v6c0 5-3.5 8-8 10-4.5-2-8-5-8-10V6l8-4z"/></svg>
         <span>Admin panel</span>
       </button>
+      <button class="nav-item" id="nav-support" data-view="support" onclick="go('support')" style="display:none">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+        <span>Yordam <span class="sup-dot" id="sup-dot" style="display:none"></span></span>
+      </button>
     </nav>
 
     <div class="profile" id="profile">
@@ -1216,6 +1269,35 @@
         </div>
       </section>
 
+      <section class="view" id="view-support">
+        <div class="sup-wrap">
+          <aside class="sup-side">
+            <div class="sup-side-h">Murojaatlar</div>
+            <div id="sup-convs"></div>
+          </aside>
+          <div class="sup-main" id="sup-main">
+            <div class="sup-empty" id="sup-placeholder">Suhbatni tanlang</div>
+            <div class="sup-thread" id="sup-thread" style="display:none">
+              <div class="sup-top">
+                <div class="sup-top-l"><div class="sup-av" id="sup-av">U</div><div><div class="sup-name" id="sup-name">Foydalanuvchi</div><div class="sup-status" id="sup-status"></div></div></div>
+                <div class="sup-acts">
+                  <button class="sup-st" onclick="supSetStatus('answered')">Javob berildi</button>
+                  <button class="sup-st" onclick="supSetStatus('closed')">Suhbatni tugatish</button>
+                  <button class="sup-st del" onclick="supDeleteThread()">O'chirish</button>
+                </div>
+              </div>
+              <div class="sup-msgs" id="sup-msgs"></div>
+              <div class="sup-input">
+                <button class="ch-tool" onclick="document.getElementById('sup-img').click()" title="Rasm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+                <input type="file" id="sup-img" accept="image/*" style="display:none" onchange="supSendImage()">
+                <input type="text" id="sup-text" placeholder="Javob yozing..." onkeydown="if(event.key==='Enter')supSend()">
+                <button class="ch-send" onclick="supSend()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <section class="view" id="view-admin">
         <div class="ad-card" id="ad-card-programs">
           <h3>Dasturlar</h3>
@@ -1336,19 +1418,6 @@
           <div id="hw-list"><div class="ad-empty">Yuklanmoqda…</div></div>
         </div>
 
-        <div class="ad-card" id="ad-card-support">
-          <h3>Murojaatlar (Yordam)</h3>
-          <div class="ad-sel" style="margin-bottom:12px">
-            <label>Filtr</label>
-            <select id="sp-filter" onchange="adLoadSupport()">
-              <option value="open">Yangi</option>
-              <option value="answered">Javob berilgan</option>
-              <option value="all">Barchasi</option>
-            </select>
-          </div>
-          <div id="sp-list"><div class="ad-empty">Yuklanmoqda…</div></div>
-        </div>
-
         <div class="ad-card" id="ad-card-users">
           <h3>Foydalanuvchilar — ball boshqaruvi</h3>
           <div class="ad-sel" style="margin-bottom:14px">
@@ -1365,9 +1434,11 @@
     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
   </button>
   <div class="help-panel" id="help-panel">
-    <div class="help-head"><span>Yordam markazi</span><button class="help-x" onclick="toggleHelp()">✕</button></div>
+    <div class="help-head"><span>Yordam markazi <span class="help-st" id="help-st"></span></span><button class="help-x" onclick="toggleHelp()">✕</button></div>
     <div class="help-body" id="help-body"></div>
     <div class="help-input">
+      <button class="ch-tool" onclick="document.getElementById('help-img').click()" title="Rasm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg></button>
+      <input type="file" id="help-img" accept="image/*" style="display:none" onchange="sendHelpImage()">
       <textarea id="help-text" rows="1" placeholder="Savol yoki muammoyingizni yozing..."></textarea>
       <button class="help-send" onclick="sendHelp()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
     </div>
@@ -1527,7 +1598,7 @@ async function loadProfileAndEnter(){
     document.getElementById('photo-prev').innerHTML='<img src="'+profile.avatar_url+'">';
   }
   iAmAdmin=!!profile.is_admin; iAmTeacher=!!profile.is_teacher; iAmStaff=iAmAdmin||iAmTeacher;
-  if(iAmStaff){ const na=document.getElementById('nav-admin'); if(na){na.style.display='flex'; const lbl=na.querySelector('span'); if(lbl&&!iAmAdmin&&iAmTeacher)lbl.textContent='O\'qituvchi';} }
+  if(iAmStaff){ const na=document.getElementById('nav-admin'); if(na){na.style.display='flex'; const lbl=na.querySelector('span'); if(lbl&&!iAmAdmin&&iAmTeacher)lbl.textContent='O\'qituvchi';} const ns=document.getElementById('nav-support'); if(ns) ns.style.display='flex'; }
   enterApp();
 }
 function enterApp(){
@@ -1566,6 +1637,7 @@ function go(view){
   else{t.setAttribute('data-i18n',TITLES[view]||'nav.home');t.textContent=tr(TITLES[view]||'nav.home');}
   if(['ae','pr','dv'].includes(view)){document.getElementById('subnav').classList.add('open');document.getElementById('prog-toggle').classList.add('open');loadProgram(view);}
   if(view==='admin') adInit();
+  if(view==='support') loadSupportAdmin();
   if(view==='asosiy') loadHome();
   if(view==='reyting') loadReyting();
   if(view==='chat') loadChat();
@@ -1627,7 +1699,6 @@ async function adInit(){
   adLoadHomework();
   adLoadUsers();
   adLoadPrograms();
-  adLoadSupport();
 }
 function pgPicked(){const f=document.getElementById('pg-icon').files[0];document.getElementById('pg-iconname').textContent=f?f.name:'Fayl tanlanmagan';}
 function pgSlugify(t){
@@ -1710,66 +1781,159 @@ async function adSetRole(uid,field,val){
   adLoadUsers();
 }
 
-/* ---------------- YORDAM (support) ---------------- */
+/* ---------------- YORDAM (support — suhbat) ---------------- */
+const SUP_ST={open:'Javob berilmadi',answered:'Javob berildi',closed:'Suhbat tugatildi'};
 let helpSub=null;
 function toggleHelp(){
   const p=document.getElementById('help-panel');
   const open=p.classList.toggle('open');
   if(open){ loadHelp(); const t=document.getElementById('help-text'); if(t)setTimeout(()=>t.focus(),60); }
 }
+function supImgUpload(file,uid,cb){
+  const ext=(file.name.split('.').pop()||'jpg').toLowerCase();
+  const path='support/'+uid+'-'+Date.now()+'.'+ext;
+  sb.storage.from('chat').upload(path,file,{contentType:file.type,upsert:false}).then(({error})=>{
+    if(error){uiAlert('Rasm yuklashda xato: '+error.message);return;}
+    cb(sb.storage.from('chat').getPublicUrl(path).data.publicUrl);
+  });
+}
 async function loadHelp(){
   const box=document.getElementById('help-body'); if(!box)return;
   if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id;}
   box.innerHTML='<div class="help-empty">Yuklanmoqda…</div>';
   const {data,error}=await sb.from('support_messages').select('*').eq('user_id',myId).order('created_at',{ascending:true});
-  if(error){box.innerHTML='<div class="help-empty">Xato: '+error.message+'<br>(v14 SQL — support_messages — Run qildingizmi?)</div>';return;}
-  if(!data||!data.length){box.innerHTML='<div class="help-empty">Savolingiz bormi?<br>Bu yerga yozing — administrator javob beradi.</div>';return;}
-  box.innerHTML=data.map(s=>{
-    let h='<div class="help-q">'+adEsc(s.message)+'</div>';
-    if(s.reply) h+='<div class="help-a"><div class="lab">ADMINISTRATOR</div>'+adEsc(s.reply)+'</div>';
-    else h+='<div class="help-wait">Javob kutilmoqda…</div>';
-    return h;
-  }).join('');
+  if(error){box.innerHTML='<div class="help-empty">Xato: '+error.message+'<br>(v15 SQL — support — Run qildingizmi?)</div>';return;}
+  const {data:th}=await sb.from('support_threads').select('status').eq('user_id',myId).maybeSingle();
+  const st=document.getElementById('help-st');
+  if(th&&data&&data.length){st.className='help-st '+th.status;st.textContent=SUP_ST[th.status]||'';}else{st.className='help-st';st.textContent='';}
+  if(!data||!data.length){box.innerHTML='<div class="help-empty">Savolingiz bormi?<br>Bu yerga yozing — administrator javob beradi.</div>';}
+  else box.innerHTML=data.map(helpBubble).join('');
   box.scrollTop=box.scrollHeight;
   if(helpSub){try{sb.removeChannel(helpSub);}catch(e){}helpSub=null;}
-  helpSub=sb.channel('support:'+myId)
+  helpSub=sb.channel('support-u:'+myId)
     .on('postgres_changes',{event:'*',schema:'public',table:'support_messages',filter:'user_id=eq.'+myId},()=>loadHelp())
     .subscribe();
+}
+function helpBubble(s){
+  const inner=s.type==='image'?'<a href="'+s.media_url+'" target="_blank" rel="noopener"><img src="'+s.media_url+'"></a>':adEsc(s.content||'');
+  if(s.from_staff) return '<div class="help-a"><div class="lab">ADMINISTRATOR</div>'+inner+'</div>';
+  return '<div class="help-q">'+inner+'</div>';
 }
 async function sendHelp(){
   const t=document.getElementById('help-text'); const msg=(t.value||'').trim(); if(!msg)return;
   if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
   t.value='';
-  const {error}=await sb.from('support_messages').insert({user_id:myId,message:msg});
+  const {error}=await sb.from('support_messages').insert({user_id:myId,sender_id:myId,from_staff:false,type:'text',content:msg});
   if(error){uiAlert('Yuborishda xato: '+error.message);t.value=msg;return;}
-  loadHelp();
 }
-async function adLoadSupport(){
-  const box=document.getElementById('sp-list'); if(!box)return;
-  box.innerHTML='<div class="ad-empty">Yuklanmoqda…</div>';
-  const filter=document.getElementById('sp-filter').value;
-  let q=sb.from('support_messages').select('*').order('created_at',{ascending:false}).limit(80);
-  if(filter==='open')q=q.eq('status','open'); else if(filter==='answered')q=q.eq('status','answered');
-  const {data,error}=await q;
-  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
-  if(!data||!data.length){box.innerHTML='<div class="ad-empty">Murojaat yo\'q.</div>';return;}
-  const uids=[...new Set(data.map(s=>s.user_id))];
-  const {data:us}=await sb.from('profiles').select('id,username').in('id',uids);
-  const um={}; (us||[]).forEach(u=>um[u.id]=u.username||'foydalanuvchi');
-  box.innerHTML=data.map(s=>{
-    const badge=s.status==='answered'?'<span class="badge graded">JAVOB BERILGAN</span>':'<span class="badge pending">YANGI</span>';
-    const old=s.reply?'<div class="sp-reply-old">Sizning javobingiz: '+adEsc(s.reply)+'</div>':'';
-    const dt=new Date(s.created_at).toLocaleString('uz');
-    return '<div class="sp-row"><div class="sp-h"><span class="who">'+adEsc(um[s.user_id]||'foydalanuvchi')+'</span><span class="lsn">'+dt+'</span>'+badge+'</div><div class="sp-msg">'+adEsc(s.message)+'</div>'+old+
-      '<div class="sp-reply"><textarea id="sr-'+s.id+'" rows="1" placeholder="Javob yozing...">'+adEsc(s.reply||'')+'</textarea><button onclick="adReplySupport(\''+s.id+'\')">Javob berish</button></div></div>';
+function sendHelpImage(){
+  const f=document.getElementById('help-img').files[0]; if(!f)return;
+  document.getElementById('help-img').value='';
+  if(f.size>20*1024*1024){uiAlert('Rasm 20 MB dan oshmasin.');return;}
+  supImgUpload(f,myId,async(url)=>{
+    await sb.from('support_messages').insert({user_id:myId,sender_id:myId,from_staff:false,type:'image',media_url:url});
+  });
+}
+
+/* ---- ADMIN yordam bo'limi ---- */
+let supUid=null, supName='', supProf={}, supMsgSub=null, supListSub=null;
+async function loadSupportAdmin(){
+  loadSupportList();
+  if(supListSub){try{sb.removeChannel(supListSub);}catch(e){}supListSub=null;}
+  supListSub=sb.channel('support-threads')
+    .on('postgres_changes',{event:'*',schema:'public',table:'support_threads'},()=>loadSupportList())
+    .subscribe();
+}
+async function loadSupportList(){
+  const box=document.getElementById('sup-convs'); if(!box)return;
+  const {data:threads,error}=await sb.from('support_threads').select('*').order('updated_at',{ascending:false});
+  if(error){box.innerHTML='<div class="ad-empty" style="padding:14px">Xato: '+error.message+'</div>';return;}
+  if(!threads||!threads.length){box.innerHTML='<div class="ad-empty" style="padding:14px">Murojaat yo\'q.</div>';document.getElementById('sup-dot').style.display='none';return;}
+  const uids=threads.map(t=>t.user_id);
+  const {data:us}=await sb.from('profiles').select('id,username,avatar_url').in('id',uids);
+  supProf={}; (us||[]).forEach(u=>supProf[u.id]=u);
+  // oxirgi xabar preview
+  const {data:lastMsgs}=await sb.from('support_messages').select('user_id,content,type,created_at').in('user_id',uids).order('created_at',{ascending:false});
+  const prev={}; (lastMsgs||[]).forEach(m=>{if(!prev[m.user_id])prev[m.user_id]=(m.type==='image'?'📷 rasm':(m.content||''));});
+  let openCount=0;
+  box.innerHTML=threads.map(t=>{
+    if(t.status==='open')openCount++;
+    const p=supProf[t.user_id]||{}; const nm=p.username||'foydalanuvchi';
+    const av=p.avatar_url?'<div class="ca"><img src="'+p.avatar_url+'"></div>':'<div class="ca">'+((nm[0]||'U').toUpperCase())+'</div>';
+    const bcls=t.status==='open'?'open':(t.status==='closed'?'closed':'answered');
+    const blab=t.status==='open'?'YANGI':(t.status==='closed'?'YOPIQ':'JAVOB');
+    return '<button class="sup-conv'+(t.user_id===supUid?' active':'')+'" onclick="supOpenThread(\''+t.user_id+'\',\''+adEsc(nm)+'\')">'+av+'<div class="ci"><b>'+adEsc(nm)+'</b><span>'+adEsc((prev[t.user_id]||'').slice(0,30))+'</span></div><span class="sup-badge '+bcls+'">'+blab+'</span></button>';
   }).join('');
+  const dot=document.getElementById('sup-dot'); dot.style.display=openCount?'inline-block':'none';
 }
-async function adReplySupport(id){
-  const t=document.getElementById('sr-'+id); const reply=(t.value||'').trim();
-  if(!reply){uiAlert('Javob matnini yozing.');return;}
-  const {error}=await sb.from('support_messages').update({reply,status:'answered',answered_at:new Date().toISOString()}).eq('id',id);
+async function supOpenThread(uid,name){
+  supUid=uid; supName=name;
+  document.getElementById('sup-placeholder').style.display='none';
+  document.getElementById('sup-thread').style.display='flex';
+  document.querySelectorAll('.sup-conv').forEach(c=>c.classList.remove('active'));
+  const p=supProf[uid]||{};
+  document.getElementById('sup-av').innerHTML=p.avatar_url?'<img src="'+p.avatar_url+'">':((name[0]||'U').toUpperCase());
+  document.getElementById('sup-name').textContent=name;
+  loadSupportList();
+  const box=document.getElementById('sup-msgs'); box.innerHTML='<div class="ad-empty">Yuklanmoqda…</div>';
+  const {data,error}=await sb.from('support_messages').select('*').eq('user_id',uid).order('created_at',{ascending:true});
+  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
+  const {data:th}=await sb.from('support_threads').select('status').eq('user_id',uid).maybeSingle();
+  document.getElementById('sup-status').textContent=th?(SUP_ST[th.status]||''):'';
+  box.innerHTML=(data||[]).map(supBubble).join('')||'<div class="ad-empty">Xabar yo\'q.</div>';
+  box.scrollTop=box.scrollHeight;
+  if(supMsgSub){try{sb.removeChannel(supMsgSub);}catch(e){}supMsgSub=null;}
+  supMsgSub=sb.channel('support-a:'+uid)
+    .on('postgres_changes',{event:'*',schema:'public',table:'support_messages',filter:'user_id=eq.'+uid},()=>{ if(supUid===uid) supReloadMsgs(); })
+    .subscribe();
+}
+async function supReloadMsgs(){
+  const box=document.getElementById('sup-msgs'); if(!box||!supUid)return;
+  const {data}=await sb.from('support_messages').select('*').eq('user_id',supUid).order('created_at',{ascending:true});
+  box.innerHTML=(data||[]).map(supBubble).join('')||'<div class="ad-empty">Xabar yo\'q.</div>';
+  box.scrollTop=box.scrollHeight;
+}
+function supBubble(s){
+  const inner=s.type==='image'?'<a href="'+s.media_url+'" target="_blank" rel="noopener"><img src="'+s.media_url+'"></a>':adEsc(s.content||'');
+  const tm=chFmt(s.created_at);
+  return '<div class="sup-m '+(s.from_staff?'staff':'user')+'"><div class="sup-b">'+inner+'<div class="tm">'+tm+'</div><button class="delx" onclick="supDeleteMsg(\''+s.id+'\')">✕</button></div></div>';
+}
+async function supSend(){
+  const t=document.getElementById('sup-text'); const msg=(t.value||'').trim(); if(!msg||!supUid)return;
+  t.value='';
+  const {error}=await sb.from('support_messages').insert({user_id:supUid,sender_id:myId,from_staff:true,type:'text',content:msg});
+  if(error){uiAlert('Xato: '+error.message);t.value=msg;}
+}
+function supSendImage(){
+  const f=document.getElementById('sup-img').files[0]; if(!f||!supUid)return;
+  document.getElementById('sup-img').value='';
+  if(f.size>20*1024*1024){uiAlert('Rasm 20 MB dan oshmasin.');return;}
+  supImgUpload(f,myId,async(url)=>{
+    await sb.from('support_messages').insert({user_id:supUid,sender_id:myId,from_staff:true,type:'image',media_url:url});
+  });
+}
+async function supSetStatus(status){
+  if(!supUid)return;
+  const {error}=await sb.from('support_threads').update({status}).eq('user_id',supUid);
   if(error){uiAlert('Xato: '+error.message);return;}
-  adLoadSupport();
+  document.getElementById('sup-status').textContent=SUP_ST[status]||'';
+  loadSupportList();
+}
+async function supDeleteMsg(id){
+  if(!await uiConfirm('Bu xabarni o\'chirasizmi?'))return;
+  const {error}=await sb.from('support_messages').delete().eq('id',id);
+  if(error){uiAlert('Xato: '+error.message);return;}
+  supReloadMsgs();
+}
+async function supDeleteThread(){
+  if(!supUid)return;
+  if(!await uiConfirm('"'+supName+'" bilan butun suhbat o\'chiriladimi? Bu qaytarilmaydi.'))return;
+  await sb.from('support_messages').delete().eq('user_id',supUid);
+  await sb.from('support_threads').delete().eq('user_id',supUid);
+  supUid=null;
+  document.getElementById('sup-thread').style.display='none';
+  document.getElementById('sup-placeholder').style.display='flex';
+  loadSupportList();
 }
 async function adAddPoints(uid,sign){
   const amt=parseInt(document.getElementById('up-'+uid).value);
