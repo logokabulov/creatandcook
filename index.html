@@ -564,6 +564,9 @@
   .pm-check.lockadm svg,.pl-lesson .pl-ic svg{opacity:1}
   .pm-check.lockadm{color:#ffb86b}
   .pm-lesson.lockadm-row .pm-pts{color:#ffb86b}
+  .rolebadge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:middle}
+  .rolebadge.admin{background:rgba(255,77,141,.16);color:#ff7db0;border:1px solid rgba(255,77,141,.4)}
+  .rolebadge.teach{background:rgba(155,139,255,.16);color:#b3a6ff;border:1px solid rgba(155,139,255,.4)}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -1185,7 +1188,7 @@
       </section>
 
       <section class="view" id="view-admin">
-        <div class="ad-card">
+        <div class="ad-card" id="ad-card-programs">
           <h3>Dasturlar</h3>
           <div class="ad-form">
             <div class="full">
@@ -1304,7 +1307,7 @@
           <div id="hw-list"><div class="ad-empty">Yuklanmoqda…</div></div>
         </div>
 
-        <div class="ad-card">
+        <div class="ad-card" id="ad-card-users">
           <h3>Foydalanuvchilar — ball boshqaruvi</h3>
           <div class="ad-sel" style="margin-bottom:14px">
             <label>Qidirish (username)</label>
@@ -1469,7 +1472,8 @@ async function loadProfileAndEnter(){
     document.getElementById('side-avatar').innerHTML='<img src="'+profile.avatar_url+'">';
     document.getElementById('photo-prev').innerHTML='<img src="'+profile.avatar_url+'">';
   }
-  if(profile.is_admin){iAmAdmin=true; const na=document.getElementById('nav-admin'); if(na) na.style.display='flex';}
+  iAmAdmin=!!profile.is_admin; iAmTeacher=!!profile.is_teacher; iAmStaff=iAmAdmin||iAmTeacher;
+  if(iAmStaff){ const na=document.getElementById('nav-admin'); if(na){na.style.display='flex'; const lbl=na.querySelector('span'); if(lbl&&!iAmAdmin&&iAmTeacher)lbl.textContent='O\'qituvchi';} }
   enterApp();
 }
 function enterApp(){
@@ -1555,6 +1559,9 @@ function adShowProg(on){const p=document.getElementById('ad-prog'),b=document.ge
   else{b.style.transition='width .25s';b.style.width='100%';setTimeout(()=>{p.style.display='none';b.style.width='0';},450);}
 }
 async function adInit(){
+  // O'qituvchiga admin-ga xos kartalarni yashiramiz
+  const adminOnly=['ad-card-programs','ad-card-users'];
+  adminOnly.forEach(id=>{const el=document.getElementById(id); if(el)el.style.display=iAmAdmin?'':'none';});
   const sel=document.getElementById('ad-program');
   if(sel.dataset.loaded){return;}
   const {data,error}=await sb.from('programs').select('id,title,sort').order('sort');
@@ -1628,16 +1635,24 @@ async function adRefreshProgramSelect(){
 async function adLoadUsers(){
   const box=document.getElementById('us-list'); if(!box)return;
   const term=(document.getElementById('us-search').value||'').trim();
-  let q=sb.from('profiles').select('id,username,points,avatar_url').order('points',{ascending:false}).limit(50);
+  let q=sb.from('profiles').select('id,username,points,avatar_url,is_admin,is_teacher').order('points',{ascending:false}).limit(50);
   if(term) q=q.ilike('username','%'+term+'%');
   const {data,error}=await q;
   if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
   if(!data||!data.length){box.innerHTML='<div class="ad-empty">Foydalanuvchi topilmadi.</div>';return;}
   box.innerHTML=data.map(u=>{
     const av=u.avatar_url?'<div class="us-av"><img src="'+u.avatar_url+'"></div>':'<div class="us-av">'+((u.username||'U')[0]||'U').toUpperCase()+'</div>';
-    return '<div class="us-row">'+av+'<div class="us-info"><b>'+adEsc(u.username||'foydalanuvchi')+'</b><span>★ '+(u.points||0)+' ball</span></div>'+
-      '<div class="us-ctrl"><input type="number" id="up-'+u.id+'" placeholder="50" min="1"><button class="us-btn add" onclick="adAddPoints(\''+u.id+'\',1)">+ qo\'shish</button><button class="us-btn sub" onclick="adAddPoints(\''+u.id+'\',-1)">− ayirish</button><button class="us-btn rst" onclick="adResetPoints(\''+u.id+'\')">0 qilish</button></div></div>';
+    const rb=u.is_admin?'<span class="rolebadge admin">ADMIN</span>':(u.is_teacher?'<span class="rolebadge teach">O\'QITUVCHI</span>':'');
+    const adminBtn=u.is_admin?'<button class="us-btn rst" onclick="adSetRole(\''+u.id+'\',\'is_admin\',false)">Adminni olish</button>':'<button class="us-btn add" onclick="adSetRole(\''+u.id+'\',\'is_admin\',true)">Admin qilish</button>';
+    const teachBtn=u.is_teacher?'<button class="us-btn rst" onclick="adSetRole(\''+u.id+'\',\'is_teacher\',false)">O\'qituvchini olish</button>':'<button class="us-btn add" onclick="adSetRole(\''+u.id+'\',\'is_teacher\',true)">O\'qituvchi qilish</button>';
+    return '<div class="us-row">'+av+'<div class="us-info"><b>'+adEsc(u.username||'foydalanuvchi')+' '+rb+'</b><span>★ '+(u.points||0)+' ball</span></div>'+
+      '<div class="us-ctrl"><input type="number" id="up-'+u.id+'" placeholder="50" min="1"><button class="us-btn add" onclick="adAddPoints(\''+u.id+'\',1)">+ qo\'shish</button><button class="us-btn sub" onclick="adAddPoints(\''+u.id+'\',-1)">− ayirish</button><button class="us-btn rst" onclick="adResetPoints(\''+u.id+'\')">0 qilish</button>'+adminBtn+teachBtn+'</div></div>';
   }).join('');
+}
+async function adSetRole(uid,field,val){
+  const {error}=await sb.from('profiles').update({[field]:val}).eq('id',uid);
+  if(error){uiAlert('Xato: '+error.message+'\\n(v8 — profiles_admin_update — Run qilinganmi?)');return;}
+  adLoadUsers();
 }
 async function adAddPoints(uid,sign){
   const amt=parseInt(document.getElementById('up-'+uid).value);
@@ -1693,10 +1708,8 @@ async function adGradeHomework(id){
   // o'quvchiga ball qo'shish (avvalgi baho bo'lsa, farqini hisoblaymiz)
   const delta=g-(meta.grade||0);
   if(delta!==0){
-    const {data:prof}=await sb.from('profiles').select('points').eq('id',meta.user_id).maybeSingle();
-    const np=((prof&&prof.points)||0)+delta;
-    const {error:pe}=await sb.from('profiles').update({points:np}).eq('id',meta.user_id);
-    if(pe){uiAlert('Baho saqlandi, lekin ball qo\'shishda xato: '+pe.message+'\\n(Admin profiles update siyosatini Run qildingizmi?)');}
+    const {error:pe}=await sb.rpc('staff_add_points',{target:meta.user_id,delta});
+    if(pe){uiAlert('Baho saqlandi, lekin ball qo\'shishda xato: '+pe.message+'\\n(v13 — staff_add_points — Run qildingizmi?)');}
   }
   adLoadHomework();
 }
@@ -1867,7 +1880,7 @@ async function adDeleteAnnouncement(id){
   adLoadAnnouncements();
 }
 /* ---------------- STUDENT: PROGRAMS + LESSON PAGE ---------------- */
-let myPoints=0, myStreak=0, myLastActive=null, iAmAdmin=false, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
+let myPoints=0, myStreak=0, myLastActive=null, iAmAdmin=false, iAmTeacher=false, iAmStaff=false, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
 const LOCK_SVG='<svg class="lk" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
 function lockedMsg(){uiAlert("Bu dars hozircha qulflangan.");}
 let playlistData=null;
@@ -1898,11 +1911,11 @@ async function loadProgram(slug){
     html+='<div class="pm-mod"><div class="pm-mod-h">'+adEsc(c.title)+'<span>'+ls.length+' dars</span></div>';
     if(!ls.length){html+='<div class="pm-empty">Darslar tez orada…</div>';}
     else ls.forEach((l,i)=>{
-      if(l.locked&&!iAmAdmin){
+      if(l.locked&&!iAmStaff){
         html+='<button class="pm-lesson locked" onclick="lockedMsg()"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">Qulflangan</span></span><span class="pm-check">'+LOCK_SVG+'</span></button>';
       } else {
-        const chk=l.locked?'<span class="pm-check lockadm" title="Qulflangan — admin ocha oladi">'+LOCK_SVG+'</span>':(lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>');
-        html+='<button class="pm-lesson'+(l.locked?' lockadm-row':'')+'" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ballgacha'+(l.locked?' · QULF (admin ko\'rinishi)':'')+'</span></span>'+chk+'</button>';
+        const chk=l.locked?'<span class="pm-check lockadm" title="Qulflangan — xodim ocha oladi">'+LOCK_SVG+'</span>':(lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>');
+        html+='<button class="pm-lesson'+(l.locked?' lockadm-row':'')+'" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ballgacha'+(l.locked?' · QULF (siz ocha olasiz)':'')+'</span></span>'+chk+'</button>';
       }
     });
     html+='</div>';
@@ -1919,11 +1932,11 @@ function renderPlaylist(){
     html+='<div class="pl-mod">'+adEsc(c.title)+'</div>';
     c.lessons.forEach(l=>{
       const active=l.id===currentLessonId?' active':'', done=lessonDone[l.id]?' done':'';
-      if(l.locked&&!iAmAdmin){
+      if(l.locked&&!iAmStaff){
         html+='<button class="pl-lesson" onclick="lockedMsg()"><span class="pl-ic">'+LOCK_SVG+'</span><span class="pl-info"><span class="t">'+adEsc(l.title)+'</span><span class="m">Qulflangan</span></span></button>';
       } else {
         const ic=l.locked?LOCK_SVG:(lessonDone[l.id]?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>':'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>');
-        const meta=l.locked?'QULF · admin ocha oladi':'★ '+(l.points||10)+' ballgacha';
+        const meta=l.locked?'QULF · siz ocha olasiz':'★ '+(l.points||10)+' ballgacha';
         html+='<button class="pl-lesson'+active+done+'" onclick="openLesson(\''+l.id+'\')"><span class="pl-ic">'+ic+'</span><span class="pl-info"><span class="t">'+adEsc(l.title)+'</span><span class="m">'+meta+'</span></span></button>';
       }
     });
@@ -1932,7 +1945,7 @@ function renderPlaylist(){
 }
 async function openLesson(id){
   const l=lessonCache[id]; if(!l)return;
-  if(l.locked&&!iAmAdmin){lockedMsg();return;}
+  if(l.locked&&!iAmStaff){lockedMsg();return;}
   currentLessonId=id;
   document.getElementById('lsn-title').textContent=l.title;
   const dsc=document.getElementById('lsn-desc'); dsc.textContent=l.description||''; dsc.style.display=l.description?'block':'none';
