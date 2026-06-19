@@ -561,6 +561,9 @@
   .ui-modal-cancel:hover{border-color:var(--text)}
   .ui-modal-ok{background:var(--grad);color:#0b0b11}
   .prog-tile img,.pc-tile img,.hm-course .tile img{width:100%;height:100%;border-radius:inherit;object-fit:cover;display:block}
+  .pm-check.lockadm svg,.pl-lesson .pl-ic svg{opacity:1}
+  .pm-check.lockadm{color:#ffb86b}
+  .pm-lesson.lockadm-row .pm-pts{color:#ffb86b}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -1898,8 +1901,8 @@ async function loadProgram(slug){
       if(l.locked&&!iAmAdmin){
         html+='<button class="pm-lesson locked" onclick="lockedMsg()"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">Qulflangan</span></span><span class="pm-check">'+LOCK_SVG+'</span></button>';
       } else {
-        const chk=lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>';
-        html+='<button class="pm-lesson" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ballgacha'+(l.locked?' · QULF':'')+'</span></span>'+chk+'</button>';
+        const chk=l.locked?'<span class="pm-check lockadm" title="Qulflangan — admin ocha oladi">'+LOCK_SVG+'</span>':(lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>');
+        html+='<button class="pm-lesson'+(l.locked?' lockadm-row':'')+'" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ballgacha'+(l.locked?' · QULF (admin ko\'rinishi)':'')+'</span></span>'+chk+'</button>';
       }
     });
     html+='</div>';
@@ -1919,8 +1922,9 @@ function renderPlaylist(){
       if(l.locked&&!iAmAdmin){
         html+='<button class="pl-lesson" onclick="lockedMsg()"><span class="pl-ic">'+LOCK_SVG+'</span><span class="pl-info"><span class="t">'+adEsc(l.title)+'</span><span class="m">Qulflangan</span></span></button>';
       } else {
-        const ic=lessonDone[l.id]?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>':'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>';
-        html+='<button class="pl-lesson'+active+done+'" onclick="openLesson(\''+l.id+'\')"><span class="pl-ic">'+ic+'</span><span class="pl-info"><span class="t">'+adEsc(l.title)+'</span><span class="m">★ '+(l.points||10)+' ballgacha</span></span></button>';
+        const ic=l.locked?LOCK_SVG:(lessonDone[l.id]?'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>':'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>');
+        const meta=l.locked?'QULF · admin ocha oladi':'★ '+(l.points||10)+' ballgacha';
+        html+='<button class="pl-lesson'+active+done+'" onclick="openLesson(\''+l.id+'\')"><span class="pl-ic">'+ic+'</span><span class="pl-info"><span class="t">'+adEsc(l.title)+'</span><span class="m">'+meta+'</span></span></button>';
       }
     });
   });
