@@ -567,6 +567,35 @@
   .rolebadge{font-family:'JetBrains Mono',monospace;font-size:9px;font-weight:700;letter-spacing:.08em;padding:2px 7px;border-radius:6px;margin-left:6px;vertical-align:middle}
   .rolebadge.admin{background:rgba(255,77,141,.16);color:#ff7db0;border:1px solid rgba(255,77,141,.4)}
   .rolebadge.teach{background:rgba(155,139,255,.16);color:#b3a6ff;border:1px solid rgba(155,139,255,.4)}
+
+  /* ===== YORDAM (support) ===== */
+  .help-fab{position:fixed;right:22px;bottom:22px;z-index:900;width:54px;height:54px;border-radius:50%;border:none;background:var(--grad);color:#0b0b11;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px -8px rgba(255,77,141,.55)}
+  .help-fab svg{width:25px;height:25px}
+  .help-fab:hover{transform:translateY(-2px)}
+  .help-panel{position:fixed;right:22px;bottom:88px;z-index:900;width:360px;max-width:calc(100vw - 44px);height:480px;max-height:calc(100vh - 130px);background:var(--surface);border:1px solid var(--line2);border-radius:18px;box-shadow:0 30px 80px -20px rgba(0,0,0,.7);display:none;flex-direction:column;overflow:hidden}
+  .help-panel.open{display:flex;animation:uipop .16s ease-out}
+  .help-head{display:flex;align-items:center;justify-content:space-between;padding:15px 17px;border-bottom:1px solid var(--line);font-family:var(--display);font-weight:800;font-size:15px}
+  .help-x{background:none;border:none;color:var(--muted);cursor:pointer;font-size:15px}
+  .help-x:hover{color:var(--text)}
+  .help-body{flex:1;overflow-y:auto;padding:15px;display:flex;flex-direction:column;gap:12px}
+  .help-empty{color:var(--muted);font-size:13px;text-align:center;margin:auto;line-height:1.6}
+  .help-q{align-self:flex-end;max-width:85%;background:var(--grad);color:#0b0b11;padding:9px 13px;border-radius:13px 13px 4px 13px;font-size:14px}
+  .help-a{align-self:flex-start;max-width:85%;background:var(--field);border:1px solid var(--line);padding:9px 13px;border-radius:13px 13px 13px 4px;font-size:14px}
+  .help-a .lab{font-size:10px;font-weight:700;color:var(--accent);letter-spacing:.06em;margin-bottom:3px}
+  .help-wait{align-self:flex-start;font-size:11px;color:var(--muted);font-style:italic}
+  .help-input{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);align-items:flex-end}
+  .help-input textarea{flex:1;resize:none;font-family:var(--font);font-size:14px;background:var(--field);border:1px solid var(--line);border-radius:12px;padding:11px 13px;color:var(--text);outline:none;max-height:90px}
+  .help-input textarea:focus{border-color:var(--accent)}
+  .help-send{width:42px;height:42px;flex-shrink:0;border:none;border-radius:12px;background:var(--grad);color:#0b0b11;cursor:pointer;display:flex;align-items:center;justify-content:center}
+  .help-send svg{width:18px;height:18px}
+  .sp-row{border:1px solid var(--line);border-radius:14px;padding:14px;margin-bottom:12px;background:var(--field)}
+  .sp-row .sp-h{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+  .sp-row .sp-h .who{font-weight:700}
+  .sp-msg{font-size:14px;line-height:1.5;margin-bottom:6px}
+  .sp-reply-old{font-size:13px;color:var(--muted);border-left:2px solid var(--accent);padding-left:10px;margin:6px 0}
+  .sp-reply{display:flex;gap:8px;margin-top:10px;align-items:flex-end}
+  .sp-reply textarea{flex:1;resize:none;font-family:var(--font);font-size:13px;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 11px;color:var(--text);outline:none}
+  .sp-reply button{border:none;border-radius:10px;background:var(--grad);color:#0b0b11;font-weight:700;font-size:13px;padding:9px 14px;cursor:pointer}
   .ad-modacts{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
   .ad-modacts button{font-family:var(--font);font-weight:600;font-size:12.5px;color:var(--text);background:var(--field);border:1px solid var(--line2);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.15s}
   .ad-modacts button:hover{background:var(--hover)}
@@ -1307,6 +1336,19 @@
           <div id="hw-list"><div class="ad-empty">Yuklanmoqda…</div></div>
         </div>
 
+        <div class="ad-card" id="ad-card-support">
+          <h3>Murojaatlar (Yordam)</h3>
+          <div class="ad-sel" style="margin-bottom:12px">
+            <label>Filtr</label>
+            <select id="sp-filter" onchange="adLoadSupport()">
+              <option value="open">Yangi</option>
+              <option value="answered">Javob berilgan</option>
+              <option value="all">Barchasi</option>
+            </select>
+          </div>
+          <div id="sp-list"><div class="ad-empty">Yuklanmoqda…</div></div>
+        </div>
+
         <div class="ad-card" id="ad-card-users">
           <h3>Foydalanuvchilar — ball boshqaruvi</h3>
           <div class="ad-sel" style="margin-bottom:14px">
@@ -1318,6 +1360,18 @@
       </section>
     </div>
   </main>
+
+  <button class="help-fab" id="help-fab" onclick="toggleHelp()" title="Yordam">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9.1 9a3 3 0 015.8 1c0 2-3 3-3 3"/><path d="M12 17h.01"/><circle cx="12" cy="12" r="10"/></svg>
+  </button>
+  <div class="help-panel" id="help-panel">
+    <div class="help-head"><span>Yordam markazi</span><button class="help-x" onclick="toggleHelp()">✕</button></div>
+    <div class="help-body" id="help-body"></div>
+    <div class="help-input">
+      <textarea id="help-text" rows="1" placeholder="Savol yoki muammoyingizni yozing..."></textarea>
+      <button class="help-send" onclick="sendHelp()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+    </div>
+  </div>
 </div>
 
 <div class="ui-modal-wrap" id="ui-modal">
@@ -1573,6 +1627,7 @@ async function adInit(){
   adLoadHomework();
   adLoadUsers();
   adLoadPrograms();
+  adLoadSupport();
 }
 function pgPicked(){const f=document.getElementById('pg-icon').files[0];document.getElementById('pg-iconname').textContent=f?f.name:'Fayl tanlanmagan';}
 function pgSlugify(t){
@@ -1653,6 +1708,68 @@ async function adSetRole(uid,field,val){
   const {error}=await sb.from('profiles').update({[field]:val}).eq('id',uid);
   if(error){uiAlert('Xato: '+error.message+'\\n(v8 — profiles_admin_update — Run qilinganmi?)');return;}
   adLoadUsers();
+}
+
+/* ---------------- YORDAM (support) ---------------- */
+let helpSub=null;
+function toggleHelp(){
+  const p=document.getElementById('help-panel');
+  const open=p.classList.toggle('open');
+  if(open){ loadHelp(); const t=document.getElementById('help-text'); if(t)setTimeout(()=>t.focus(),60); }
+}
+async function loadHelp(){
+  const box=document.getElementById('help-body'); if(!box)return;
+  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id;}
+  box.innerHTML='<div class="help-empty">Yuklanmoqda…</div>';
+  const {data,error}=await sb.from('support_messages').select('*').eq('user_id',myId).order('created_at',{ascending:true});
+  if(error){box.innerHTML='<div class="help-empty">Xato: '+error.message+'<br>(v14 SQL — support_messages — Run qildingizmi?)</div>';return;}
+  if(!data||!data.length){box.innerHTML='<div class="help-empty">Savolingiz bormi?<br>Bu yerga yozing — administrator javob beradi.</div>';return;}
+  box.innerHTML=data.map(s=>{
+    let h='<div class="help-q">'+adEsc(s.message)+'</div>';
+    if(s.reply) h+='<div class="help-a"><div class="lab">ADMINISTRATOR</div>'+adEsc(s.reply)+'</div>';
+    else h+='<div class="help-wait">Javob kutilmoqda…</div>';
+    return h;
+  }).join('');
+  box.scrollTop=box.scrollHeight;
+  if(helpSub){try{sb.removeChannel(helpSub);}catch(e){}helpSub=null;}
+  helpSub=sb.channel('support:'+myId)
+    .on('postgres_changes',{event:'*',schema:'public',table:'support_messages',filter:'user_id=eq.'+myId},()=>loadHelp())
+    .subscribe();
+}
+async function sendHelp(){
+  const t=document.getElementById('help-text'); const msg=(t.value||'').trim(); if(!msg)return;
+  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
+  t.value='';
+  const {error}=await sb.from('support_messages').insert({user_id:myId,message:msg});
+  if(error){uiAlert('Yuborishda xato: '+error.message);t.value=msg;return;}
+  loadHelp();
+}
+async function adLoadSupport(){
+  const box=document.getElementById('sp-list'); if(!box)return;
+  box.innerHTML='<div class="ad-empty">Yuklanmoqda…</div>';
+  const filter=document.getElementById('sp-filter').value;
+  let q=sb.from('support_messages').select('*').order('created_at',{ascending:false}).limit(80);
+  if(filter==='open')q=q.eq('status','open'); else if(filter==='answered')q=q.eq('status','answered');
+  const {data,error}=await q;
+  if(error){box.innerHTML='<div class="ad-empty">Xato: '+error.message+'</div>';return;}
+  if(!data||!data.length){box.innerHTML='<div class="ad-empty">Murojaat yo\'q.</div>';return;}
+  const uids=[...new Set(data.map(s=>s.user_id))];
+  const {data:us}=await sb.from('profiles').select('id,username').in('id',uids);
+  const um={}; (us||[]).forEach(u=>um[u.id]=u.username||'foydalanuvchi');
+  box.innerHTML=data.map(s=>{
+    const badge=s.status==='answered'?'<span class="badge graded">JAVOB BERILGAN</span>':'<span class="badge pending">YANGI</span>';
+    const old=s.reply?'<div class="sp-reply-old">Sizning javobingiz: '+adEsc(s.reply)+'</div>':'';
+    const dt=new Date(s.created_at).toLocaleString('uz');
+    return '<div class="sp-row"><div class="sp-h"><span class="who">'+adEsc(um[s.user_id]||'foydalanuvchi')+'</span><span class="lsn">'+dt+'</span>'+badge+'</div><div class="sp-msg">'+adEsc(s.message)+'</div>'+old+
+      '<div class="sp-reply"><textarea id="sr-'+s.id+'" rows="1" placeholder="Javob yozing...">'+adEsc(s.reply||'')+'</textarea><button onclick="adReplySupport(\''+s.id+'\')">Javob berish</button></div></div>';
+  }).join('');
+}
+async function adReplySupport(id){
+  const t=document.getElementById('sr-'+id); const reply=(t.value||'').trim();
+  if(!reply){uiAlert('Javob matnini yozing.');return;}
+  const {error}=await sb.from('support_messages').update({reply,status:'answered',answered_at:new Date().toISOString()}).eq('id',id);
+  if(error){uiAlert('Xato: '+error.message);return;}
+  adLoadSupport();
 }
 async function adAddPoints(uid,sign){
   const amt=parseInt(document.getElementById('up-'+uid).value);
