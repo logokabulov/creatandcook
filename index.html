@@ -1489,6 +1489,7 @@
 const SUPABASE_URL='https://sxiwzaxojwunuededqys.supabase.co';
 const SUPABASE_KEY='sb_publishable_HtvA218bd7ev1_6YZ4MgdQ_S_gzeTNh';
 const sb=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY);
+const PAYME_MERCHANT_ID='SIZNING_KASSA_ID'; // Payme kassa (merchant) ID — kassa ochilgach shu yerga yozasiz
 function _val(id){const e=document.getElementById(id);return e?e.value.trim():'';}
 function _setVal(id,v){const e=document.getElementById(id);if(e&&v!=null)e.value=v;}
 function _setText(id,v){const e=document.getElementById(id);if(e&&v!=null)e.textContent=v;}
@@ -1626,6 +1627,7 @@ async function loadProfileAndEnter(){
   }
   iAmAdmin=!!profile.is_admin; iAmTeacher=!!profile.is_teacher; iAmStaff=iAmAdmin||iAmTeacher;
   myPlanName=profile.plan_name||null; myPlanExpires=profile.plan_expires||null;
+  myHasAccess=iAmStaff||(!!myPlanName&&(!myPlanExpires||new Date(myPlanExpires)>new Date()));
   if(iAmStaff){ const na=document.getElementById('nav-admin'); if(na){na.style.display='flex'; const lbl=na.querySelector('span'); if(lbl&&!iAmAdmin&&iAmTeacher)lbl.textContent='O\'qituvchi';} const ns=document.getElementById('nav-support'); if(ns) ns.style.display='flex'; }
   enterApp();
 }
@@ -1852,6 +1854,7 @@ function helpBubble(s){
 async function sendHelp(){
   const t=document.getElementById('help-text'); const msg=(t.value||'').trim(); if(!msg)return;
   if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
+  const ok=await checkDailySupportLimit(); if(!ok)return;
   t.value='';
   const {error}=await sb.from('support_messages').insert({user_id:myId,sender_id:myId,from_staff:false,type:'text',content:msg});
   if(error){uiAlert('Yuborishda xato: '+error.message);t.value=msg;return;}
@@ -1860,8 +1863,11 @@ function sendHelpImage(){
   const f=document.getElementById('help-img').files[0]; if(!f)return;
   document.getElementById('help-img').value='';
   if(f.size>20*1024*1024){uiAlert('Rasm 20 MB dan oshmasin.');return;}
-  supImgUpload(f,myId,async(url)=>{
-    await sb.from('support_messages').insert({user_id:myId,sender_id:myId,from_staff:false,type:'image',media_url:url});
+  checkDailySupportLimit().then(ok=>{
+    if(!ok)return;
+    supImgUpload(f,myId,async(url)=>{
+      await sb.from('support_messages').insert({user_id:myId,sender_id:myId,from_staff:false,type:'image',media_url:url});
+    });
   });
 }
 
@@ -1976,6 +1982,8 @@ function planFmtPrice(p){
 async function loadObuna(){
   const box=document.getElementById('plans-list'); if(!box)return;
   box.innerHTML='<div class="lb-empty">Yuklanmoqda…</div>';
+  // joriy obuna holatini yangilaymiz (to'lovdan keyin)
+  try{ if(myId){ const {data:pr}=await sb.from('profiles').select('plan_name,plan_expires').eq('id',myId).maybeSingle(); if(pr){myPlanName=pr.plan_name||null;myPlanExpires=pr.plan_expires||null;} } }catch(e){}
   const {data,error}=await sb.from('plans').select('*').eq('active',true).order('sort');
   if(error){box.innerHTML='<div class="lb-empty">Xato: '+error.message+'<br>(v16 SQL — plans — Run qildingizmi?)</div>';return;}
   // joriy obuna holati
@@ -1996,7 +2004,16 @@ async function subscribePlan(planId){
   const {data:p}=await sb.from('plans').select('*').eq('id',planId).maybeSingle();
   if(!p)return;
   if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id;}
-  // so'rov yozamiz
+  // Payme avtomatik to'lov (kassa ID sozlangan bo'lsa)
+  if(p.price>0 && PAYME_MERCHANT_ID && PAYME_MERCHANT_ID!=='SIZNING_KASSA_ID'){
+    const {data:order,error}=await sb.from('orders').insert({user_id:myId,plan_id:p.id,plan_name:p.name,period:p.period,amount:p.price}).select().maybeSingle();
+    if(error||!order){await uiAlert('Buyurtma yaratishda xato: '+(error?error.message:'')+'\\n(v18 SQL — orders — Run qildingizmi?)');return;}
+    const prm='m='+PAYME_MERCHANT_ID+';ac.order_id='+order.id+';a='+(Number(p.price)*100)+';l=uz';
+    window.open('https://checkout.paycom.uz/'+btoa(prm),'_blank');
+    await uiAlert('Payme to\'lov sahifasi ochildi. To\'lovдан keyin obunangiz avtomatik faollashadi.');
+    return;
+  }
+  // Aks holda — qo'lda tasdiqlash (havola + admin)
   await sb.from('subscription_requests').insert({user_id:myId,plan_id:p.id,plan_name:p.name,price:p.price,period:p.period});
   if(p.checkout_url){
     window.open(p.checkout_url,'_blank');
@@ -2170,6 +2187,7 @@ async function adLoadLessons(){
   box.innerHTML=adLessonsCache.map((l,i)=>{
     const vtag=l.video_url?'<span class="ad-vtag has">VIDEO</span>':'<span class="ad-vtag no">VIDEO YO\'Q</span>';
     const ltag=l.locked?'<span class="ad-vtag lock">QULF</span>':'';
+    const ftag=l.is_free?'<span class="ad-vtag" style="background:rgba(100,220,100,.15);color:#8fd98f;border-color:rgba(100,220,100,.3)">TEKIN</span>':'';
     const nmat=Array.isArray(l.materials)?l.materials.length:0;
     const c=fbCount[l.id]||{up:0,down:0};
     const meta=(l.points||10)+' ballgacha · '+(nmat?nmat+' material':'material yo\'q')+(l.description?' · tavsifli':'')+' · 👍 '+c.up+' / 👎 '+c.down;
@@ -2178,7 +2196,10 @@ async function adLoadLessons(){
     const lk=l.locked
       ?'<button class="ic" title="Ochish (qulfni yechish)" onclick="adToggleLock(\''+l.id+'\')" style="color:#e0476b"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg></button>'
       :'<button class="ic" title="Qulflash" onclick="adToggleLock(\''+l.id+'\')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 014-4 4 4 0 013.5 2"/></svg></button>';
-    return '<div class="ad-lesson"><div class="ord">'+(i+1)+'</div><div class="sp"><div class="lt">'+adEsc(l.title)+'</div><div class="lm">'+meta+'</div></div>'+vtag+ltag+up+dn+lk+
+    const fk=l.is_free
+      ?'<button class="ic" title="Tekin belgisini olib tashlash" onclick="adToggleFree(\''+l.id+'\')" style="color:#8fd98f">★</button>'
+      :'<button class="ic" title="Tekin qilish (obunasizlar ochishi uchun)" onclick="adToggleFree(\''+l.id+'\')">★</button>';
+    return '<div class="ad-lesson"><div class="ord">'+(i+1)+'</div><div class="sp"><div class="lt">'+adEsc(l.title)+'</div><div class="lm">'+meta+'</div></div>'+vtag+ltag+ftag+up+dn+lk+fk+
       '<button class="ic" title="Tahrirlash" onclick="adEditLesson(\''+l.id+'\')"><svg viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>'+
       '<button class="ic del" title="O\'chirish" onclick="adDeleteLesson(\''+l.id+'\')"><svg viewBox="0 0 24 24"><path d="M3 6h18M8 6V4h8v2M19 6l-1 14H6L5 6"/></svg></button></div>';
   }).join('');
@@ -2186,6 +2207,12 @@ async function adLoadLessons(){
 async function adToggleLock(id){
   const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
   const {error}=await sb.from('lessons').update({locked:!l.locked}).eq('id',id);
+  if(error){adNote('Xato: '+error.message);return;}
+  adLoadLessons();
+}
+async function adToggleFree(id){
+  const l=adLessonsCache.find(x=>x.id===id); if(!l)return;
+  const {error}=await sb.from('lessons').update({is_free:!l.is_free}).eq('id',id);
   if(error){adNote('Xato: '+error.message);return;}
   adLoadLessons();
 }
@@ -2314,9 +2341,31 @@ async function adDeleteAnnouncement(id){
   adLoadAnnouncements();
 }
 /* ---------------- STUDENT: PROGRAMS + LESSON PAGE ---------------- */
-let myPoints=0, myStreak=0, myLastActive=null, iAmAdmin=false, iAmTeacher=false, iAmStaff=false, myPlanName=null, myPlanExpires=null, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
+let myPoints=0, myStreak=0, myLastActive=null, iAmAdmin=false, iAmTeacher=false, iAmStaff=false, myPlanName=null, myPlanExpires=null, myHasAccess=false, lessonCache={}, lessonDone={}, currentLessonId=null, currentProgSlug=null, homeNext=null;
+const FREE_DAILY_MSG_LIMIT=10;
 const LOCK_SVG='<svg class="lk" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="9" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></svg>';
-function lockedMsg(){uiAlert("Bu dars hozircha qulflangan.");}
+function lockedMsg(){uiAlert('Bu dars qulflangan. Administrator ruxsat bergandan keyin ochiladi.');}
+function subMsg(){uiAlert('Bu dars faqat obunachilarga ochiq.\n\nObuna bo\'limiga o\'tib tarif tanlang — hammasi ochiladi!').then(()=>go('obuna'));}
+async function checkDailyLimit(){
+  if(myHasAccess||iAmStaff)return true;
+  const {data}=await sb.rpc('daily_message_count',{uid:myId});
+  const cnt=typeof data==='number'?data:0;
+  if(cnt>=FREE_DAILY_MSG_LIMIT){
+    await uiAlert('Kunlik xabar limitingiz ('+FREE_DAILY_MSG_LIMIT+' ta) tugadi.\nObuna oling — cheksiz xabar yozasiz!');
+    go('obuna'); return false;
+  }
+  return true;
+}
+async function checkDailySupportLimit(){
+  if(myHasAccess||iAmStaff)return true;
+  const {data}=await sb.rpc('daily_support_count',{uid:myId});
+  const cnt=typeof data==='number'?data:0;
+  if(cnt>=FREE_DAILY_MSG_LIMIT){
+    await uiAlert('Kunlik yordam limiti ('+FREE_DAILY_MSG_LIMIT+' ta) tugadi.\nObuna oling — limit yo\'qoladi!');
+    return false;
+  }
+  return true;
+}
 let playlistData=null;
 async function buildPlaylist(slug){
   const {data:prog}=await sb.from('programs').select('id').eq('slug',slug).maybeSingle();
@@ -2324,7 +2373,7 @@ async function buildPlaylist(slug){
   const {data:courses}=await sb.from('courses').select('id,title,sort').eq('program_id',prog.id).order('sort');
   const cids=(courses||[]).map(c=>c.id);
   let lessons=[];
-  if(cids.length){const {data:ls}=await sb.from('lessons').select('id,course_id,title,sort,video_url,description,materials,points,locked').in('course_id',cids).order('sort');lessons=ls||[];}
+  if(cids.length){const {data:ls}=await sb.from('lessons').select('id,course_id,title,sort,video_url,description,materials,points,locked,is_free').in('course_id',cids).order('sort');lessons=ls||[];}
   const {data:{user}}=await sb.auth.getUser();
   if(user){const {data:pr}=await sb.from('lesson_progress').select('lesson_id,completed').eq('user_id',user.id);(pr||[]).forEach(p=>{if(p.completed)lessonDone[p.lesson_id]=true;});}
   lessons.forEach(l=>{lessonCache[l.id]=l;});
@@ -2345,11 +2394,21 @@ async function loadProgram(slug){
     html+='<div class="pm-mod"><div class="pm-mod-h">'+adEsc(c.title)+'<span>'+ls.length+' dars</span></div>';
     if(!ls.length){html+='<div class="pm-empty">Darslar tez orada…</div>';}
     else ls.forEach((l,i)=>{
-      if(l.locked&&!iAmStaff){
-        html+='<button class="pm-lesson locked" onclick="lockedMsg()"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">Qulflangan</span></span><span class="pm-check">'+LOCK_SVG+'</span></button>';
+      const canOpen=iAmStaff||myHasAccess||l.is_free;
+      if(!canOpen||l.locked&&!iAmStaff){
+        const reason=l.locked&&iAmStaff?null:(l.locked?'locked':(!canOpen?'sub':null));
+        if(iAmStaff&&l.locked){
+          // xodim ko'radi — qulf belgisi bilan ochiq
+          const chk='<span class="pm-check lockadm" title="Qulflangan — xodim ocha oladi">'+LOCK_SVG+'</span>';
+          html+='<button class="pm-lesson lockadm-row" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ballgacha · QULF (siz ocha olasiz)</span></span>'+chk+'</button>';
+        } else {
+          const msg=l.locked?'lockedMsg()':'subMsg()';
+          const lbl=l.locked?'Qulflangan':'Obuna kerak';
+          html+='<button class="pm-lesson locked" onclick="'+msg+'"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">'+lbl+'</span></span><span class="pm-check">'+LOCK_SVG+'</span></button>';
+        }
       } else {
-        const chk=l.locked?'<span class="pm-check lockadm" title="Qulflangan — xodim ocha oladi">'+LOCK_SVG+'</span>':(lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>');
-        html+='<button class="pm-lesson'+(l.locked?' lockadm-row':'')+'" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ballgacha'+(l.locked?' · QULF (siz ocha olasiz)':'')+'</span></span>'+chk+'</button>';
+        const chk=l.locked&&iAmStaff?'<span class="pm-check lockadm" title="Qulflangan — xodim ocha oladi">'+LOCK_SVG+'</span>':(lessonDone[l.id]?'<span class="pm-check done">✓</span>':'<span class="pm-check"></span>');
+        html+='<button class="pm-lesson'+(l.locked&&iAmStaff?' lockadm-row':'')+'" onclick="openLesson(\''+l.id+'\')"><span class="pm-ord">'+(i+1)+'</span><span class="pm-t">'+adEsc(l.title)+'<span class="pm-pts">★ '+(l.points||10)+' ballgacha'+(l.locked&&iAmStaff?' · QULF (siz ocha olasiz)':l.is_free?' · Tekin':'')+'</span></span>'+chk+'</button>';
       }
     });
     html+='</div>';
@@ -2380,6 +2439,7 @@ function renderPlaylist(){
 async function openLesson(id){
   const l=lessonCache[id]; if(!l)return;
   if(l.locked&&!iAmStaff){lockedMsg();return;}
+  if(!myHasAccess&&!l.is_free&&!iAmStaff){subMsg();return;}
   currentLessonId=id;
   document.getElementById('lsn-title').textContent=l.title;
   const dsc=document.getElementById('lsn-desc'); dsc.textContent=l.description||''; dsc.style.display=l.description?'block':'none';
@@ -2756,7 +2816,8 @@ async function editMsg(id){
 }
 async function _chatInsert(extra){
   if(chatReadonly)return null;
-  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return;}
+  if(!myId){const {data:{user}}=await sb.auth.getUser(); if(user)myId=user.id; else return null;}
+  const ok=await checkDailyLimit(); if(!ok)return null;
   const row=Object.assign({channel:chatChannel,sender_id:myId,recipient_id:chatRecipient,content:''},extra);
   const {data,error}=await sb.from('messages').insert(row).select().maybeSingle();
   if(error){uiAlert('Yuborishda xato: '+error.message);return null;}
